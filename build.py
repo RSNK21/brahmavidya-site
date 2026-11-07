@@ -203,6 +203,16 @@ def main():
                 css = open(p, encoding='utf-8').read()
                 css = re.sub(r'url\((["\']?)/(?!/)([^)"\']+)\1\)', lambda m: f'url({m.group(1)}{up}{m.group(2)}{m.group(1)})', css)
                 open(p, 'w', encoding='utf-8').write(css)
+    # Old WordPress addresses of documents keep working: /wp-content/uploads/... gets a
+    # copy of every PDF, Word file and zip (links to these were shared widely).
+    src_up = os.path.join(ROOT, 'assets', 'uploads')
+    for dirpath, _, files in os.walk(src_up):
+        for f in files:
+            if f.lower().endswith(('.pdf', '.doc', '.docx', '.zip')):
+                rel = os.path.relpath(os.path.join(dirpath, f), src_up)
+                dst = os.path.join(DIST, 'wp-content', 'uploads', rel)
+                os.makedirs(os.path.dirname(dst), exist_ok=True)
+                shutil.copy2(os.path.join(dirpath, f), dst)
     for extra in ('CNAME', 'robots.txt'):
         if os.path.exists(os.path.join(ROOT, extra)):
             shutil.copy(os.path.join(ROOT, extra), DIST)
