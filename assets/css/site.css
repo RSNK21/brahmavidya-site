@@ -52,15 +52,33 @@
   --gut: clamp(16px, 4vw, 32px);
   --band: clamp(48px, 6vw, 84px);
   --ease: cubic-bezier(.2, 0, 0, 1);
+  --flush-bg: var(--deep); --flush-fg: #fff;
+  --menu-bg: var(--card); --menu-line: color-mix(in srgb, var(--line) 70%, transparent);
+  color-scheme: light;
 }
+/* Dark theme. Applies when the device is dark (unless the visitor chose light with the
+   header switch), or when the visitor chose dark. site.js sets <html data-theme="..."> */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --paper: #17130f; --ivory: #1f1a15; --sand: #2a231c; --card: #221c17;
     --ink: #f1e9dc; --ink-2: #d4c8b6; --muted: #ab9f8f; --line: #3d342b;
     --madder: #e8a59c; --madder-2: #f2bbb3; --on-madder: #3a0f0b; --madder-soft: #4a2420;
     --deep: #182531; --on-deep: #efe6d8; --bronze: #d5ad73; --focus: #8ab4ff;
     --shadow-1: 0 1px 2px rgba(0,0,0,.4); --shadow-2: 0 4px 16px rgba(0,0,0,.45); --shadow-3: 0 10px 30px rgba(0,0,0,.55);
+    --flush-bg: var(--on-deep); --flush-fg: var(--deep);
+    --menu-bg: color-mix(in srgb, var(--card) 92%, var(--madder) 8%); --menu-line: color-mix(in srgb, var(--line) 80%, var(--madder) 20%);
+    color-scheme: dark;
   }
+}
+:root[data-theme="dark"] {
+    --paper: #17130f; --ivory: #1f1a15; --sand: #2a231c; --card: #221c17;
+    --ink: #f1e9dc; --ink-2: #d4c8b6; --muted: #ab9f8f; --line: #3d342b;
+    --madder: #e8a59c; --madder-2: #f2bbb3; --on-madder: #3a0f0b; --madder-soft: #4a2420;
+    --deep: #182531; --on-deep: #efe6d8; --bronze: #d5ad73; --focus: #8ab4ff;
+    --shadow-1: 0 1px 2px rgba(0,0,0,.4); --shadow-2: 0 4px 16px rgba(0,0,0,.45); --shadow-3: 0 10px 30px rgba(0,0,0,.55);
+    --flush-bg: var(--on-deep); --flush-fg: var(--deep);
+    --menu-bg: color-mix(in srgb, var(--card) 92%, var(--madder) 8%); --menu-line: color-mix(in srgb, var(--line) 80%, var(--madder) 20%);
+    color-scheme: dark;
 }
 
 /* ---------- Base ---------- */
@@ -122,7 +140,7 @@ strong { font-weight: 700; }
 .nav-item.is-active > .sub-toggle { color: var(--madder); }
 
 /* dropdown: Material menu surface */
-.sub { list-style: none; margin: 0; padding: 8px; position: absolute; top: calc(100% + 8px); left: 0; min-width: 260px; background: var(--card); border: 1px solid color-mix(in srgb, var(--line) 70%, transparent); border-radius: 16px; box-shadow: 0 2px 6px rgba(36,30,24,.08), 0 14px 36px -6px rgba(36,30,24,.22);
+.sub { list-style: none; margin: 0; padding: 8px; position: absolute; top: calc(100% + 8px); left: 0; min-width: 260px; background: var(--menu-bg); border: 1px solid var(--menu-line); border-radius: 16px; box-shadow: 0 2px 6px rgba(36,30,24,.08), 0 14px 36px -6px rgba(36,30,24,.22);
   opacity: 0; visibility: hidden; transform: translateY(-6px) scale(.96); transform-origin: 24px 0;
   transition: opacity .18s var(--ease), transform .28s cubic-bezier(.2, 0, 0, 1), visibility 0s linear .28s; }
 .has-sub::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 12px; } /* hover bridge to the menu */
@@ -213,14 +231,13 @@ strong { font-weight: 700; }
 .btn:hover, .btn:focus-visible { color: var(--btn-flush-fg); text-decoration: none; }
 .btn:active { transform: scale(.97); }
 .btn .i { width: 20px; height: 20px; }
-.btn-filled { --btn-bg: var(--madder); --btn-fg: var(--on-madder); --btn-flush: var(--deep); --btn-flush-fg: #fff; box-shadow: var(--shadow-1); }
+.btn-filled { --btn-bg: var(--madder); --btn-fg: var(--on-madder); --btn-flush: var(--flush-bg); --btn-flush-fg: var(--flush-fg); box-shadow: var(--shadow-1); }
 .btn-filled:hover { box-shadow: var(--shadow-2); }
 .btn-tonal { --btn-bg: var(--madder-soft); --btn-fg: var(--ink); }
 .btn-outline { box-shadow: inset 0 0 0 1px var(--line); }
 .band-deep .btn-outline { --btn-fg: var(--on-deep); --btn-flush: var(--on-deep); --btn-flush-fg: var(--deep); box-shadow: inset 0 0 0 1px rgba(255,255,255,.4); }
 .btn[aria-disabled="true"], .btn:disabled { opacity: .5; pointer-events: none; }
 .btn-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
-@media (prefers-color-scheme: dark) { .btn-filled { --btn-flush: var(--on-deep); --btn-flush-fg: var(--deep); } }
 .ripple { position: absolute; border-radius: 50%; transform: scale(0); background: currentColor; opacity: .22; pointer-events: none; animation: ripple .6s var(--ease) forwards; z-index: 0; }
 @keyframes ripple { to { transform: scale(2.6); opacity: 0; } }
 .icon-btn { display: inline-grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: var(--r-pill); background: none; color: var(--ink-2); cursor: pointer; transition: background-color .2s var(--ease); }
@@ -444,7 +461,26 @@ a.card:hover { box-shadow: var(--shadow-2); transform: translateY(-2px); border-
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
 
-/* Material dark elevation: raised surfaces get a faint lift toward the accent */
+/* ---------- Light / dark switch (Material icon button) ---------- */
+.theme-btn { position: relative; overflow: hidden; display: inline-grid; place-items: center; flex: none; width: 44px; height: 44px; margin-left: 4px; border: 0; border-radius: var(--r-pill); background: transparent; color: var(--ink-2); cursor: pointer; transition: background-color .2s var(--ease), color .2s var(--ease), transform .12s var(--ease); }
+.theme-btn:hover { background: var(--madder-soft); color: var(--ink); }
+.theme-btn:active { transform: scale(.92); }
+.theme-btn .i { grid-area: 1 / 1; width: 22px; height: 22px; transition: transform .5s cubic-bezier(.34, 1.4, .64, 1), opacity .25s var(--ease); }
+.theme-btn .i-sun .rays { transform-origin: 12px 12px; transition: transform .6s cubic-bezier(.2, 0, 0, 1); }
+.theme-btn .i-sun { opacity: 0; transform: rotate(-90deg) scale(.4); }
+.theme-btn .i-sun .rays { transform: rotate(-45deg) scale(.6); }
+.theme-btn:hover .i-moon { transform: rotate(-18deg); }
+:root[data-theme="dark"] .theme-btn .i-moon { opacity: 0; transform: rotate(90deg) scale(.4); }
+:root[data-theme="dark"] .theme-btn .i-sun { opacity: 1; transform: none; }
+:root[data-theme="dark"] .theme-btn .i-sun .rays { transform: none; }
+:root[data-theme="dark"] .theme-btn:hover .i-sun .rays { transform: rotate(45deg); }
 @media (prefers-color-scheme: dark) {
-  .sub { background: color-mix(in srgb, var(--card) 92%, var(--madder) 8%); border-color: color-mix(in srgb, var(--line) 80%, var(--madder) 20%); }
+  :root:not([data-theme="light"]) .theme-btn .i-moon { opacity: 0; transform: rotate(90deg) scale(.4); }
+  :root:not([data-theme="light"]) .theme-btn .i-sun { opacity: 1; transform: none; }
+  :root:not([data-theme="light"]) .theme-btn .i-sun .rays { transform: none; }
+  :root:not([data-theme="light"]) .theme-btn:hover .i-sun .rays { transform: rotate(45deg); }
 }
+@media (max-width: 1080px) { .theme-btn { order: 2; margin-left: 0; } .menu-btn { order: 3; } }
+/* the new theme spreads from the button (View Transitions); old browsers just fade colours */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+.theme-fade, .theme-fade * { transition: background-color .35s var(--ease), color .35s var(--ease), border-color .35s var(--ease) !important; }

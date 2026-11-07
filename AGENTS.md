@@ -60,7 +60,10 @@ GitHub Actions builds, checks and publishes on every push to `main`
    `grid grid-2|3|4`, `card`, `split`, `figure`, `person`, `facts`, `course`,
    `tabs`, `awardees`, `videos`, `gallery`, `doc-list`, `contact-cards`, `notice`, `verse`,
    buttons `btn btn-filled|btn-tonal|btn-outline`. Colours come from tokens
-   (`--madder`, `--deep`, `--ivory`, …); dark mode is automatic.
+   (`--madder`, `--deep`, `--ivory`, …). Dark mode follows the device, and the header
+   switch can override it (`<html data-theme="dark|light">`, saved in localStorage
+   `bv-theme`). A new colour must be a token set in `:root` and in BOTH dark blocks
+   (the `prefers-color-scheme` one and `:root[data-theme="dark"]`).
 6. **Indic text:** mark it with `lang="sa"`, `lang="hi"` or `lang="kn"`. Never put
    `letter-spacing` or `text-transform` on it.
 7. **Images:** put new ones in `assets/uploads/<year>/<month>/` with plain ASCII

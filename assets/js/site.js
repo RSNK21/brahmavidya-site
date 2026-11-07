@@ -75,6 +75,47 @@
     window.addEventListener('resize', settle);
   }
 
+  /* ---------- Light / dark switch ----------
+     The choice is saved in this browser (localStorage "bv-theme") and applied by a tiny
+     script in <head> before the page draws. With no saved choice the device setting rules.
+     The new theme spreads in a circle from the button where the browser supports it. */
+  var themeBtn = d.querySelector('.theme-btn');
+  if (themeBtn) {
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    var meta = d.querySelector('meta[name="theme-color"]');
+    var current = function () { return root.getAttribute('data-theme') || (mq.matches ? 'dark' : 'light'); };
+    var label = function () {
+      var next = current() === 'dark' ? 'light' : 'dark';
+      themeBtn.setAttribute('aria-label', 'Switch to ' + next + ' mode');
+      themeBtn.title = 'Switch to ' + next + ' mode';
+      if (meta) meta.setAttribute('content', current() === 'dark' ? '#17130f' : '#fffdf8');
+    };
+    var apply = function (t) {
+      root.setAttribute('data-theme', t);
+      try { localStorage.setItem('bv-theme', t); } catch (e) {}
+      label();
+    };
+    label();
+    mq.addEventListener && mq.addEventListener('change', label);
+    themeBtn.addEventListener('click', function () {
+      var next = current() === 'dark' ? 'light' : 'dark';
+      var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (d.startViewTransition && !calm) {
+        var r = themeBtn.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+        var far = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+        var vt = d.startViewTransition(function () { apply(next); });
+        vt.ready.then(function () {
+          root.animate({ clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + far + 'px at ' + x + 'px ' + y + 'px)'] },
+            { duration: 600, easing: 'cubic-bezier(.2, 0, 0, 1)', pseudoElement: '::view-transition-new(root)' });
+        }).catch(function () {});
+      } else {
+        root.classList.add('theme-fade');
+        apply(next);
+        setTimeout(function () { root.classList.remove('theme-fade'); }, 400);
+      }
+    });
+  }
+
   /* ---------- Header lifts with a soft shadow once the page scrolls ---------- */
   var header = d.querySelector('.site-header');
   if (header) {
