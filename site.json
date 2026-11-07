@@ -1,6 +1,5 @@
 {
   "_readme": "Central settings for brahmavidya.co.in. Change contact details, menus, footer and forms here; every page picks them up on the next build. See AGENTS.md.",
-
   "name": "Brahmavidya",
   "tagline": "Indian Musicology and Indology",
   "description": "Brahmavidya is a Mysuru-based institution for Indian musicology and Indology: Bharatanatyam, Karnāṭaka Saṅgīta, Sanskrit, Yoga, Ayurveda and manuscript research.",
@@ -8,29 +7,52 @@
   "lang": "en",
   "founded": 1989,
   "share_image": "/assets/uploads/2025/10/Cini-Foundation.webp",
-
   "contact": {
     "email": "brahmavidya1008@gmail.com",
-    "phones": ["+91 94484 39009", "+91 98404 33852"],
+    "phones": [
+      "+91 94484 39009",
+      "+91 98404 33852"
+    ],
     "office": {
       "label": "Administrative & Academic Office",
-      "lines": ["No. 12, ‘Trayeelakshmi’, 9th Cross, 4th Main", "Jayanagar, Mysuru, Karnataka 570014"],
+      "lines": [
+        "No. 12, ‘Trayeelakshmi’, 9th Cross, 4th Main",
+        "Jayanagar, Mysuru, Karnataka 570014"
+      ],
       "map": "https://www.google.com/maps/search/?api=1&query=No.+12+Trayeelakshmi+9th+Cross+4th+Main+Jayanagar+Mysuru+570014"
     },
     "natyashala": {
       "label": "Natyashala (Dance Studio)",
-      "lines": ["31/A, JT Koppal 5th Stage, Kuvempunagar", "Mysuru, Karnataka 570023"],
+      "lines": [
+        "31/A, JT Koppal 5th Stage, Kuvempunagar",
+        "Mysuru, Karnataka 570023"
+      ],
       "map": "https://www.google.com/maps/search/?api=1&query=31%2FA+JT+Koppal+5th+Stage+Kuvempunagar+Mysuru+570023"
     }
   },
-
   "social": [
-    { "_note": "Add real profile links here; an entry with an empty url is not shown.", "name": "YouTube", "icon": "youtube", "url": "" },
-    { "name": "Facebook", "icon": "facebook", "url": "" },
-    { "name": "Instagram", "icon": "instagram", "url": "" },
-    { "name": "X", "icon": "x", "url": "" }
+    {
+      "_note": "Add real profile links here; an entry with an empty url is not shown.",
+      "name": "YouTube: Naada Nandana",
+      "icon": "youtube",
+      "url": "https://www.youtube.com/@naadanandana"
+    },
+    {
+      "name": "Facebook",
+      "icon": "facebook",
+      "url": ""
+    },
+    {
+      "name": "Instagram",
+      "icon": "instagram",
+      "url": ""
+    },
+    {
+      "name": "X",
+      "icon": "x",
+      "url": ""
+    }
   ],
-
   "forms": {
     "_note": "The site has no server. Subscribe posts to the WordPress.com newsletter list of blog 248154268 (the existing 15 subscribers live there). Courses and artist profiles use Google Forms.",
     "subscribe": {
@@ -41,59 +63,188 @@
     "course_application": "https://forms.gle/Bb5BunNR3nKXdV3U8",
     "artist_profile": ""
   },
-
   "nav": [
-    { "label": "Home", "href": "/", "section": "home" },
-    { "label": "About", "href": "/about/", "section": "about", "children": [
-      { "label": "Brahmavidya", "href": "/about/" },
-      { "label": "Our Inspiration", "href": "/our-inspiration/" },
-      { "label": "Faculty and Scholars", "href": "/our-faculty-and-scholars/" },
-      { "label": "Artist Repository", "href": "/artist-repository/" }
-    ]},
-    { "label": "Courses", "href": "/short-term-courses-recognised-by-karnataka-samskrit-university/", "section": "courses", "children": [
-      { "label": "All short-term courses", "href": "/short-term-courses-recognised-by-karnataka-samskrit-university/" },
-      { "label": "Saṃskṛta Saṅgītam", "href": "/samskrita-sangitam-short-term-courses-recognised-by-karnataka-samskrita-university/" },
-      { "label": "Saṃskṛta Nāṭyam", "href": "/samskrita-natyam-short-term-courses-recognised-by-karnataka-samskrita-university/" },
-      { "label": "Yoga", "href": "/yoga-short-term-courses-recognised-by-karnataka-samskrita-university/" },
-      { "label": "Ayurveda", "href": "/ayurveda-short-term-courses-recognised-by-karnataka-samskrita-university/" }
-    ]},
-    { "label": "Digital Tools", "href": "/digital-tools/", "section": "tools", "children": [
-      { "label": "All digital tools", "href": "/digital-tools/" },
-      { "label": "EyM Sanskrit OCR", "href": "/ocr-eym-sanskrit-ocr-integration-beta/" },
-      { "label": "Kannada Tools", "href": "/kannada-ascii-to-unicode-converter/" },
-      { "label": "BVMatanga Font", "href": "/bvmatanga-kannada-font/" },
-      { "label": "Stotravahini Privacy Policy", "href": "/stotravahini-privacy-policy/" },
-      { "label": "Downloads", "href": "/downloads/" }
-    ]},
-    { "label": "BV Mudrana", "href": "/bv-mudrana/", "section": "mudrana" },
-    { "label": "Musicology Day", "href": "/indian-musicology-day-2/", "section": "imd", "children": [
-      { "label": "Indian Musicology Day", "href": "/indian-musicology-day-2/" },
-      { "label": "Gallery", "href": "/gallery/" }
-    ]},
-    { "label": "Contact", "href": "/contact/", "section": "contact" }
+    {
+      "label": "Home",
+      "href": "/",
+      "section": "home"
+    },
+    {
+      "label": "About",
+      "href": "/about/",
+      "section": "about",
+      "children": [
+        {
+          "label": "Brahmavidya",
+          "href": "/about/"
+        },
+        {
+          "label": "Our Inspiration",
+          "href": "/our-inspiration/"
+        },
+        {
+          "label": "Faculty and Scholars",
+          "href": "/our-faculty-and-scholars/"
+        },
+        {
+          "label": "Artist Repository",
+          "href": "/artist-repository/"
+        }
+      ]
+    },
+    {
+      "label": "Courses",
+      "href": "/short-term-courses-recognised-by-karnataka-samskrit-university/",
+      "section": "courses",
+      "children": [
+        {
+          "label": "All short-term courses",
+          "href": "/short-term-courses-recognised-by-karnataka-samskrit-university/"
+        },
+        {
+          "label": "Saṃskṛta Saṅgītam",
+          "href": "/samskrita-sangitam-short-term-courses-recognised-by-karnataka-samskrita-university/"
+        },
+        {
+          "label": "Saṃskṛta Nāṭyam",
+          "href": "/samskrita-natyam-short-term-courses-recognised-by-karnataka-samskrita-university/"
+        },
+        {
+          "label": "Yoga",
+          "href": "/yoga-short-term-courses-recognised-by-karnataka-samskrita-university/"
+        },
+        {
+          "label": "Ayurveda",
+          "href": "/ayurveda-short-term-courses-recognised-by-karnataka-samskrita-university/"
+        }
+      ]
+    },
+    {
+      "label": "Digital Tools",
+      "href": "/digital-tools/",
+      "section": "tools",
+      "children": [
+        {
+          "label": "All digital tools",
+          "href": "/digital-tools/"
+        },
+        {
+          "label": "EyM Sanskrit OCR",
+          "href": "/ocr-eym-sanskrit-ocr-integration-beta/"
+        },
+        {
+          "label": "Kannada Tools",
+          "href": "/kannada-ascii-to-unicode-converter/"
+        },
+        {
+          "label": "BVMatanga Font",
+          "href": "/bvmatanga-kannada-font/"
+        },
+        {
+          "label": "Stotravahini Privacy Policy",
+          "href": "/stotravahini-privacy-policy/"
+        },
+        {
+          "label": "Downloads",
+          "href": "/downloads/"
+        }
+      ]
+    },
+    {
+      "label": "BV Mudrana",
+      "href": "/bv-mudrana/",
+      "section": "mudrana"
+    },
+    {
+      "label": "Musicology Day",
+      "href": "/indian-musicology-day-2/",
+      "section": "imd",
+      "children": [
+        {
+          "label": "Indian Musicology Day",
+          "href": "/indian-musicology-day-2/"
+        },
+        {
+          "label": "Gallery",
+          "href": "/gallery/"
+        }
+      ]
+    },
+    {
+      "label": "Contact",
+      "href": "/contact/",
+      "section": "contact"
+    }
   ],
-
   "footer": {
     "columns": [
-      { "title": "Brahmavidya", "links": [
-        { "label": "About", "href": "/about/" },
-        { "label": "Our Inspiration", "href": "/our-inspiration/" },
-        { "label": "Faculty and Scholars", "href": "/our-faculty-and-scholars/" },
-        { "label": "Indian Musicology Day", "href": "/indian-musicology-day-2/" },
-        { "label": "Gallery", "href": "/gallery/" }
-      ]},
-      { "title": "Learn and use", "links": [
-        { "label": "Short-term courses", "href": "/short-term-courses-recognised-by-karnataka-samskrit-university/" },
-        { "label": "Digital tools", "href": "/digital-tools/" },
-        { "label": "BV Mudrana", "href": "/bv-mudrana/" },
-        { "label": "Downloads", "href": "/downloads/" }
-      ]},
-      { "title": "Legal", "links": [
-        { "label": "Privacy Policy", "href": "/privacy-policy/" },
-        { "label": "Terms and Conditions", "href": "/terms-and-conditions/" },
-        { "label": "Disclaimer", "href": "/disclaimer/" },
-        { "label": "Stotravahini Privacy Policy", "href": "/stotravahini-privacy-policy/" }
-      ]}
+      {
+        "title": "Brahmavidya",
+        "links": [
+          {
+            "label": "About",
+            "href": "/about/"
+          },
+          {
+            "label": "Our Inspiration",
+            "href": "/our-inspiration/"
+          },
+          {
+            "label": "Faculty and Scholars",
+            "href": "/our-faculty-and-scholars/"
+          },
+          {
+            "label": "Indian Musicology Day",
+            "href": "/indian-musicology-day-2/"
+          },
+          {
+            "label": "Gallery",
+            "href": "/gallery/"
+          }
+        ]
+      },
+      {
+        "title": "Learn and use",
+        "links": [
+          {
+            "label": "Short-term courses",
+            "href": "/short-term-courses-recognised-by-karnataka-samskrit-university/"
+          },
+          {
+            "label": "Digital tools",
+            "href": "/digital-tools/"
+          },
+          {
+            "label": "BV Mudrana",
+            "href": "/bv-mudrana/"
+          },
+          {
+            "label": "Downloads",
+            "href": "/downloads/"
+          }
+        ]
+      },
+      {
+        "title": "Legal",
+        "links": [
+          {
+            "label": "Privacy Policy",
+            "href": "/privacy-policy/"
+          },
+          {
+            "label": "Terms and Conditions",
+            "href": "/terms-and-conditions/"
+          },
+          {
+            "label": "Disclaimer",
+            "href": "/disclaimer/"
+          },
+          {
+            "label": "Stotravahini Privacy Policy",
+            "href": "/stotravahini-privacy-policy/"
+          }
+        ]
+      }
     ]
   }
 }
