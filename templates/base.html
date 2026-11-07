@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="{{lang}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{title}}</title>
+<meta name="description" content="{{description}}">
+<link rel="canonical" href="{{canonical}}">
+<meta name="theme-color" content="#7d302b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Brahmavidya">
+<meta property="og:title" content="{{og_title}}">
+<meta property="og:description" content="{{description}}">
+<meta property="og:url" content="{{canonical}}">
+<meta property="og:image" content="{{og_image}}">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/assets/img/favicon.ico" sizes="any">
+<link rel="icon" href="/assets/img/icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/img/icon-180.png">
+<link rel="preload" href="/assets/fonts/BVNanda-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css">
+{{extra_css}}
+<script src="/assets/js/site.js" defer></script>
+{{extra_js}}
+</head>
+<body class="layout-{{layout}}">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-in">
+    <a class="brand" href="/" aria-label="Brahmavidya, home">
+      <img src="/assets/img/icon-192.png" width="48" height="48" alt="">
+      <span class="brand-text"><span class="brand-name">Brahmavidya</span><span class="brand-sub">Musicology · Indology · Mysuru</span></span>
+    </a>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
+      <svg class="i i-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+      <svg class="i i-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.3 5.71 12 12l6.3 6.29-1.42 1.42L10.59 13.4 4.29 19.7 2.88 18.29 9.17 12 2.88 5.71 4.29 4.29l6.3 6.3 6.29-6.3z"/></svg>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      {{nav}}
+    </nav>
+  </div>
+</header>
+
+<main id="main" class="site-main">
+{{content}}
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-in">
+    {{footer}}
+  </div>
+  <div class="wrap footer-base">
+    <p>© {{year}} Brahmavidya, Mysuru. All rights reserved.</p>
+    <p><a href="/privacy-policy/">Privacy</a> · <a href="/terms-and-conditions/">Terms</a> · <a href="/disclaimer/">Disclaimer</a></p>
+  </div>
+</footer>
+
+<!-- Subscribe: Material extended FAB + dialog. Posts to the WordPress.com newsletter list (see site.json → forms.subscribe). -->
+<button class="fab-subscribe" type="button" data-open-subscribe aria-haspopup="dialog">
+  <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5z"/></svg>
+  <span>Subscribe</span>
+</button>
+
+<dialog class="sub-dialog" id="subscribe-dialog" aria-labelledby="sub-title">
+  <form class="sub-card" method="post" action="{{sub_action}}" target="sub-sink" data-mailto="{{sub_mailto}}">
+    <button class="icon-btn sub-x" type="button" data-close-subscribe aria-label="Close">
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.3 5.71 12 12l6.3 6.29-1.42 1.42L10.59 13.4 4.29 19.7 2.88 18.29 9.17 12 2.88 5.71 4.29 4.29l6.3 6.3 6.29-6.3z"/></svg>
+    </button>
+    <div class="sub-body" data-state="form">
+      <h2 id="sub-title">Letters from Brahmavidya</h2>
+      <p>News of seminars, concerts, Indian Musicology Day, new courses and new digital tools. A few letters a year.</p>
+      <label class="field">
+        <input type="email" name="email" required autocomplete="email" placeholder=" " inputmode="email">
+        <span>Email address</span>
+      </label>
+      <input type="hidden" name="action" value="subscribe">
+      <input type="hidden" name="blog_id" value="{{sub_blog}}">
+      <input type="hidden" name="source" value="{{site_url}}/">
+      <input type="hidden" name="sub-type" value="widget">
+      <input type="hidden" name="redirect_fragment" value="subscribe-blog">
+      <button class="btn btn-filled" type="submit"><span>Subscribe</span></button>
+      <p class="sub-note">You can leave at any time from the link in every letter.</p>
+    </div>
+    <div class="sub-body sub-done" data-state="done" hidden>
+      <h2>Almost done</h2>
+      <p>Please open the email we have just sent and confirm your subscription.</p>
+      <button class="btn btn-tonal" type="button" data-close-subscribe><span>Close</span></button>
+    </div>
+  </form>
+  <iframe name="sub-sink" class="sub-sink" title="Subscription response" tabindex="-1" aria-hidden="true"></iframe>
+</dialog>
+</body>
+</html>

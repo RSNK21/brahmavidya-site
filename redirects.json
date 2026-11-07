@@ -1,0 +1,27 @@
+{
+  "_readme": "Old WordPress addresses that no longer have their own page. Each one gets a small page that sends visitors (and search engines) to the new address. Left: old path. Right: where it goes now.",
+
+  "/home/": "/",
+  "/front_page/": "/",
+  "/hero-section/": "/",
+  "/indian-musicology-day/": "/indian-musicology-day-2/",
+  "/courses/": "/short-term-courses-recognised-by-karnataka-samskrit-university/",
+  "/courses-2/": "/short-term-courses-recognised-by-karnataka-samskrit-university/",
+  "/courses-lp/": "/short-term-courses-recognised-by-karnataka-samskrit-university/",
+  "/single-course-page/": "/short-term-courses-recognised-by-karnataka-samskrit-university/",
+  "/registration/": "/short-term-courses-recognised-by-karnataka-samskrit-university/",
+  "/registration-success/": "/short-term-courses-recognised-by-karnataka-samskrit-university/",
+  "/reset-password/": "/",
+  "/profile/": "/",
+  "/lp-profile/": "/",
+  "/lp-checkout/": "/short-term-courses-recognised-by-karnataka-samskrit-university/",
+  "/instructor/": "/our-faculty-and-scholars/",
+  "/instructors/": "/our-faculty-and-scholars/",
+  "/become_a_teacher/": "/contact/",
+  "/term_conditions/": "/terms-and-conditions/",
+  "/blog/": "/",
+  "/blog-2/": "/",
+  "/hello-bv/": "/",
+  "/audio-library/": "/gallery/",
+  "/wpuf-preview/": "/"
+}

@@ -1,0 +1,231 @@
+---
+title: BV Mudrana
+description: BV Mudrana — page layout for Kannada, Sanskrit and English. Opens PageMaker and InDesign files and turns old Nudi, Praja, Chanakya and Nalanda text into Unicode. Free from Brahmavidya.
+section: mudrana
+layout: wide
+css: /assets/css/tools/bv-mudrana.css
+js: /assets/js/tools/bv-legacy-converters.js, /assets/js/tools/bv-mudrana.js
+image: /assets/uploads/2026/10/bv-mudrana-pagemaker-dark.jpg
+---
+<!-- Launch page for BV Mudrana (source and releases: github.com/RSNK21/bvmudrana).
+     Page styles: assets/css/tools/bv-mudrana.css · behaviour: assets/js/tools/bv-mudrana.js
+     Converters: assets/js/tools/bv-legacy-converters.js (shared engine). -->
+<div class="bvm" id="bvm-launch">
+<header class="bvm-top">
+<div class="bvm-wrap">
+<a class="bvm-brand" href="#bvm-launch"><img alt="" src="/assets/uploads/2026/10/bv-mudrana-icon.png"/><b>BV Mudrana</b><span>0.9.2</span></a>
+<nav aria-label="On this page" class="bvm-nav">
+<a href="#convert">Converter</a><a href="#files">Files</a><a href="#features">Features</a><a href="#fonts">Fonts</a><a href="#releases">Releases</a><a href="https://github.com/RSNK21/bvmudrana">GitHub</a>
+</nav>
+<a class="bvm-btn primary" href="#download"><svg viewbox="0 0 20 20"><path d="M10 3v10M5.5 8.5 10 13l4.5-4.5M4 16.5h12"></path></svg>Download</a>
+</div>
+</header>
+<div>
+<section aria-labelledby="bvm-h1" class="bvm-hero">
+<div class="bvm-wrap">
+<div class="bvm-sheet">
+<span class="bvm-crop tl"></span><span class="bvm-crop tr"></span><span class="bvm-crop bl"></span><span class="bvm-crop br"></span>
+<span aria-hidden="true" class="bvm-reg l"></span><span aria-hidden="true" class="bvm-reg r"></span>
+<div aria-hidden="true" class="bvm-bar"><i style="background:var(--bvm-cyan)"></i><i style="background:var(--bvm-magenta)"></i><i style="background:var(--bvm-yellow)"></i><i style="background:var(--bvm-ink)"></i><i style="background:var(--bvm-saffron)"></i><i style="background:var(--bvm-kumkum)"></i><i style="background:var(--bvm-leaf)"></i></div>
+<div class="bvm-hero-grid">
+<div>
+<p aria-label="Mudrana" class="bvm-mudrana" lang="kn">ಮುದ್ರಣ</p>
+<h1 class="bvm-h1" id="bvm-h1">Page layout for Kannada, Sanskrit and English, <em>that opens your PageMaker books.</em></h1>
+<p class="lede">BV Mudrana works the way PageMaker 7 did, with its menus, toolbox and shortcuts, and writes real Unicode text. Old Nudi, Praja, Chanakya and Nalanda text becomes Unicode as the file opens, set in fonts made from the same letterforms.</p>
+<div class="bvm-cta">
+<a class="bvm-btn primary" href="#download"><svg viewbox="0 0 20 20"><path d="M10 3v10M5.5 8.5 10 13l4.5-4.5M4 16.5h12"></path></svg>Download for Windows</a>
+<a class="bvm-btn" href="#convert">Try the converter</a>
+<small>Free. Windows 10 and 11, 64-bit. Version 0.9.2.</small>
+</div>
+</div>
+<div aria-live="polite" class="bvm-stick">
+<div class="bvm-stick-row"><span class="bvm-stick-k" id="bvm-stick-font">Nudi</span><div aria-label="Old ASCII text" class="bvm-ascii" id="bvm-ascii"></div></div>
+<div class="bvm-stick-row"><span class="bvm-stick-k">Unicode</span><div class="bvm-uni" id="bvm-uni"></div></div>
+<div class="bvm-stick-foot"><span id="bvm-stick-what">What a PageMaker file stores, and what BV Mudrana makes of it.</span>
+<div aria-label="Choose an example" class="bvm-pips" id="bvm-pips" role="group"></div></div>
+</div>
+</div>
+<figure class="bvm-shot">
+<div class="bvm-window"><img alt="BV Mudrana in PageMaker mode: a page with ಮುದ್ರಣ set in BV Matanga, with the toolbox, control palette and styles palette." fetchpriority="high" height="920" src="/assets/uploads/2026/10/bv-mudrana-pagemaker-dark.jpg" width="1440"/></div>
+<figcaption>PageMaker mode, Studio Dark theme. The page title is set in BV Matanga, with BV Nanda, BV Chitkala and Praja Unicode below it.</figcaption>
+</figure>
+<div class="bvm-slug"><span>BV Mudrana 0.9.2 · proof 1</span><span>Brahmavidya, Bengaluru</span><span>Designed By Tejas H Badala and Dr R S Nandakumar for Brahmavidya</span></div>
+</div>
+</div>
+</section>
+<div class="bvm-facts"><div class="bvm-wrap"><ul>
+<li><b>4 to 7</b><span>PageMaker versions it opens</span></li>
+<li><b>CS4 to 2026</b><span>InDesign versions, through IDML</span></li>
+<li><b>5</b><span>old font encodings made Unicode</span></li>
+<li><b>20</b><span>Brahmavidya font faces included</span></li>
+</ul></div></div>
+<section aria-labelledby="bvm-conv-h" id="convert">
+<div class="bvm-wrap">
+<div class="sec-head">
+<h2 id="bvm-conv-h">Bring old text into Unicode</h2>
+<p class="lede">These are the converters inside BV Mudrana, running in this page. Paste text that was typed in an old font, or switch direction and turn Unicode back into the old code for an old workflow.</p>
+</div>
+<div class="bvm-conv">
+<div aria-label="Old font" class="bvm-tabs" id="bvm-enc" role="tablist"></div>
+<div class="bvm-conv-body">
+<div class="bvm-pane">
+<label for="bvm-in" id="bvm-in-lbl">Typed in Nudi (ASCII)</label>
+<textarea id="bvm-in" spellcheck="false"></textarea>
+<div class="bvm-pane-foot"><button class="bvm-mini" id="bvm-sample" type="button">Load an example</button><span id="bvm-count"></span></div>
+</div>
+<button aria-label="Swap direction" class="bvm-swap" id="bvm-swap" title="Swap direction" type="button"><svg viewbox="0 0 20 20"><path d="M4 7h12l-3.5-3.5M16 13H4l3.5 3.5"></path></svg></button>
+<div class="bvm-pane">
+<span class="lbl" id="bvm-out-lbl">Unicode, in Praja Unicode</span>
+<div aria-live="polite" class="bvm-out" id="bvm-out" lang="kn"></div>
+<div class="bvm-pane-foot"><button class="bvm-mini" id="bvm-copy" type="button">Copy</button><span id="bvm-copied" role="status"></span></div>
+</div>
+</div>
+
+<p class="bvm-note" id="bvm-enc-note"></p>
+</div>
+</div>
+</section>
+<section aria-labelledby="bvm-files-h" id="files" style="padding-top:0">
+<div class="bvm-wrap">
+<div class="sec-head">
+<h2 id="bvm-files-h">Opens the files you already have</h2>
+<p class="lede">A PageMaker book from 1998, an InDesign file from the press, a Word manuscript in Nudi: each opens with its pages, frames and styles in place, and you choose what happens to every old font before anything changes.</p>
+</div>
+<div class="bvm-files">
+<div>
+<h3><svg viewbox="0 0 24 24"><path d="M4 20h16M12 4v11M7.5 10.5 12 15l4.5-4.5"></path></svg>Opens</h3>
+<dl>
+<dt>PMD P65 PM6</dt><dd><b>PageMaker 6, 6.5 and 7.</b> Pages, masters, threaded text blocks, styles, tabs, colours, lines, boxes, cropped TIFF and JPEG pictures.</dd>
+<dt>PM5</dt><dd><b>PageMaker 5,</b> read directly. PageMaker 4 opens through PageMaker 7 on the same computer.</dd>
+<dt>IDML</dt><dd><b>InDesign CS4 to 2026.</b> Masters, layers, swatches, styles, threaded frames, groups, rotation, linked pictures.</dd>
+<dt>INDD INDT INX</dt><dd><b>InDesign documents,</b> through the InDesign installed on the computer.</dd>
+<dt>DOCX RTF TXT</dt><dd><b>Word and text files</b> placed or converted, keeping bold, italic and styles.</dd>
+</dl>
+</div>
+<div>
+<h3><svg viewbox="0 0 24 24"><path d="M4 20h16M12 15V4M7.5 8.5 12 4l4.5 4.5"></path></svg>Saves</h3>
+<dl>
+<dt>BVM</dt><dd><b>BV Mudrana</b> publications and templates, with automatic recovery of unsaved work.</dd>
+<dt>PMD P65 PMT</dt><dd><b>Back to PageMaker 7 and 6.5,</b> with Unicode turned back into the old Nudi, Praja or Chanakya code.</dd>
+<dt>IDML</dt><dd><b>For InDesign,</b> with the World-Ready composer set so Kannada and Devanagari shape correctly there.</dd>
+<dt>INDD</dt><dd><b>InDesign documents and templates</b> when InDesign is installed.</dd>
+<dt>PDF HTML</dt><dd><b>Print-ready PDF</b> with the fonts embedded, HTML, graphics and tagged text.</dd>
+</dl>
+</div>
+</div>
+</div>
+</section>
+<section aria-labelledby="bvm-feat-h" id="features" style="padding-top:0">
+<div class="bvm-wrap">
+<div class="sec-head">
+<h2 id="bvm-feat-h">Everything in its compartment</h2>
+<p class="lede">The tools of a typesetter’s case, sorted the way you reach for them.</p>
+</div>
+<div class="bvm-case">
+<article class="bvm-cell w3 h2 big"><span aria-hidden="true" class="bvm-sort">ಅ</span><h3>PageMaker, as you remember it</h3><p>The same nine menus, the fourteen-tool toolbox, the control palette, windowshade handles on text blocks, master pages, Autoflow, Story Editor and PageMaker’s keyboard shortcuts. People who set books in PageMaker for twenty years start working at once.</p>
+<ul><li>Smart open: every old font is surveyed and a Unicode font and size suggested, measured on your own text so lines break where they did</li><li>Text blocks start with exactly the text they had in PageMaker</li><li>Save back to PageMaker 7 when the press still needs it</li></ul></article>
+<article class="bvm-cell w3"><span aria-hidden="true" class="bvm-sort">ಕ</span><h3>Kannada keyboards built in</h3><p>Nudi KGP and phonetic Kannada, phonetic Devanagari and IAST. Scroll Lock switches, as in Nudi.</p></article>
+<article class="bvm-cell w3"><span aria-hidden="true" class="bvm-sort dv">ॐ</span><h3>Sanskrit tools</h3><p>Śloka and IAST styles, transliteration between Kannada, Devanagari and IAST in one keystroke, Vedic signs in the Glyphs palette.</p></article>
+<article class="bvm-cell w2"><span aria-hidden="true" class="bvm-sort lt">Tab</span><h3>Publications in tabs</h3><p>Open several files at once. Ctrl+Tab moves between them; Ctrl+Shift+T brings back the one you closed.</p></article>
+<article class="bvm-cell w2"><span aria-hidden="true" class="bvm-sort lt">¶</span><h3>Reflow and fit</h3><p>Overset text flows onto new pages in the page’s columns. Fit Frame to Text, Balance Columns, text wrap.</p></article>
+<article class="bvm-cell w2"><span aria-hidden="true" class="bvm-sort lt">.*</span><h3>Find and Change</h3><p>Across bold and italic, whole words in Kannada and Devanagari, regular expressions, Find Font.</p></article>
+<article class="bvm-cell w2"><span aria-hidden="true" class="bvm-sort lt">†</span><h3>Footnotes, index, contents</h3><p>Footnotes numbered in Kannada or Devanagari digits, an index, a table of contents, running heads.</p></article>
+<article class="bvm-cell w2"><span aria-hidden="true" class="bvm-sort lt">Snap</span><h3>Smart Guides</h3><p>Objects snap to the edges and centres of other objects while you drag, as in InDesign.</p></article>
+<article class="bvm-cell w2"><span aria-hidden="true" class="bvm-sort lt">✓</span><h3>Live preflight</h3><p>A light in the status bar counts missing fonts, missing pictures and overset text before the press does.</p></article>
+<article class="bvm-cell w3"><span aria-hidden="true" class="bvm-sort lt">⊞</span><h3>From Scribus, Word and LibreOffice</h3><p>Pages and Outline palettes, Align and Distribute, tables, gradients, a Library, Data Merge, Format Painter, typographer’s quotes, sticky notes for proof comments, a watermark and page border, Read Aloud.</p></article>
+<article class="bvm-cell w3"><span aria-hidden="true" class="bvm-sort lt">✦</span><h3>Your own name on it</h3><p>Tell BV Mudrana your name when you install it. The start screen says Namaste, and the title bar reads as your own Mudrana.</p></article>
+</div>
+</div>
+</section>
+<section aria-labelledby="bvm-ws-h" id="workspaces" style="padding-top:0">
+<div class="bvm-wrap">
+<div class="sec-head">
+<h2 id="bvm-ws-h">Four ways to work, seven looks</h2>
+<p class="lede">Choose the interface that fits the person at the keyboard. Every mode has every command; only the way in changes.</p>
+</div>
+<div class="bvm-ws">
+<div aria-label="Interface mode" class="bvm-ws-list" id="bvm-ws-list" role="tablist">
+<button aria-selected="true" data-alt="PageMaker mode with the Studio Dark theme" data-shot="pagemaker-dark" role="tab"><b>PageMaker</b>The classic layout: toolbox, control palette, styles, colours, layers and masters.</button>
+<button aria-selected="false" data-alt="Word style mode with the ribbon and the Paper Light theme" data-shot="word-light" role="tab"><b>Word style</b>A ribbon with Home, Insert, Layout, Language, Review and View, and a live styles gallery.</button>
+<button aria-selected="false" data-alt="Basic mode with Material You Dark" data-shot="basic-material" role="tab"><b>Basic</b>One row of big labelled buttons. No palettes, no rulers. Good for a first book.</button>
+<button aria-selected="false" data-alt="Advanced mode with the Modern Expressive theme" data-shot="advanced-expressive" role="tab"><b>Advanced</b>Everything at once, tighter, with the Pages panel and Align palette, for big books.</button>
+<button aria-selected="false" data-alt="PageMaker mode with the Classic PageMaker 7 theme" data-shot="classic" role="tab"><b>Classic PageMaker 7</b>The grey Windows 2000 look, down to the bevels, for those who miss it.</button>
+</div>
+<div class="bvm-ws-view"><div class="bvm-window"><img alt="PageMaker mode with the Studio Dark theme" height="920" id="bvm-ws-img" src="/assets/uploads/2026/10/bv-mudrana-pagemaker-dark.jpg" width="1440"/></div></div>
+</div>
+</div>
+</section>
+<section aria-labelledby="bvm-fonts-h" id="fonts" style="padding-top:0">
+<div class="bvm-wrap">
+<div class="sec-head">
+<h2 id="bvm-fonts-h">Fonts made at Brahmavidya, included</h2>
+<p class="lede">Each one keeps the letterforms of a font people already printed with, now as Unicode. BV Mudrana installs them in Windows for your account, so Word and every other program can use them too. Click a line and type your own text.</p>
+</div>
+<div class="bvm-spec-tools"><label for="bvm-size">Size</label><input id="bvm-size" max="110" min="24" type="range" value="58"/><output for="bvm-size" id="bvm-size-out">58 px</output></div>
+<div class="bvm-specimens">
+<div class="bvm-spec"><div class="bvm-spec-meta"><b>BV Matanga</b><span>Kannada display, Regular and Bold. From the curves of the Matangeshvara rock inscription.</span></div><div aria-label="BV Matanga sample" class="bvm-spec-sample" contenteditable="true" lang="kn" spellcheck="false" style="font-family:'BVMatanga',serif">ಮತಂಗೇಶ್ವರ ದೇವರದಿಡ್ಡಿ</div></div>
+<div class="bvm-spec"><div class="bvm-spec-meta"><b>Praja Unicode</b><span>Kannada text, Regular, Demi and Light. The Prajavani newspaper face, in Unicode.</span></div><div aria-label="Praja Unicode sample" class="bvm-spec-sample" contenteditable="true" lang="kn" spellcheck="false" style="font-family:'Praja Unicode',serif">ಕನ್ನಡ ಮುದ್ರಣಕ್ಕೆ ಹೊಸ ಉಸಿರು</div></div>
+<div class="bvm-spec"><div class="bvm-spec-meta"><b>BV Chitkala</b><span>Devanagari, with Hindi, Hindi Heavy and Math. Made from Chanakya.</span></div><div aria-label="BV Chitkala sample" class="bvm-spec-sample" contenteditable="true" lang="sa" spellcheck="false" style="font-family:'BVChitkala',serif">श्रीमद्भगवद्गीता</div></div>
+<div class="bvm-spec"><div class="bvm-spec-meta"><b>BV Nanda</b><span>IAST transliteration, roman and italic. Made from Nalandagar.</span></div><div aria-label="BV Nanda sample" class="bvm-spec-sample" contenteditable="true" lang="sa-Latn" spellcheck="false" style="font-family:'BVNanda',serif">Śrīmad Bhagavadgītā <i>kṛṣṇārjuna-saṃvāda</i></div></div>
+</div>
+</div>
+</section>
+<section aria-labelledby="bvm-screens-h" id="screens" style="padding-top:0">
+<div class="bvm-wrap">
+<div class="sec-head">
+<h2 id="bvm-screens-h">From the old file to a clean page</h2>
+</div>
+<div class="bvm-screens">
+<figure><div class="bvm-window"><img alt="The Open dialog for a PageMaker file, listing each font with a suggested Unicode font, size and preview" height="920" loading="lazy" src="/assets/uploads/2026/10/bv-mudrana-smart-open.jpg" width="1440"/></div><figcaption><b>Every font, decided before opening.</b> Nudi, Praja and Baraha text is measured in both fonts, so the Unicode size keeps PageMaker’s line breaks.</figcaption></figure>
+<figure><div class="bvm-window"><img alt="A PageMaker 5 chapter open in BV Mudrana, with IAST text and tables" height="920" loading="lazy" src="/assets/uploads/2026/10/bv-mudrana-pm5-tables.jpg" width="1440"/></div><figcaption><b>A PageMaker 5 chapter, in Unicode IAST.</b> Text blocks, tab stops, rules and running heads where they were.</figcaption></figure>
+<figure><div class="bvm-window"><img alt="The Convert Legacy Text dialog listing Chanakya, Nalandagara and Walkman-Chanakya with their Unicode fonts" height="920" loading="lazy" src="/assets/uploads/2026/10/bv-mudrana-convert-legacy.jpg" width="1440"/></div><figcaption><b>Chanakya, Walkman-Chanakya and Nalanda.</b> Utilities, Convert Legacy Text to Unicode, for text already in a publication.</figcaption></figure>
+<figure><div class="bvm-window"><img alt="The start screen with page-size presets and recent files shown as first-page pictures" height="920" loading="lazy" src="/assets/uploads/2026/10/bv-mudrana-start.jpg" width="1440"/></div><figcaption><b>The start screen.</b> Demy, Crown and Royal book sizes in one click, and recent files as pictures of their first page.</figcaption></figure>
+</div>
+</div>
+</section>
+<section aria-labelledby="bvm-rel-h" id="releases" style="padding-top:0">
+<div class="bvm-wrap">
+<div class="sec-head"><h2 id="bvm-rel-h">How it grew</h2><p class="lede">Each version installs over the one before with a small update file. Nothing has to be uninstalled.</p></div>
+<ol class="bvm-releases" reversed="">
+<li class="now"><b>0.9</b><p>Publications in tabs, a new start screen, InDesign IDML and INDD, PageMaker 5, Chanakya and Nalanda to Unicode in BV Chitkala and BV Nanda, Smart Guides, live preflight, BV Matanga.</p></li>
+<li><b>0.8</b><p>Reflow overset text, Find and Change with regular expressions, Find Font, Format Painter, fields and special characters, watermarks, Read Aloud, your name on the title bar.</p></li>
+<li><b>0.7</b><p>Praja (Prajavani) fonts: Praja Unicode, Praja01 to Praja08, Praja documents in Word and RTF, and updates that install over the old version.</p></li>
+<li><b>0.6</b><p>Four interface modes and seven themes, from Material You to Classic PageMaker 7.</p></li>
+<li><b>0.5</b><p>Smart open with measured font sizes, Kannada keyboards, footnotes, more PageMaker formatting kept.</p></li>
+<li><b>0.4</b><p>PageMaker’s menus drawn in the window, Pages, Outline, Align and Glyphs palettes, tables from Scribus.</p></li>
+<li><b>0.3</b><p>Save as PageMaker 7 and 6.5, the Brahmavidya Kannada converter everywhere.</p></li>
+<li><b>0.2</b><p>Opens PageMaker 6.5 and 7 files and turns Nudi text into Unicode Kannada.</p></li>
+</ol>
+</div>
+</section>
+<section aria-labelledby="bvm-dl-h" id="download" style="padding-top:0">
+<div class="bvm-wrap">
+<div class="bvm-dl">
+<span aria-hidden="true" class="bvm-dl-kn">ಮು</span>
+<div style="position:relative">
+<h2 id="bvm-dl-h">Download BV Mudrana 0.9.2</h2>
+<p>Free from Brahmavidya. Install it once with the Setup file; after that, each new version comes as a small Update file that installs over the old one and keeps your settings.</p>
+<div class="bvm-cta">
+<a class="bvm-btn primary" href="https://github.com/RSNK21/bvmudrana/releases/download/v0.9.2/BV-Mudrana-Setup-0.9.2.exe"><svg viewbox="0 0 20 20"><path d="M10 3v10M5.5 8.5 10 13l4.5-4.5M4 16.5h12"></path></svg>Setup for Windows</a>
+<a class="bvm-btn" href="https://github.com/RSNK21/bvmudrana/releases/download/v0.9.2/BV-Mudrana-Update-0.9.2.exe">Update from 0.8 or 0.9</a>
+<small style="color:inherit;opacity:.75">Source code, earlier versions and SHA-256 checksums are on <a href="https://github.com/RSNK21/bvmudrana" style="text-decoration:underline">GitHub</a>.</small>
+</div>
+</div>
+<dl>
+<div><dt>Windows</dt><dd>Windows 10 or 11, 64-bit. About 115 MB to install.</dd></div>
+<div><dt>Optional: PageMaker 7</dt><dd>Needed only to save .pmd files and to open PageMaker 4 files.</dd></div>
+<div><dt>Optional: InDesign</dt><dd>Needed only for .indd files. IDML works without it.</dd></div>
+<div><dt>Fonts</dt><dd>Praja Unicode, Praja01 to Praja08, BV Chitkala, BV Nanda and BV Matanga are installed for you.</dd></div>
+</dl>
+</div>
+</div>
+</section>
+</div>
+<footer class="bvm-foot">
+<div class="bvm-wrap">
+<img alt="" height="56" loading="lazy" src="/assets/uploads/2026/10/bv-mudrana-icon.png" width="56"/>
+<span><b>Designed By Tejas H Badala and Dr R S Nandakumar for Brahmavidya</b></span>
+<span>Kannada conversion: the Brahmavidya Kannada converter. PageMaker file reading based on libpagemaker (MPL 2.0). BV Matanga is under the SIL Open Font License 1.1. Source code: <a href="https://github.com/RSNK21/bvmudrana" style="text-decoration:underline">github.com/RSNK21/bvmudrana</a>.</span>
+</div>
+</footer>
+</div>
