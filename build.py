@@ -122,22 +122,25 @@ def icon(name):
     return f'<svg class="i" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="{paths[name]}"/></svg>'
 
 
-def build_nav(section):
+def build_nav(section, page_url=''):
+    """Top menu from site.json. Items carry --i (their position) for staggered
+    animations; the current page is marked aria-current in its dropdown."""
     out = ['<ul class="nav-list">']
     for i, item in enumerate(site['nav']):
         active = ' is-active' if item.get('section') == section else ''
         cur = ' aria-current="true"' if active else ''
         kids = item.get('children')
         if kids:
-            out.append(f'<li class="nav-item has-sub{active}">'
+            out.append(f'<li class="nav-item has-sub{active}" style="--i:{i}">'
                        f'<a class="nav-link" href="{item["href"]}"{cur}>{esc(item["label"])}</a>'
                        f'<button class="sub-toggle" type="button" aria-expanded="false" aria-controls="sub-{i}" aria-label="Show {esc(item["label"])} pages">{icon("expand")}</button>'
                        f'<ul class="sub" id="sub-{i}">')
-            for k in kids:
-                out.append(f'<li><a href="{k["href"]}">{esc(k["label"])}</a></li>')
+            for j, k in enumerate(kids):
+                here = ' aria-current="page"' if k['href'] == page_url else ''
+                out.append(f'<li style="--i:{j}"><a href="{k["href"]}"{here}>{esc(k["label"])}</a></li>')
             out.append('</ul></li>')
         else:
-            out.append(f'<li class="nav-item{active}"><a class="nav-link" href="{item["href"]}"{cur}>{esc(item["label"])}</a></li>')
+            out.append(f'<li class="nav-item{active}" style="--i:{i}"><a class="nav-link" href="{item["href"]}"{cur}>{esc(item["label"])}</a></li>')
     out.append('</ul>')
     return ''.join(out)
 
@@ -231,7 +234,7 @@ def main():
             '{{og_image}}': site['url'] + image,
             '{{extra_css}}': extra_css,
             '{{extra_js}}': extra_js,
-            '{{nav}}': build_nav(meta.get('section', '')),
+            '{{nav}}': build_nav(meta.get('section', ''), url),
             '{{footer}}': footer,
             '{{layout}}': meta.get('layout', 'default'),
             '{{sub_action}}': sub['action'], '{{sub_blog}}': sub['blog_id'], '{{sub_mailto}}': sub['fallback_mailto'],

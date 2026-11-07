@@ -1,4 +1,4 @@
-/* Brahmavidya — site.js
+/* Brahmavidya: site.js
    Menu, sub-menus, Subscribe dialog, button ripples, tabs, click-to-play
    videos and the photo viewer. No libraries. Every feature checks that its
    elements exist, so pages without them are unaffected. */
@@ -17,31 +17,75 @@
       menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     });
   }
+  var desktop = function () { return window.matchMedia('(min-width: 1081px)').matches; };
+  /* On phones a sub-menu slides open: animate max-height to its real height. */
+  var setOpen = function (item, open) {
+    item.classList.toggle('is-open', open);
+    var btn = item.querySelector('.sub-toggle'), sub = item.querySelector('.sub');
+    if (btn) btn.setAttribute('aria-expanded', String(open));
+    if (sub) sub.style.maxHeight = (!desktop() && open) ? sub.scrollHeight + 24 + 'px' : '';
+  };
   d.querySelectorAll('.sub-toggle').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
       var item = btn.parentElement, open = !item.classList.contains('is-open');
-      d.querySelectorAll('.has-sub.is-open').forEach(function (o) {
-        if (o !== item) { o.classList.remove('is-open'); o.querySelector('.sub-toggle').setAttribute('aria-expanded', 'false'); }
-      });
-      item.classList.toggle('is-open', open);
-      btn.setAttribute('aria-expanded', String(open));
+      d.querySelectorAll('.has-sub.is-open').forEach(function (o) { if (o !== item) setOpen(o, false); });
+      setOpen(item, open);
     });
   });
   d.addEventListener('click', function (e) {
-    if (!e.target.closest('.has-sub') && window.matchMedia('(min-width: 1081px)').matches) {
-      d.querySelectorAll('.has-sub.is-open').forEach(function (o) { o.classList.remove('is-open'); });
+    if (!e.target.closest('.has-sub') && desktop()) {
+      d.querySelectorAll('.has-sub.is-open').forEach(function (o) { setOpen(o, false); });
     }
   });
   d.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
-    d.querySelectorAll('.has-sub.is-open').forEach(function (o) { o.classList.remove('is-open'); });
+    d.querySelectorAll('.has-sub.is-open').forEach(function (o) { setOpen(o, false); });
     if (d.body.classList.contains('menu-open') && menuBtn) menuBtn.click();
   });
 
+  /* ---------- Desktop: a pill indicator glides to the hovered menu item ----------
+     It rests on the current section's item and glides back when the pointer leaves. */
+  var list = d.querySelector('.site-nav .nav-list');
+  if (list) {
+    var ind = d.createElement('span');
+    ind.className = 'nav-ind';
+    ind.setAttribute('aria-hidden', 'true');
+    list.insertBefore(ind, list.firstChild);
+    var items = Array.prototype.filter.call(list.children, function (li) { return li.classList && li.classList.contains('nav-item'); });
+    var home = list.querySelector('.nav-item.is-active');
+    var place = function (li, instant) {
+      if (!desktop()) return;
+      if (!li) { ind.style.opacity = '0'; return; }
+      if (instant) ind.classList.add('no-anim');
+      ind.style.width = li.offsetWidth + 'px';
+      ind.style.transform = 'translateX(' + li.offsetLeft + 'px)';
+      ind.style.opacity = '1';
+      if (instant) { void ind.offsetWidth; ind.classList.remove('no-anim'); }
+    };
+    items.forEach(function (li) {
+      li.addEventListener('mouseenter', function () { list.classList.add('is-hovering'); place(li); });
+      li.addEventListener('focusin', function () { place(li); });
+    });
+    list.addEventListener('mouseleave', function () { list.classList.remove('is-hovering'); place(home); });
+    list.addEventListener('focusout', function (e) { if (!list.contains(e.relatedTarget)) place(home); });
+    var settle = function () { place(home, true); };
+    settle();
+    if (d.fonts && d.fonts.ready) d.fonts.ready.then(settle);
+    window.addEventListener('resize', settle);
+  }
+
+  /* ---------- Header lifts with a soft shadow once the page scrolls ---------- */
+  var header = d.querySelector('.site-header');
+  if (header) {
+    var onScroll = function () { header.classList.toggle('is-scrolled', window.scrollY > 8); };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
   /* ---------- Material ripple on buttons ---------- */
   d.addEventListener('pointerdown', function (e) {
-    var el = e.target.closest('.btn, .fab-subscribe');
+    var el = e.target.closest('.btn, .fab-subscribe, .sub a, .menu-btn');
     if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var r = el.getBoundingClientRect(), size = Math.max(r.width, r.height);
     var s = d.createElement('span');

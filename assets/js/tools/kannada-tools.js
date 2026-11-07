@@ -1,4 +1,4 @@
-/* Brahmavidya Kannada Tools — converter and page behaviour.
+/* Brahmavidya Kannada Tools: converter and page behaviour.
    Ported from the WordPress page (where it had to be base64-wrapped). Runs in the browser.
    Only the "Aksharamukha" transliteration panel sends text to an outside service. */
 (function(){if(new URLSearchParams(window.location.search).get("word-addin")==="1")document.documentElement.classList.add("bv-word-addin");})();

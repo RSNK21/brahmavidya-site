@@ -1,4 +1,4 @@
-# AGENTS.md — instructions for AI agents working on brahmavidya.co.in
+# AGENTS.md: instructions for AI agents working on brahmavidya.co.in
 
 Read this whole file before changing anything. It is short on purpose.
 
@@ -67,6 +67,8 @@ GitHub Actions builds, checks and publishes on every push to `main`
    file names, at most ~1800 px on the long side. Always write a real `alt`.
 8. **No secrets** in this repository. It is public.
 9. **Do not invent facts** (names, dates, awards, fees). Ask the site owner.
+10. **No em dashes (—)** anywhere in the site text. Use a comma, colon, brackets or a
+    full stop instead. (Number ranges like 1949–1984 keep the short en dash.)
 
 ## Common tasks
 
