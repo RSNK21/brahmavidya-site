@@ -72,25 +72,25 @@ GitHub Actions builds, checks and publishes on every push to `main`
 
 ## Common tasks
 
-**Add a page** — copy a similar file in `pages/`, change the header block
+**Add a page**: copy a similar file in `pages/`, change the header block
 (`title`, `description`, `section`) and the content. Add it to `site.json` → `nav`
 and/or `footer` if it should be in a menu. Build and check.
 
-**Change the menu** — edit `site.json` → `nav`. `section` on a page decides which
+**Change the menu**: edit `site.json` → `nav`. `section` on a page decides which
 top item is highlighted.
 
-**Add Indian Musicology Day for a new year** — in
+**Add Indian Musicology Day for a new year**: in
 `pages/indian-musicology-day-2.html` add a `<button class="tab" role="tab" …>` and a
 matching `<div class="tab-panel" role="tabpanel" …>`; copy the 2025 block. Videos use
 `<button data-yt="VIDEO_ID">` and load only when clicked.
 
-**Add a course** — copy an `<article class="course">` block in the course page.
+**Add a course**: copy an `<article class="course">` block in the course page.
 All courses use the one application form in `site.json` → `forms.course_application`.
 
-**Add photos to the gallery** — add `<a href="IMG"><img src="IMG" alt="…"></a>` inside a
+**Add photos to the gallery**: add `<a href="IMG"><img src="IMG" alt="…"></a>` inside a
 `<div class="gallery">`. The viewer is automatic.
 
-**Release a new BV Mudrana version** — update version numbers and the two download
+**Release a new BV Mudrana version**: update version numbers and the two download
 URLs (GitHub releases of RSNK21/bvmudrana) in `pages/bv-mudrana.html`, and add the
 version to the "How it grew" list.
 
