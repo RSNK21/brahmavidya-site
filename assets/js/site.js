@@ -58,8 +58,11 @@
       if (!desktop()) return;
       if (!li) { ind.style.opacity = '0'; return; }
       if (instant) ind.classList.add('no-anim');
-      ind.style.width = li.offsetWidth + 'px';
-      ind.style.transform = 'translateX(' + li.offsetLeft + 'px)';
+      /* underline the word itself (the link minus its side padding) */
+      var a = li.querySelector('.nav-link'), cs = getComputedStyle(a);
+      var padL = parseFloat(cs.paddingLeft) || 0, padR = parseFloat(cs.paddingRight) || 0;
+      ind.style.width = Math.max(0, a.offsetWidth - padL - padR) + 'px';
+      ind.style.transform = 'translateX(' + (li.offsetLeft + a.offsetLeft + padL) + 'px)';
       ind.style.opacity = '1';
       if (instant) { void ind.offsetWidth; ind.classList.remove('no-anim'); }
     };
@@ -88,7 +91,7 @@
       var next = current() === 'dark' ? 'light' : 'dark';
       themeBtn.setAttribute('aria-label', 'Switch to ' + next + ' mode');
       themeBtn.title = 'Switch to ' + next + ' mode';
-      if (meta) meta.setAttribute('content', current() === 'dark' ? '#17130f' : '#fffdf8');
+      if (meta) meta.setAttribute('content', current() === 'dark' ? '#221a11' : '#faede0');
     };
     var apply = function (t) {
       root.setAttribute('data-theme', t);

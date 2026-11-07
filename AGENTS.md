@@ -70,7 +70,12 @@ GitHub Actions builds, checks and publishes on every push to `main`
    file names, at most ~1800 px on the long side. Always write a real `alt`.
 8. **No secrets** in this repository. It is public.
 9. **Do not invent facts** (names, dates, awards, fees). Ask the site owner.
-10. **No em dashes (—)** anywhere in the site text. Use a comma, colon, brackets or a
+10. **Keep the original colour scheme** of brahmavidya.co.in (tokens at the top of
+    `site.css`): blush header `#faede0`, cream footer `#ffebcd` with a brown `#775622`
+    strip, brown headings `#4c3508`, menu violet `#605be5`, link blue `#046bd2`, slate
+    Subscribe `#2c3338`, and the brown logo with "Foundation for Academics and Creativity"
+    in the header. Do not swap in a new palette.
+11. **No em dashes (—)** anywhere in the site text. Use a comma, colon, brackets or a
     full stop instead. (Number ranges like 1949–1984 keep the short en dash.)
 
 ## Common tasks

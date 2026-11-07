@@ -158,7 +158,8 @@ def build_footer():
     return f'''
     <div class="f-brand">
       <a class="f-logo" href="/"><img src="/assets/img/brahmavidya-logo-240.webp" width="120" height="116" alt="Brahmavidya"></a>
-      <p class="f-tag">Indian Musicology and Indology · Mysuru, since {site["founded"]}</p>
+      <span class="f-name">Brahmavidya</span>
+      <p class="f-tag">Indian Arts, Culture, and Academics</p>
       {social_html}
     </div>
     {''.join(cols)}
@@ -246,7 +247,7 @@ def main():
         doc = fill(doc)
         target = os.path.join(DIST, '404.html') if rel == '404.html' else out_path(url)
         if rel == '404.html':
-            doc = doc.replace('href="/', f'href="{site["url"]}/').replace('src="/', f'src="{site["url"]}/') if not FILE_LINKS else relativize(doc, '/')
+            doc = doc.replace('href="/', f'href="{site["url"]}/').replace('src="/', f'src="{site["url"]}/').replace('srcset="/', f'srcset="{site["url"]}/').replace(', /assets/', f', {site["url"]}/assets/') if not FILE_LINKS else relativize(doc, '/')
         else:
             doc = relativize(doc, url)
         os.makedirs(os.path.dirname(target), exist_ok=True)

@@ -6,7 +6,7 @@
 <title>{{title}}</title>
 <meta name="description" content="{{description}}">
 <link rel="canonical" href="{{canonical}}">
-<meta name="theme-color" content="#fffdf8">
+<meta name="theme-color" content="#faede0">
 <script>try{var t=localStorage.getItem("bv-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Brahmavidya">
@@ -29,9 +29,10 @@
 
 <header class="site-header">
   <div class="wrap header-in">
-    <a class="brand" href="/" aria-label="Brahmavidya, home">
-      <img src="/assets/img/icon-192.png" width="48" height="48" alt="">
-      <span class="brand-text"><span class="brand-name">Brahmavidya</span><span class="brand-sub">Musicology · Indology · Mysuru</span></span>
+    <a class="brand" href="/" aria-label="Brahmavidya, Foundation for Academics and Creativity: home">
+      <img class="brand-logo" src="/assets/img/brahmavidya-logo-classic-160.png" srcset="/assets/img/brahmavidya-logo-classic-160.png 1x, /assets/img/brahmavidya-logo-classic-240.png 2x" width="74" height="62" alt="">
+      <span class="brand-rule" aria-hidden="true"></span>
+      <span class="brand-text"><span class="brand-name">Brahmavidya</span><span>Foundation for Academics</span><span>and Creativity</span></span>
     </a>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
       <svg class="i i-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
@@ -55,9 +56,11 @@
   <div class="wrap footer-in">
     {{footer}}
   </div>
-  <div class="wrap footer-base">
-    <p>© {{year}} Brahmavidya, Mysuru. All rights reserved.</p>
-    <p><a href="/privacy-policy/">Privacy</a> · <a href="/terms-and-conditions/">Terms</a> · <a href="/disclaimer/">Disclaimer</a></p>
+  <div class="footer-base">
+    <div class="wrap footer-base-in">
+      <p>© {{year}} Brahmavidya, All Rights Reserved.</p>
+      <p>Maintained by Brahmavidya · <a href="/privacy-policy/">Privacy</a> · <a href="/terms-and-conditions/">Terms</a> · <a href="/disclaimer/">Disclaimer</a></p>
+    </div>
   </div>
 </footer>
 
