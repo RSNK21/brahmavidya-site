@@ -1,0 +1,604 @@
+<div class="entry-content clear" data-ast-blocks-layout="true" itemprop="text">
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<style>
+.bvm {
+--bvm-paper: #f3f4f6;
+--bvm-sheet: #ffffff;
+--bvm-ink: #1c1a37;
+--bvm-ink-2: #4a4866;
+--bvm-ink-3: #77758f;
+--bvm-rule: #d7d8e0;
+--bvm-saffron: #e2701a;
+--bvm-kumkum: #b9241d;
+--bvm-leaf: #2e7b3a;
+--bvm-sandal: #e9d4a6;
+--bvm-cyan: #0098d4; --bvm-magenta: #d4007a; --bvm-yellow: #f5c400;
+--bvm-on-saffron: #1c1a37;
+--bvm-shadow: 0 1px 0 rgba(28, 26, 55, .06), 0 18px 40px -18px rgba(28, 26, 55, .35);
+--bvm-display: 'Bodoni Moda', 'Bodoni 72', Didot, 'Times New Roman', serif;
+--bvm-body: 'Hanken Grotesk', 'Segoe UI', system-ui, sans-serif;
+--bvm-kn: 'BVMatanga', 'Noto Serif Kannada', serif;
+}
+.bvm { font: 400 17px/1.6 var(--bvm-body); color: var(--bvm-ink); background: var(--bvm-paper); -webkit-font-smoothing: antialiased; overflow-x: clip; }
+.bvm *, .bvm *::before, .bvm *::after { box-sizing: border-box; }
+.bvm img { max-width: 100%; display: block; }
+.bvm a { color: inherit; }
+.bvm :focus-visible { outline: 2px solid var(--bvm-saffron); outline-offset: 3px; border-radius: 4px; }
+.bvm-wrap { width: 100%; max-width: 1180px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+.bvm h2 { font: 600 clamp(30px, 4.2vw, 50px)/1.08 var(--bvm-display); letter-spacing: -.01em; margin: 0 0 14px; text-wrap: balance; font-variation-settings: 'opsz' 28; }
+.bvm h3 { font: 600 19px/1.3 var(--bvm-body); margin: 0 0 6px; }
+.bvm p { margin: 0 0 14px; max-width: 64ch; text-wrap: pretty; }
+.bvm .lede { font-size: 19px; color: var(--bvm-ink-2); }
+.bvm section { padding-block: clamp(64px, 9vw, 120px); }
+.bvm .sec-head { display: grid; gap: 4px; margin-bottom: 40px; max-width: 760px; }
+.bvm h1, .bvm h2, .bvm h3 { color: var(--bvm-ink); }
+.bvm .bvm-dl h2 { color: var(--bvm-paper); }
+.bvm a { text-decoration: none; }
+.bvm button { text-transform: none; letter-spacing: normal; box-shadow: none; }
+.bvm ul, .bvm ol { margin-left: 0; }
+.bvm-top { position: relative; z-index: 2; background: color-mix(in srgb, var(--bvm-paper) 86%, transparent); backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--bvm-rule); }
+.bvm-top .bvm-wrap { display: flex; align-items: center; gap: 22px; min-height: 62px; }
+.bvm-brand { display: flex; white-space: nowrap; align-items: center; gap: 10px; text-decoration: none; }
+.bvm-brand img { width: 34px; height: 34px; border-radius: 8px; }
+.bvm-brand b { font: 700 18px/1 var(--bvm-display); letter-spacing: .01em; }
+.bvm-brand span { font: 500 12px/1 var(--bvm-body); color: var(--bvm-ink-3); padding: 4px 7px; border: 1px solid var(--bvm-rule); border-radius: 99px; }
+.bvm-nav { display: flex; gap: 20px; margin-left: auto; font-size: 15px; }
+.bvm-nav a { text-decoration: none; color: var(--bvm-ink-2); }
+.bvm-nav a:hover { color: var(--bvm-ink); }
+.bvm-btn { display: inline-flex; align-items: center; gap: 10px; min-height: 46px; padding: 0 20px; border-radius: 10px; border: 1.5px solid var(--bvm-ink); background: transparent; color: var(--bvm-ink); font: 600 15px/1 var(--bvm-body); text-decoration: none; cursor: pointer; transition: background-color .15s, color .15s, transform .1s; }
+.bvm-btn:hover { background: var(--bvm-ink); color: var(--bvm-paper); }
+.bvm-btn:active { transform: translateY(1px); }
+.bvm-btn.primary { background: var(--bvm-saffron); border-color: var(--bvm-saffron); color: var(--bvm-on-saffron); }
+.bvm-btn.primary:hover { background: var(--bvm-kumkum); border-color: var(--bvm-kumkum); color: #fff; }
+.bvm-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.bvm-top .bvm-btn { min-height: 38px; padding: 0 14px; font-size: 14px; }
+@media (max-width: 760px) { .bvm-nav { display: none; } .bvm-top .bvm-btn { margin-left: auto; } }
+.bvm .bvm-hero { padding-block: 44px 64px; }
+.bvm-sheet { position: relative; background: var(--bvm-sheet); border-radius: 4px; box-shadow: var(--bvm-shadow); padding: clamp(28px, 5vw, 64px) clamp(20px, 5vw, 64px) clamp(26px, 4vw, 48px); }
+.bvm-crop { position: absolute; width: 26px; height: 26px; pointer-events: none; }
+.bvm-crop::before, .bvm-crop::after { content: ""; position: absolute; background: var(--bvm-ink); opacity: .55; }
+.bvm-crop::before { width: 18px; height: 1px; }
+.bvm-crop::after { width: 1px; height: 18px; }
+.bvm-crop.tl { top: -14px; left: -14px; } .bvm-crop.tl::before { top: 13px; left: 0; } .bvm-crop.tl::after { left: 13px; top: 0; }
+.bvm-crop.tr { top: -14px; right: -14px; } .bvm-crop.tr::before { top: 13px; right: 0; } .bvm-crop.tr::after { right: 13px; top: 0; }
+.bvm-crop.bl { bottom: -14px; left: -14px; } .bvm-crop.bl::before { bottom: 13px; left: 0; } .bvm-crop.bl::after { left: 13px; bottom: 0; }
+.bvm-crop.br { bottom: -14px; right: -14px; } .bvm-crop.br::before { bottom: 13px; right: 0; } .bvm-crop.br::after { right: 13px; bottom: 0; }
+.bvm-reg { position: absolute; top: 50%; width: 22px; height: 22px; margin-top: -11px; border: 1px solid var(--bvm-ink); border-radius: 50%; opacity: .45; }
+.bvm-reg::before, .bvm-reg::after { content: ""; position: absolute; background: var(--bvm-ink); }
+.bvm-reg::before { left: -6px; right: -6px; top: 10px; height: 1px; }
+.bvm-reg::after { top: -6px; bottom: -6px; left: 10px; width: 1px; }
+.bvm-reg.l { left: -34px; } .bvm-reg.r { right: -34px; }
+@media (max-width: 1260px) { .bvm-reg { display: none; } }
+.bvm-bar { display: flex; gap: 0; height: 10px; width: min(280px, 40%); margin: 0 0 30px; }
+.bvm-bar i { flex: 1; }
+.bvm-slug { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; margin-top: 30px; padding-top: 14px; border-top: 1px dashed var(--bvm-rule); font: 500 12.5px/1.4 var(--bvm-body); color: var(--bvm-ink-3); font-variant-numeric: tabular-nums; }
+.bvm-hero-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: end; }
+@media (max-width: 920px) { .bvm-hero-grid { grid-template-columns: 1fr; } }
+.bvm-mudrana { font: 400 clamp(92px, 15vw, 210px)/.95 var(--bvm-kn); margin: 0 0 10px -.04em; color: var(--bvm-ink); letter-spacing: -.01em; }
+.bvm-mudrana .dot { color: var(--bvm-saffron); }
+.bvm-h1 { font: 500 clamp(30px, 3.9vw, 50px)/1.08 var(--bvm-display); letter-spacing: -.012em; margin: 0 0 18px; text-wrap: balance; font-variation-settings: 'opsz' 36; }
+.bvm-h1 em { font-style: italic; font-weight: 500; }
+.bvm-cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 26px 0 0; }
+.bvm-cta small { flex-basis: 100%; color: var(--bvm-ink-3); font-size: 13px; }
+.bvm-stick { position: relative; background: var(--bvm-paper); border: 1px solid var(--bvm-rule); border-radius: 12px; padding: 18px 20px 16px; }
+.bvm-stick-row { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 14px; align-items: baseline; }
+.bvm-stick-row + .bvm-stick-row { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--bvm-rule); }
+.bvm-stick-k { font: 600 12px/1.3 var(--bvm-body); color: var(--bvm-ink-3); }
+.bvm-ascii { font: 500 clamp(17px, 2vw, 21px)/1.3 ui-monospace, 'Cascadia Mono', Consolas, monospace; color: var(--bvm-ink-2); overflow-wrap: anywhere; min-height: 1.3em; }
+.bvm-ascii .on { color: var(--bvm-kumkum); }
+.bvm-uni { font-size: clamp(30px, 4vw, 46px); line-height: 1.25; min-height: 1.3em; overflow-wrap: anywhere; }
+.bvm-uni .ch { display: inline-block; white-space: pre; transition: opacity .35s, transform .35s, filter .35s; }
+.bvm-uni .ch.off { opacity: 0; transform: translateY(.18em); filter: blur(3px); }
+.bvm-stick-foot { display: flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 13px; color: var(--bvm-ink-3); }
+.bvm-pips { display: flex; gap: 6px; margin-left: auto; }
+.bvm-pips button { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--bvm-rule); background: var(--bvm-sheet); color: var(--bvm-ink-2); font: 600 11px/1 var(--bvm-body); cursor: pointer; padding: 0; }
+.bvm-pips button[aria-pressed="true"] { background: var(--bvm-ink); color: var(--bvm-paper); border-color: var(--bvm-ink); }
+.bvm-shot { position: relative; margin: 40px 0 0; }
+.bvm-window { border-radius: 10px; overflow: hidden; background: #1d1d26; box-shadow: 0 2px 0 rgba(0,0,0,.05), 0 40px 70px -30px rgba(20, 18, 50, .55); border: 1px solid rgba(0,0,0,.25); }
+.bvm-window img { width: 100%; height: auto; aspect-ratio: 1440 / 920; }
+.bvm-shot figcaption { font-size: 13px; color: var(--bvm-ink-3); margin-top: 12px; }
+.bvm-facts { border-block: 1px solid var(--bvm-rule); padding-block: 26px; }
+.bvm-facts ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+.bvm-facts li { display: grid; gap: 2px; }
+.bvm-facts b { font: 600 30px/1.1 var(--bvm-display); font-variant-numeric: lining-nums tabular-nums; }
+.bvm-facts span { font-size: 14px; color: var(--bvm-ink-2); }
+@media (max-width: 760px) { .bvm-facts ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.bvm-conv { background: var(--bvm-sheet); border: 1px solid var(--bvm-rule); border-radius: 16px; overflow: hidden; box-shadow: var(--bvm-shadow); }
+.bvm-tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px 14px 0; border-bottom: 1px solid var(--bvm-rule); }
+.bvm-tab { border: 0; background: transparent; padding: 10px 14px 12px; font: 600 14.5px/1.2 var(--bvm-body); color: var(--bvm-ink-3); cursor: pointer; border-bottom: 2.5px solid transparent; margin-bottom: -1px; text-align: left; }
+.bvm-tab small { display: block; font-weight: 500; font-size: 12px; margin-top: 2px; }
+.bvm-tab[aria-selected="true"] { color: var(--bvm-ink); border-bottom-color: var(--bvm-saffron); }
+.bvm-conv-body { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+@media (max-width: 860px) { .bvm-conv-body { grid-template-columns: 1fr; } .bvm-swap { justify-self: center; transform: rotate(90deg); } }
+.bvm-pane { padding: 18px 20px 20px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.bvm-pane label, .bvm-pane .lbl { font: 600 13px/1.3 var(--bvm-body); color: var(--bvm-ink-3); }
+.bvm-pane textarea { width: 100%; min-height: 170px; resize: vertical; border: 1px solid var(--bvm-rule); border-radius: 10px; background: var(--bvm-paper); color: var(--bvm-ink); padding: 14px; font: 500 18px/1.5 ui-monospace, 'Cascadia Mono', Consolas, monospace; }
+.bvm-out { min-height: 170px; border-radius: 10px; padding: 12px 14px; font-size: 26px; line-height: 1.55; background: color-mix(in srgb, var(--bvm-sandal) 26%, var(--bvm-sheet)); border: 1px solid color-mix(in srgb, var(--bvm-sandal) 70%, var(--bvm-rule)); white-space: pre-wrap; overflow-wrap: anywhere; }
+.bvm-swap { align-self: center; margin: 0 4px; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--bvm-rule); background: var(--bvm-sheet); color: var(--bvm-ink); cursor: pointer; display: grid; place-items: center; }
+.bvm-swap svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.bvm-swap:hover { background: var(--bvm-paper); }
+.bvm-pane-foot { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--bvm-ink-3); flex-wrap: wrap; }
+.bvm-mini { border: 1px solid var(--bvm-rule); background: var(--bvm-sheet); color: var(--bvm-ink); border-radius: 8px; padding: 7px 12px; font: 600 13px/1 var(--bvm-body); cursor: pointer; }
+.bvm-mini:hover { background: var(--bvm-paper); }
+.bvm .bvm-note { max-width: none; margin: 0; padding: 14px 20px; border-top: 1px solid var(--bvm-rule); font-size: 14px; color: var(--bvm-ink-2); background: var(--bvm-paper); }
+.bvm-files { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border: 1px solid var(--bvm-rule); border-radius: 16px; overflow: hidden; background: var(--bvm-sheet); }
+@media (max-width: 760px) { .bvm-files { grid-template-columns: 1fr; } }
+.bvm-files > div { padding: 24px 26px; min-width: 0; }
+.bvm-files > div + div { border-left: 1px solid var(--bvm-rule); }
+@media (max-width: 760px) { .bvm-files > div + div { border-left: 0; border-top: 1px solid var(--bvm-rule); } }
+.bvm-files h3 { display: flex; align-items: center; gap: 10px; }
+.bvm-files h3 svg { width: 22px; height: 22px; fill: none; stroke: var(--bvm-saffron); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.bvm-files dl { margin: 14px 0 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px 16px; }
+.bvm-files dt { font: 700 12.5px/1.6 var(--bvm-body); letter-spacing: .03em; color: var(--bvm-kumkum); white-space: nowrap; padding-top: 1px; }
+.bvm-files dd { margin: 0; font-size: 15.5px; color: var(--bvm-ink-2); }
+.bvm-files dd b { color: var(--bvm-ink); font-weight: 600; }
+.bvm-case { --cell: var(--bvm-sheet); background: color-mix(in srgb, var(--bvm-sandal) 55%, var(--bvm-ink) 8%); padding: 10px; border-radius: 14px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-rows: minmax(150px, auto); gap: 10px; box-shadow: inset 0 2px 0 rgba(255,255,255,.25), var(--bvm-shadow); }
+.bvm-cell { background: var(--cell); border-radius: 6px; padding: 18px 18px 16px; display: flex; flex-direction: column; gap: 6px; min-width: 0; box-shadow: inset 0 0 0 1px rgba(0,0,0,.04), inset 0 6px 14px -10px rgba(0,0,0,.35); }
+.bvm-sort { font: 400 34px/1 var(--bvm-kn); color: var(--bvm-saffron); margin-bottom: 4px; }
+.bvm-sort.dv { font-family: 'BVChitkala', serif; }
+.bvm-sort.lt { font-family: var(--bvm-display); font-style: italic; }
+.bvm-cell p { font-size: 14.5px; line-height: 1.5; color: var(--bvm-ink-2); margin: 0; }
+.bvm-cell.w2 { grid-column: span 2; } .bvm-cell.w3 { grid-column: span 3; } .bvm-cell.h2 { grid-row: span 2; }
+.bvm-cell.big .bvm-sort { font-size: 64px; }
+.bvm-cell.big h3 { font-size: 22px; }
+.bvm-cell ul { margin: 6px 0 0; padding-left: 18px; color: var(--bvm-ink-2); font-size: 14.5px; line-height: 1.55; }
+@media (max-width: 1000px) { .bvm-case { grid-template-columns: repeat(2, minmax(0, 1fr)); } .bvm-cell.w3, .bvm-cell.w2 { grid-column: span 2; } .bvm-cell.h2 { grid-row: auto; } }
+@media (max-width: 560px) { .bvm-case { grid-template-columns: 1fr; } .bvm-cell.w3, .bvm-cell.w2 { grid-column: auto; } }
+.bvm-ws { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 900px) { .bvm-ws { grid-template-columns: 1fr; } }
+.bvm-ws-list { display: grid; gap: 6px; }
+.bvm-ws-list button { text-align: left; border: 1px solid transparent; background: transparent; border-radius: 10px; padding: 12px 14px; cursor: pointer; color: var(--bvm-ink-2); font: 500 14px/1.45 var(--bvm-body); }
+.bvm-ws-list button b { display: block; font-size: 16px; color: var(--bvm-ink); font-weight: 600; }
+.bvm-ws-list button[aria-selected="true"] { background: var(--bvm-sheet); border-color: var(--bvm-rule); box-shadow: var(--bvm-shadow); }
+.bvm-ws-list button:hover { color: var(--bvm-ink); }
+.bvm-ws-view .bvm-window img { transition: opacity .25s; }
+.bvm-specimens { display: grid; gap: 0; border-top: 1px solid var(--bvm-rule); }
+.bvm-spec { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 24px; padding: 28px 0; border-bottom: 1px solid var(--bvm-rule); align-items: baseline; }
+@media (max-width: 760px) { .bvm-spec { grid-template-columns: 1fr; gap: 6px; } }
+.bvm-spec-meta b { display: block; font-size: 17px; }
+.bvm-spec-meta span { font-size: 13.5px; color: var(--bvm-ink-3); }
+.bvm-spec-sample { font-size: var(--bvm-spec-size, 56px); line-height: 1.25; outline: none; overflow-wrap: anywhere; min-width: 0; border-radius: 6px; }
+.bvm-spec-sample:focus { box-shadow: 0 0 0 2px color-mix(in srgb, var(--bvm-saffron) 50%, transparent); }
+.bvm-spec-tools { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; font-size: 14px; color: var(--bvm-ink-2); }
+.bvm-spec-tools input[type=range] { accent-color: var(--bvm-saffron); width: 180px; }
+.bvm-screens { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 28px; }
+@media (max-width: 800px) { .bvm-screens { grid-template-columns: 1fr; } }
+.bvm .bvm-screens figure { margin: 0; min-width: 0; }
+.bvm-screens figcaption { margin-top: 12px; font-size: 15px; color: var(--bvm-ink-2); }
+.bvm-screens figcaption b { color: var(--bvm-ink); }
+.bvm-releases { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-left: 2px solid var(--bvm-rule); }
+.bvm-releases li { position: relative; padding: 0 0 26px 28px; display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 16px; }
+.bvm-releases li::before { content: ""; position: absolute; left: -7px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--bvm-sheet); border: 2px solid var(--bvm-ink-3); }
+.bvm-releases li.now::before { background: var(--bvm-saffron); border-color: var(--bvm-saffron); }
+.bvm-releases b { font: 600 22px/1.2 var(--bvm-display); font-variant-numeric: lining-nums; }
+.bvm-releases p { margin: 0; color: var(--bvm-ink-2); font-size: 15.5px; }
+@media (max-width: 560px) { .bvm-releases li { grid-template-columns: 1fr; gap: 2px; } }
+.bvm-dl { background: var(--bvm-ink); color: var(--bvm-paper); border-radius: 22px; padding: clamp(28px, 5vw, 60px); display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 40px; position: relative; overflow: hidden; }
+.bvm-dl h2 { color: var(--bvm-paper); }
+.bvm-dl p { color: color-mix(in srgb, var(--bvm-paper) 78%, var(--bvm-ink)); }
+.bvm-dl .bvm-btn { border-color: var(--bvm-paper); color: var(--bvm-paper); }
+.bvm-dl .bvm-btn:hover { background: var(--bvm-paper); color: var(--bvm-ink); }
+.bvm-dl .bvm-btn.primary { color: var(--bvm-on-saffron); border-color: var(--bvm-saffron); }
+.bvm-dl-kn { position: absolute; right: -10px; bottom: -40px; font: 700 220px/1 var(--bvm-kn); color: color-mix(in srgb, var(--bvm-paper) 7%, transparent); pointer-events: none; user-select: none; }
+.bvm-dl dl { margin: 0; display: grid; gap: 14px; align-content: start; position: relative; }
+.bvm-dl dt { font-weight: 600; font-size: 15px; }
+.bvm-dl dd { margin: 2px 0 0; font-size: 14.5px; color: color-mix(in srgb, var(--bvm-paper) 72%, var(--bvm-ink)); }
+@media (max-width: 860px) { .bvm-dl { grid-template-columns: 1fr; } }
+.bvm-foot { padding-block: 40px 60px; font-size: 14px; color: var(--bvm-ink-3); }
+.bvm-foot .bvm-wrap { display: flex; flex-wrap: wrap; gap: 14px 30px; align-items: center; }
+.bvm-foot img { width: 56px; height: auto; }
+.bvm-foot b { color: var(--bvm-ink); font-weight: 600; }
+@media (prefers-reduced-motion: reduce) { .bvm *, .bvm *::before, .bvm *::after { transition: none !important; animation: none !important; } }
+</style>
+<div class="bvm" id="bvm-launch">
+<header class="bvm-top">
+<div class="bvm-wrap">
+<a class="bvm-brand" href="#bvm-launch"><img alt="" data-recalc-dims="1" decoding="async" src="https://i0.wp.com/brahmavidya.co.in/wp-content/uploads/2026/10/bv-mudrana-icon.png?w=1920&amp;ssl=1"/><b>BV Mudrana</b><span>0.9.2</span></a>
+<nav aria-label="On this page" class="bvm-nav">
+<a href="#convert">Converter</a><a href="#files">Files</a><a href="#features">Features</a><a href="#fonts">Fonts</a><a href="#releases">Releases</a><a href="https://github.com/RSNK21/bvmudrana">GitHub</a>
+</nav>
+<a class="bvm-btn primary" href="#download"><svg viewbox="0 0 20 20"><path d="M10 3v10M5.5 8.5 10 13l4.5-4.5M4 16.5h12"></path></svg>Download</a>
+</div>
+</header>
+<div>
+<section aria-labelledby="bvm-h1" class="bvm-hero">
+<div class="bvm-wrap">
+<div class="bvm-sheet">
+<span class="bvm-crop tl"></span><span class="bvm-crop tr"></span><span class="bvm-crop bl"></span><span class="bvm-crop br"></span>
+<span aria-hidden="true" class="bvm-reg l"></span><span aria-hidden="true" class="bvm-reg r"></span>
+<div aria-hidden="true" class="bvm-bar"><i style="background:var(--bvm-cyan)"></i><i style="background:var(--bvm-magenta)"></i><i style="background:var(--bvm-yellow)"></i><i style="background:var(--bvm-ink)"></i><i style="background:var(--bvm-saffron)"></i><i style="background:var(--bvm-kumkum)"></i><i style="background:var(--bvm-leaf)"></i></div>
+<div class="bvm-hero-grid">
+<div>
+<p aria-label="Mudrana" class="bvm-mudrana" lang="kn">ಮುದ್ರಣ</p>
+<h1 class="bvm-h1" id="bvm-h1">Page layout for Kannada, Sanskrit and English, <em>that opens your PageMaker books.</em></h1>
+<p class="lede">BV Mudrana works the way PageMaker 7 did, with its menus, toolbox and shortcuts, and writes real Unicode text. Old Nudi, Praja, Chanakya and Nalanda text becomes Unicode as the file opens, set in fonts made from the same letterforms.</p>
+<div class="bvm-cta">
+<a class="bvm-btn primary" href="#download"><svg viewbox="0 0 20 20"><path d="M10 3v10M5.5 8.5 10 13l4.5-4.5M4 16.5h12"></path></svg>Download for Windows</a>
+<a class="bvm-btn" href="#convert">Try the converter</a>
+<small>Free. Windows 10 and 11, 64-bit. Version 0.9.2.</small>
+</div>
+</div>
+<div aria-live="polite" class="bvm-stick">
+<div class="bvm-stick-row"><span class="bvm-stick-k" id="bvm-stick-font">Nudi</span><div aria-label="Old ASCII text" class="bvm-ascii" id="bvm-ascii"></div></div>
+<div class="bvm-stick-row"><span class="bvm-stick-k">Unicode</span><div class="bvm-uni" id="bvm-uni"></div></div>
+<div class="bvm-stick-foot"><span id="bvm-stick-what">What a PageMaker file stores, and what BV Mudrana makes of it.</span>
+<div aria-label="Choose an example" class="bvm-pips" id="bvm-pips" role="group"></div></div>
+</div>
+</div>
+<figure class="bvm-shot">
+<div class="bvm-window"><img alt="BV Mudrana in PageMaker mode: a page with ಮುದ್ರಣ set in BV Matanga, with the toolbox, control palette and styles palette." data-recalc-dims="1" decoding="async" fetchpriority="high" height="920" src="https://i0.wp.com/brahmavidya.co.in/wp-content/uploads/2026/10/bv-mudrana-pagemaker-dark.jpg?resize=1440%2C920&amp;ssl=1" width="1440"/></div>
+<figcaption>PageMaker mode, Studio Dark theme. The page title is set in BV Matanga, with BV Nanda, BV Chitkala and Praja Unicode below it.</figcaption>
+</figure>
+<div class="bvm-slug"><span>BV Mudrana 0.9.2 · proof 1</span><span>Brahmavidya, Bengaluru</span><span>Designed By Tejas H Badala and Dr R S Nandakumar for Brahmavidya</span></div>
+</div>
+</div>
+</section>
+<div class="bvm-facts"><div class="bvm-wrap"><ul>
+<li><b>4 to 7</b><span>PageMaker versions it opens</span></li>
+<li><b>CS4 to 2026</b><span>InDesign versions, through IDML</span></li>
+<li><b>5</b><span>old font encodings made Unicode</span></li>
+<li><b>20</b><span>Brahmavidya font faces included</span></li>
+</ul></div></div>
+<section aria-labelledby="bvm-conv-h" id="convert">
+<div class="bvm-wrap">
+<div class="sec-head">
+<h2 id="bvm-conv-h">Bring old text into Unicode</h2>
+<p class="lede">These are the converters inside BV Mudrana, running in this page. Paste text that was typed in an old font, or switch direction and turn Unicode back into the old code for an old workflow.</p>
+</div>
+<div class="bvm-conv">
+<div aria-label="Old font" class="bvm-tabs" id="bvm-enc" role="tablist"></div>
+<div class="bvm-conv-body">
+<div class="bvm-pane">
+<label for="bvm-in" id="bvm-in-lbl">Typed in Nudi (ASCII)</label>
+<textarea id="bvm-in" spellcheck="false"></textarea>
+<div class="bvm-pane-foot"><button class="bvm-mini" id="bvm-sample" type="button">Load an example</button><span id="bvm-count"></span></div>
+</div>
+<button aria-label="Swap direction" class="bvm-swap" id="bvm-swap" title="Swap direction" type="button"><svg viewbox="0 0 20 20"><path d="M4 7h12l-3.5-3.5M16 13H4l3.5 3.5"></path></svg></button>
+<div class="bvm-pane">
+<span class="lbl" id="bvm-out-lbl">Unicode, in Praja Unicode</span>
+<div aria-live="polite" class="bvm-out" id="bvm-out" lang="kn"></div>
+<div class="bvm-pane-foot"><button class="bvm-mini" id="bvm-copy" type="button">Copy</button><span id="bvm-copied" role="status"></span></div>
+</div>
+</div>
+<p class="bvm-note" id="bvm-enc-note"></p>
+</div>
+</div>
+</section>
+<section aria-labelledby="bvm-files-h" id="files" style="padding-top:0">
+<div class="bvm-wrap">
+<div class="sec-head">
+<h2 id="bvm-files-h">Opens the files you already have</h2>
+<p class="lede">A PageMaker book from 1998, an InDesign file from the press, a Word manuscript in Nudi: each opens with its pages, frames and styles in place, and you choose what happens to every old font before anything changes.</p>
+</div>
+<div class="bvm-files">
+<div>
+<h3><svg viewbox="0 0 24 24"><path d="M4 20h16M12 4v11M7.5 10.5 12 15l4.5-4.5"></path></svg>Opens</h3>
+<dl>
+<dt>PMD P65 PM6</dt><dd><b>PageMaker 6, 6.5 and 7.</b> Pages, masters, threaded text blocks, styles, tabs, colours, lines, boxes, cropped TIFF and JPEG pictures.</dd>
+<dt>PM5</dt><dd><b>PageMaker 5,</b> read directly. PageMaker 4 opens through PageMaker 7 on the same computer.</dd>
+<dt>IDML</dt><dd><b>InDesign CS4 to 2026.</b> Masters, layers, swatches, styles, threaded frames, groups, rotation, linked pictures.</dd>
+<dt>INDD INDT INX</dt><dd><b>InDesign documents,</b> through the InDesign installed on the computer.</dd>
+<dt>DOCX RTF TXT</dt><dd><b>Word and text files</b> placed or converted, keeping bold, italic and styles.</dd>
+</dl>
+</div>
+<div>
+<h3><svg viewbox="0 0 24 24"><path d="M4 20h16M12 15V4M7.5 8.5 12 4l4.5 4.5"></path></svg>Saves</h3>
+<dl>
+<dt>BVM</dt><dd><b>BV Mudrana</b> publications and templates, with automatic recovery of unsaved work.</dd>
+<dt>PMD P65 PMT</dt><dd><b>Back to PageMaker 7 and 6.5,</b> with Unicode turned back into the old Nudi, Praja or Chanakya code.</dd>
+<dt>IDML</dt><dd><b>For InDesign,</b> with the World-Ready composer set so Kannada and Devanagari shape correctly there.</dd>
+<dt>INDD</dt><dd><b>InDesign documents and templates</b> when InDesign is installed.</dd>
+<dt>PDF HTML</dt><dd><b>Print-ready PDF</b> with the fonts embedded, HTML, graphics and tagged text.</dd>
+</dl>
+</div>
+</div>
+</div>
+</section>
+<section aria-labelledby="bvm-feat-h" id="features" style="padding-top:0">
+<div class="bvm-wrap">
+<div class="sec-head">
+<h2 id="bvm-feat-h">Everything in its compartment</h2>
+<p class="lede">The tools of a typesetter’s case, sorted the way you reach for them.</p>
+</div>
+<div class="bvm-case">
+<article class="bvm-cell w3 h2 big"><span aria-hidden="true" class="bvm-sort">ಅ</span><h3>PageMaker, as you remember it</h3><p>The same nine menus, the fourteen-tool toolbox, the control palette, windowshade handles on text blocks, master pages, Autoflow, Story Editor and PageMaker’s keyboard shortcuts. People who set books in PageMaker for twenty years start working at once.</p>
+<ul><li>Smart open: every old font is surveyed and a Unicode font and size suggested, measured on your own text so lines break where they did</li><li>Text blocks start with exactly the text they had in PageMaker</li><li>Save back to PageMaker 7 when the press still needs it</li></ul></article>
+<article class="bvm-cell w3"><span aria-hidden="true" class="bvm-sort">ಕ</span><h3>Kannada keyboards built in</h3><p>Nudi KGP and phonetic Kannada, phonetic Devanagari and IAST. Scroll Lock switches, as in Nudi.</p></article>
+<article class="bvm-cell w3"><span aria-hidden="true" class="bvm-sort dv">ॐ</span><h3>Sanskrit tools</h3><p>Śloka and IAST styles, transliteration between Kannada, Devanagari and IAST in one keystroke, Vedic signs in the Glyphs palette.</p></article>
+<article class="bvm-cell w2"><span aria-hidden="true" class="bvm-sort lt">Tab</span><h3>Publications in tabs</h3><p>Open several files at once. Ctrl+Tab moves between them; Ctrl+Shift+T brings back the one you closed.</p></article>
+<article class="bvm-cell w2"><span aria-hidden="true" class="bvm-sort lt">¶</span><h3>Reflow and fit</h3><p>Overset text flows onto new pages in the page’s columns. Fit Frame to Text, Balance Columns, text wrap.</p></article>
+<article class="bvm-cell w2"><span aria-hidden="true" class="bvm-sort lt">.*</span><h3>Find and Change</h3><p>Across bold and italic, whole words in Kannada and Devanagari, regular expressions, Find Font.</p></article>
+<article class="bvm-cell w2"><span aria-hidden="true" class="bvm-sort lt">†</span><h3>Footnotes, index, contents</h3><p>Footnotes numbered in Kannada or Devanagari digits, an index, a table of contents, running heads.</p></article>
+<article class="bvm-cell w2"><span aria-hidden="true" class="bvm-sort lt">Snap</span><h3>Smart Guides</h3><p>Objects snap to the edges and centres of other objects while you drag, as in InDesign.</p></article>
+<article class="bvm-cell w2"><span aria-hidden="true" class="bvm-sort lt">✓</span><h3>Live preflight</h3><p>A light in the status bar counts missing fonts, missing pictures and overset text before the press does.</p></article>
+<article class="bvm-cell w3"><span aria-hidden="true" class="bvm-sort lt">⊞</span><h3>From Scribus, Word and LibreOffice</h3><p>Pages and Outline palettes, Align and Distribute, tables, gradients, a Library, Data Merge, Format Painter, typographer’s quotes, sticky notes for proof comments, a watermark and page border, Read Aloud.</p></article>
+<article class="bvm-cell w3"><span aria-hidden="true" class="bvm-sort lt">✦</span><h3>Your own name on it</h3><p>Tell BV Mudrana your name when you install it. The start screen says Namaste, and the title bar reads as your own Mudrana.</p></article>
+</div>
+</div>
+</section>
+<section aria-labelledby="bvm-ws-h" id="workspaces" style="padding-top:0">
+<div class="bvm-wrap">
+<div class="sec-head">
+<h2 id="bvm-ws-h">Four ways to work, seven looks</h2>
+<p class="lede">Choose the interface that fits the person at the keyboard. Every mode has every command; only the way in changes.</p>
+</div>
+<div class="bvm-ws">
+<div aria-label="Interface mode" class="bvm-ws-list" id="bvm-ws-list" role="tablist">
+<button aria-selected="true" data-alt="PageMaker mode with the Studio Dark theme" data-shot="pagemaker-dark" role="tab"><b>PageMaker</b>The classic layout: toolbox, control palette, styles, colours, layers and masters.</button>
+<button aria-selected="false" data-alt="Word style mode with the ribbon and the Paper Light theme" data-shot="word-light" role="tab"><b>Word style</b>A ribbon with Home, Insert, Layout, Language, Review and View, and a live styles gallery.</button>
+<button aria-selected="false" data-alt="Basic mode with Material You Dark" data-shot="basic-material" role="tab"><b>Basic</b>One row of big labelled buttons. No palettes, no rulers. Good for a first book.</button>
+<button aria-selected="false" data-alt="Advanced mode with the Modern Expressive theme" data-shot="advanced-expressive" role="tab"><b>Advanced</b>Everything at once, tighter, with the Pages panel and Align palette, for big books.</button>
+<button aria-selected="false" data-alt="PageMaker mode with the Classic PageMaker 7 theme" data-shot="classic" role="tab"><b>Classic PageMaker 7</b>The grey Windows 2000 look, down to the bevels, for those who miss it.</button>
+</div>
+<div class="bvm-ws-view"><div class="bvm-window"><img alt="PageMaker mode with the Studio Dark theme" data-recalc-dims="1" decoding="async" height="920" id="bvm-ws-img" src="https://i0.wp.com/brahmavidya.co.in/wp-content/uploads/2026/10/bv-mudrana-pagemaker-dark.jpg?resize=1440%2C920&amp;ssl=1" width="1440"/></div></div>
+</div>
+</div>
+</section>
+<section aria-labelledby="bvm-fonts-h" id="fonts" style="padding-top:0">
+<div class="bvm-wrap">
+<div class="sec-head">
+<h2 id="bvm-fonts-h">Fonts made at Brahmavidya, included</h2>
+<p class="lede">Each one keeps the letterforms of a font people already printed with, now as Unicode. BV Mudrana installs them in Windows for your account, so Word and every other program can use them too. Click a line and type your own text.</p>
+</div>
+<div class="bvm-spec-tools"><label for="bvm-size">Size</label><input id="bvm-size" max="110" min="24" type="range" value="58"/><output for="bvm-size" id="bvm-size-out">58 px</output></div>
+<div class="bvm-specimens">
+<div class="bvm-spec"><div class="bvm-spec-meta"><b>BV Matanga</b><span>Kannada display, Regular and Bold. From the curves of the Matangeshvara rock inscription.</span></div><div aria-label="BV Matanga sample" class="bvm-spec-sample" contenteditable="true" lang="kn" spellcheck="false" style="font-family:'BVMatanga',serif">ಮತಂಗೇಶ್ವರ ದೇವರದಿಡ್ಡಿ</div></div>
+<div class="bvm-spec"><div class="bvm-spec-meta"><b>Praja Unicode</b><span>Kannada text, Regular, Demi and Light. The Prajavani newspaper face, in Unicode.</span></div><div aria-label="Praja Unicode sample" class="bvm-spec-sample" contenteditable="true" lang="kn" spellcheck="false" style="font-family:'Praja Unicode',serif">ಕನ್ನಡ ಮುದ್ರಣಕ್ಕೆ ಹೊಸ ಉಸಿರು</div></div>
+<div class="bvm-spec"><div class="bvm-spec-meta"><b>BV Chitkala</b><span>Devanagari, with Hindi, Hindi Heavy and Math. Made from Chanakya.</span></div><div aria-label="BV Chitkala sample" class="bvm-spec-sample" contenteditable="true" lang="sa" spellcheck="false" style="font-family:'BVChitkala',serif">श्रीमद्भगवद्गीता</div></div>
+<div class="bvm-spec"><div class="bvm-spec-meta"><b>BV Nanda</b><span>IAST transliteration, roman and italic. Made from Nalandagar.</span></div><div aria-label="BV Nanda sample" class="bvm-spec-sample" contenteditable="true" lang="sa-Latn" spellcheck="false" style="font-family:'BVNanda',serif">Śrīmad Bhagavadgītā <i>kṛṣṇārjuna-saṃvāda</i></div></div>
+</div>
+</div>
+</section>
+<section aria-labelledby="bvm-screens-h" id="screens" style="padding-top:0">
+<div class="bvm-wrap">
+<div class="sec-head">
+<h2 id="bvm-screens-h">From the old file to a clean page</h2>
+</div>
+<div class="bvm-screens">
+<figure><div class="bvm-window"><img alt="The Open dialog for a PageMaker file, listing each font with a suggested Unicode font, size and preview" data-recalc-dims="1" decoding="async" height="920" loading="lazy" src="https://i0.wp.com/brahmavidya.co.in/wp-content/uploads/2026/10/bv-mudrana-smart-open.jpg?resize=1440%2C920&amp;ssl=1" width="1440"/></div><figcaption><b>Every font, decided before opening.</b> Nudi, Praja and Baraha text is measured in both fonts, so the Unicode size keeps PageMaker’s line breaks.</figcaption></figure>
+<figure><div class="bvm-window"><img alt="A PageMaker 5 chapter open in BV Mudrana, with IAST text and tables" data-recalc-dims="1" decoding="async" height="920" loading="lazy" src="https://i0.wp.com/brahmavidya.co.in/wp-content/uploads/2026/10/bv-mudrana-pm5-tables.jpg?resize=1440%2C920&amp;ssl=1" width="1440"/></div><figcaption><b>A PageMaker 5 chapter, in Unicode IAST.</b> Text blocks, tab stops, rules and running heads where they were.</figcaption></figure>
+<figure><div class="bvm-window"><img alt="The Convert Legacy Text dialog listing Chanakya, Nalandagara and Walkman-Chanakya with their Unicode fonts" data-recalc-dims="1" decoding="async" height="920" loading="lazy" src="https://i0.wp.com/brahmavidya.co.in/wp-content/uploads/2026/10/bv-mudrana-convert-legacy.jpg?resize=1440%2C920&amp;ssl=1" width="1440"/></div><figcaption><b>Chanakya, Walkman-Chanakya and Nalanda.</b> Utilities, Convert Legacy Text to Unicode, for text already in a publication.</figcaption></figure>
+<figure><div class="bvm-window"><img alt="The start screen with page-size presets and recent files shown as first-page pictures" data-recalc-dims="1" decoding="async" height="920" loading="lazy" src="https://i0.wp.com/brahmavidya.co.in/wp-content/uploads/2026/10/bv-mudrana-start.jpg?resize=1440%2C920&amp;ssl=1" width="1440"/></div><figcaption><b>The start screen.</b> Demy, Crown and Royal book sizes in one click, and recent files as pictures of their first page.</figcaption></figure>
+</div>
+</div>
+</section>
+<section aria-labelledby="bvm-rel-h" id="releases" style="padding-top:0">
+<div class="bvm-wrap">
+<div class="sec-head"><h2 id="bvm-rel-h">How it grew</h2><p class="lede">Each version installs over the one before with a small update file. Nothing has to be uninstalled.</p></div>
+<ol class="bvm-releases" reversed="">
+<li class="now"><b>0.9</b><p>Publications in tabs, a new start screen, InDesign IDML and INDD, PageMaker 5, Chanakya and Nalanda to Unicode in BV Chitkala and BV Nanda, Smart Guides, live preflight, BV Matanga.</p></li>
+<li><b>0.8</b><p>Reflow overset text, Find and Change with regular expressions, Find Font, Format Painter, fields and special characters, watermarks, Read Aloud, your name on the title bar.</p></li>
+<li><b>0.7</b><p>Praja (Prajavani) fonts: Praja Unicode, Praja01 to Praja08, Praja documents in Word and RTF, and updates that install over the old version.</p></li>
+<li><b>0.6</b><p>Four interface modes and seven themes, from Material You to Classic PageMaker 7.</p></li>
+<li><b>0.5</b><p>Smart open with measured font sizes, Kannada keyboards, footnotes, more PageMaker formatting kept.</p></li>
+<li><b>0.4</b><p>PageMaker’s menus drawn in the window, Pages, Outline, Align and Glyphs palettes, tables from Scribus.</p></li>
+<li><b>0.3</b><p>Save as PageMaker 7 and 6.5, the Brahmavidya Kannada converter everywhere.</p></li>
+<li><b>0.2</b><p>Opens PageMaker 6.5 and 7 files and turns Nudi text into Unicode Kannada.</p></li>
+</ol>
+</div>
+</section>
+<section aria-labelledby="bvm-dl-h" id="download" style="padding-top:0">
+<div class="bvm-wrap">
+<div class="bvm-dl">
+<span aria-hidden="true" class="bvm-dl-kn">ಮು</span>
+<div style="position:relative">
+<h2 id="bvm-dl-h">Download BV Mudrana 0.9.2</h2>
+<p>Free from Brahmavidya. Install it once with the Setup file; after that, each new version comes as a small Update file that installs over the old one and keeps your settings.</p>
+<div class="bvm-cta">
+<a class="bvm-btn primary" href="https://github.com/RSNK21/bvmudrana/releases/download/v0.9.2/BV-Mudrana-Setup-0.9.2.exe"><svg viewbox="0 0 20 20"><path d="M10 3v10M5.5 8.5 10 13l4.5-4.5M4 16.5h12"></path></svg>Setup for Windows</a>
+<a class="bvm-btn" href="https://github.com/RSNK21/bvmudrana/releases/download/v0.9.2/BV-Mudrana-Update-0.9.2.exe">Update from 0.8 or 0.9</a>
+<small style="color:inherit;opacity:.75">Source code, earlier versions and SHA-256 checksums are on <a href="https://github.com/RSNK21/bvmudrana" style="text-decoration:underline">GitHub</a>.</small>
+</div>
+</div>
+<dl>
+<div><dt>Windows</dt><dd>Windows 10 or 11, 64-bit. About 115 MB to install.</dd></div>
+<div><dt>Optional: PageMaker 7</dt><dd>Needed only to save .pmd files and to open PageMaker 4 files.</dd></div>
+<div><dt>Optional: InDesign</dt><dd>Needed only for .indd files. IDML works without it.</dd></div>
+<div><dt>Fonts</dt><dd>Praja Unicode, Praja01 to Praja08, BV Chitkala, BV Nanda and BV Matanga are installed for you.</dd></div>
+</dl>
+</div>
+</div>
+</section>
+</div>
+<footer class="bvm-foot">
+<div class="bvm-wrap">
+<img alt="" data-recalc-dims="1" decoding="async" height="56" loading="lazy" src="https://i0.wp.com/brahmavidya.co.in/wp-content/uploads/2026/10/bv-mudrana-icon.png?resize=56%2C56&amp;ssl=1" width="56"/>
+<span><b>Designed By Tejas H Badala and Dr R S Nandakumar for Brahmavidya</b></span>
+<span>Kannada conversion: the Brahmavidya Kannada converter. PageMaker file reading based on libpagemaker (MPL 2.0). BV Matanga is under the SIL Open Font License 1.1. Source code: <a href="https://github.com/RSNK21/bvmudrana" style="text-decoration:underline">github.com/RSNK21/bvmudrana</a>.</span>
+</div>
+</footer>
+</div>
+<script>
+window.__bvmMain = function () {
+var L = window.BV && window.BV.Legacy;
+var DL = window.BV && window.BV.DevLegacy;
+var $ = function (id) { return document.getElementById(id); };
+var ENCS = [
+{ id: 'nudi', name: 'Nudi / Baraha', sub: 'Kannada', font: "'Praja Unicode', 'BVMatanga', serif", fontName: 'Praja Unicode', lang: 'kn', sample: 'ಕನ್ನಡ ಸಾಹಿತ್ಯ ಪರಿಷತ್ತಿನ ಮುದ್ರಣಾಲಯದಲ್ಲಿ ಮೊದಲ ಪುಸ್ತಕ ಅಚ್ಚಾಯಿತು.',
+note: 'Nudi and Baraha store a Kannada syllable as pieces of shapes. The Brahmavidya Kannada converter puts each syllable back in Unicode order, keeping visible halants.' },
+{ id: 'praja', name: 'Praja', sub: 'Kannada (Prajavani)', font: "'Praja Unicode', serif", fontName: 'Praja Unicode', lang: 'kn', sample: 'ಪ್ರಜಾವಾಣಿ ಪತ್ರಿಕೆಯ ಅಕ್ಷರಗಳು ಈಗ ಯೂನಿಕೋಡಿನಲ್ಲಿ.',
+note: 'Praja has its own layout, not Nudi’s. Converted text set in Praja Unicode has the same letters and the same widths, so nothing on the page moves.' },
+{ id: 'chanakya', name: 'Chanakya', sub: 'Devanagari', font: "'BVChitkala', serif", fontName: 'BV Chitkala', lang: 'sa', sample: 'धर्मक्षेत्रे कुरुक्षेत्रे समवेता युयुत्सवः ।',
+note: 'Chanakya writes the i-sign before its consonant and the reph after it, as they are seen. The converter reorders them, rebuilds conjuncts from half forms, and sets the result in BV Chitkala, made from Chanakya itself.' },
+{ id: 'walkman', name: 'Walkman-Chanakya', sub: 'Hindi (Kruti layout)', font: "'BVChitkala', serif", fontName: 'BV Chitkala Hindi', lang: 'hi', sample: 'नमस्ते भारत । हिन्दी की क्रिया ।',
+note: 'Walkman-Chanakya-901 uses the Kruti Dev keyboard layout, common in Hindi newspapers. Its text goes to BV Chitkala Hindi.' },
+{ id: 'nalanda', name: 'Nalanda', sub: 'IAST transliteration', font: "'BVNanda', serif", fontName: 'BV Nanda', lang: 'sa-Latn', sample: 'Śrīmad Bhagavadgītā: dharmakṣetre kurukṣetre samavetā yuyutsavaḥ',
+note: 'In Nalanda fonts an accent is a separate key typed before its letter. The converter joins each accent to its letter, so ṛ, ū and ṃ become single Unicode characters, set in BV Nanda.' },
+];
+var enc = ENCS[0], toUni = true;
+function legacyOf(e, t) { return L.fromUnicode(t, e.id); }
+function uniOf(e, t) { return L.toUnicode(t, e.id); }
+function render() {
+var v = $('bvm-in').value;
+var out = toUni ? uniOf(enc, v) : legacyOf(enc, v);
+var o = $('bvm-out');
+o.textContent = out;
+o.style.fontFamily = toUni ? enc.font : "ui-monospace, 'Cascadia Mono', Consolas, monospace";
+o.style.fontSize = toUni ? '' : '19px';
+o.lang = toUni ? enc.lang : 'en';
+$('bvm-count').textContent = [...v].length + ' characters in';
+}
+function labels() {
+$('bvm-in-lbl').textContent = toUni ? 'Typed in ' + enc.name + ' (ASCII)' : 'Unicode text';
+$('bvm-out-lbl').textContent = toUni ? 'Unicode, in ' + enc.fontName : 'For the old ' + enc.name + ' font';
+var i = $('bvm-in');
+i.style.fontFamily = toUni ? "ui-monospace, 'Cascadia Mono', Consolas, monospace" : enc.font;
+i.style.fontSize = toUni ? '' : '22px';
+$('bvm-enc-note').textContent = enc.note;
+}
+function load() { $('bvm-in').value = toUni ? legacyOf(enc, enc.sample) : enc.sample; render(); }
+var tabs = $('bvm-enc');
+ENCS.forEach(function (e, k) {
+var b = document.createElement('button');
+b.className = 'bvm-tab'; b.type = 'button'; b.setAttribute('role', 'tab'); b.id = 'bvm-tab-' + e.id;
+b.setAttribute('aria-selected', k === 0 ? 'true' : 'false'); b.tabIndex = k === 0 ? 0 : -1;
+b.innerHTML = e.name + '<small>' + e.sub + '</small>';
+b.addEventListener('click', function () { select(k, true); });
+tabs.appendChild(b);
+});
+function select(k, focus) {
+enc = ENCS[k];
+[].forEach.call(tabs.children, function (b, j) { b.setAttribute('aria-selected', j === k ? 'true' : 'false'); b.tabIndex = j === k ? 0 : -1; if (j === k && focus) b.focus(); });
+labels(); load();
+}
+tabs.addEventListener('keydown', function (ev) {
+var k = ENCS.indexOf(enc);
+if (ev.key === 'ArrowRight') { ev.preventDefault(); select((k + 1) % ENCS.length, true); }
+if (ev.key === 'ArrowLeft') { ev.preventDefault(); select((k - 1 + ENCS.length) % ENCS.length, true); }
+});
+$('bvm-in').addEventListener('input', render);
+$('bvm-sample').addEventListener('click', load);
+$('bvm-swap').addEventListener('click', function () {
+var cur = toUni ? uniOf(enc, $('bvm-in').value) : $('bvm-in').value;
+toUni = !toUni;
+$('bvm-in').value = toUni ? legacyOf(enc, cur) : cur;
+labels(); render();
+});
+$('bvm-copy').addEventListener('click', function () {
+var t = $('bvm-out').textContent;
+var done = function (ok) { $('bvm-copied').textContent = ok ? 'Copied.' : 'Select the text and press Ctrl+C.'; setTimeout(function () { $('bvm-copied').textContent = ''; }, 2500); };
+try { navigator.clipboard.writeText(t).then(function () { done(true); }, function () { selectOut(); done(false); }); } catch (e) { selectOut(); done(false); }
+});
+function selectOut() { var r = document.createRange(); r.selectNodeContents($('bvm-out')); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+labels(); load();
+var STICK = [
+{ e: ENCS[0], t: 'ಕನ್ನಡ ಮುದ್ರಣ', f: "'BVMatanga', serif" },
+{ e: ENCS[1], t: 'ಪ್ರಜಾವಾಣಿ', f: "'Praja Unicode', serif" },
+{ e: ENCS[2], t: 'श्रीमद्भगवद्गीता', f: "'BVChitkala', serif" },
+{ e: ENCS[4], t: 'Śrīmad Bhagavadgītā', f: "'BVNanda', serif" },
+];
+var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+var si = 0, timer = 0, paused = false;
+var pips = $('bvm-pips');
+STICK.forEach(function (s, k) {
+var b = document.createElement('button');
+b.type = 'button'; b.textContent = String(k + 1); b.setAttribute('aria-pressed', k === 0 ? 'true' : 'false');
+b.setAttribute('aria-label', s.e.name + ' example');
+b.addEventListener('click', function () { paused = true; show(k); });
+pips.appendChild(b);
+});
+function show(k) {
+clearTimeout(timer);
+si = k;
+var s = STICK[k];
+[].forEach.call(pips.children, function (b, j) { b.setAttribute('aria-pressed', j === k ? 'true' : 'false'); });
+$('bvm-stick-font').textContent = s.e.name;
+var ascii = legacyOf(s.e, s.t);
+var a = $('bvm-ascii'), u = $('bvm-uni');
+a.textContent = ascii;
+u.style.fontFamily = s.f;
+u.lang = s.e.lang;
+var g = window.Intl && Intl.Segmenter ? [...new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(s.t)].map(function (x) { return x.segment; }) : [...s.t];
+var seg = [];
+g.forEach(function (c) { var last = seg[seg.length - 1]; if (last && /[್्]$/.test(last)) seg[seg.length - 1] = last + c; else seg.push(c); });
+u.innerHTML = '';
+var spans = seg.map(function (g) { var sp = document.createElement('span'); sp.className = 'ch' + (reduce ? '' : ' off'); sp.textContent = g; u.appendChild(sp); return sp; });
+if (!reduce) spans.forEach(function (sp, j) { setTimeout(function () { sp.classList.remove('off'); }, 260 + j * 110); });
+if (!paused) timer = setTimeout(function () { show((si + 1) % STICK.length); }, 4200 + seg.length * 110);
+}
+show(0);
+var wsList = $('bvm-ws-list');
+var SHOTS = { 'pagemaker-dark': 'https://brahmavidya.co.in/wp-content/uploads/2026/10/bv-mudrana-pagemaker-dark.jpg', 'word-light': 'https://brahmavidya.co.in/wp-content/uploads/2026/10/bv-mudrana-word-light.jpg', 'basic-material': 'https://brahmavidya.co.in/wp-content/uploads/2026/10/bv-mudrana-basic-material.jpg', 'advanced-expressive': 'https://brahmavidya.co.in/wp-content/uploads/2026/10/bv-mudrana-advanced-expressive.jpg', 'classic': 'https://brahmavidya.co.in/wp-content/uploads/2026/10/bv-mudrana-classic.jpg' };
+wsList.addEventListener('click', function (ev) {
+var b = ev.target.closest('button');
+if (!b) return;
+[].forEach.call(wsList.children, function (x) { x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+var img = $('bvm-ws-img');
+img.style.opacity = '.25';
+setTimeout(function () { img.src = SHOTS[b.dataset.shot]; img.alt = b.dataset.alt; img.style.opacity = '1'; }, reduce ? 0 : 140);
+});
+var sz = $('bvm-size');
+sz.addEventListener('input', function () { document.querySelector('.bvm-specimens').style.setProperty('--bvm-spec-size', sz.value + 'px'); $('bvm-size-out').textContent = sz.value + ' px'; });
+document.querySelector('.bvm-specimens').style.setProperty('--bvm-spec-size', sz.value + 'px');
+};
+</script>
+<script>
+(function () {
+var SRC = 'https://brahmavidya.co.in/wp-content/uploads/2026/10/bv-mudrana-assets.png';
+function run() { try { window.__bvmMain(); } catch (e) { if (window.console) console.error(e); } }
+function fail() {
+window.BV = window.BV || {};
+if (!window.BV.Legacy) window.BV.Legacy = { toUnicode: function (s) { return s; }, fromUnicode: function (s) { return s; } };
+run();
+var n = document.getElementById('bvm-enc-note'); if (n) n.textContent = 'The converter could not load in this browser. Please refresh the page.';
+}
+var img = new Image();
+img.onload = function () {
+try {
+var c = document.createElement('canvas'); c.width = img.naturalWidth; c.height = img.naturalHeight;
+var x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(img, 0, 0);
+var d = x.getImageData(0, 0, c.width, c.height).data, b = new Uint8Array(d.length / 4 * 3);
+for (var i = 0, j = 0; i < d.length; i += 4) { b[j++] = d[i]; b[j++] = d[i + 1]; b[j++] = d[i + 2]; }
+var hl = b[0] | (b[1] << 8) | (b[2] << 16) | (b[3] << 24), td = new TextDecoder();
+var hdr = JSON.parse(td.decode(b.subarray(4, 4 + hl))), base = 4 + hl, parts = {};
+hdr.forEach(function (h) { parts[h[0]] = b.slice(base + h[1], base + h[1] + h[2]); });
+[['BVMatanga', 'BVMatanga-Regular', { weight: '400' }], ['BVMatanga', 'BVMatanga-Bold', { weight: '700' }], ['Praja Unicode', 'PrajaUnicode-Regular', {}],
+['BVChitkala', 'BVChitkala-Regular', {}], ['BVNanda', 'BVNanda-Regular', { style: 'normal' }], ['BVNanda', 'BVNanda-Italic', { style: 'italic' }]].forEach(function (f) {
+try { var ff = new FontFace(f[0], parts[f[1]].buffer, f[2]); document.fonts.add(ff); ff.load(); } catch (e) {}
+});
+(0, eval)(td.decode(parts.converters));
+if (!window.BV || !window.BV.Legacy) throw new Error('converters missing');
+} catch (e) { if (window.console) console.error(e); return fail(); }
+run();
+};
+img.onerror = fail;
+img.src = SRC;
+})();
+</script>
+<style>
+#bvm-launch {
+--bvm-paper: #11122a; --bvm-sheet: #191a36; --bvm-ink: #ecebf6; --bvm-ink-2: #c3c1d8; --bvm-ink-3: #9593b0; --bvm-rule: #2d2e50;
+--bvm-saffron: #f08a35; --bvm-kumkum: #ec5b4f; --bvm-leaf: #5fb06a; --bvm-sandal: #cdb07a; --bvm-on-saffron: #11122a;
+--bvm-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 24px 50px -20px rgba(0, 0, 0, .7);
+color-scheme: dark;
+}
+#bvm-launch .bvm-dl { background: #20224a; color: var(--bvm-ink); border: 1px solid var(--bvm-rule); }
+#bvm-launch .bvm-dl h2 { color: var(--bvm-ink); }
+#bvm-launch .bvm-dl p, #bvm-launch .bvm-dl dd { color: var(--bvm-ink-2); }
+#bvm-launch .bvm-dl .bvm-btn { border-color: var(--bvm-ink); color: var(--bvm-ink); }
+#bvm-launch .bvm-dl .bvm-btn:hover { background: var(--bvm-ink); color: var(--bvm-paper); }
+#bvm-launch .bvm-dl .bvm-btn.primary { background: var(--bvm-saffron); border-color: var(--bvm-saffron); color: var(--bvm-on-saffron); }
+#bvm-launch .bvm-dl .bvm-btn.primary:hover { background: var(--bvm-kumkum); border-color: var(--bvm-kumkum); color: #fff; }
+#bvm-launch .bvm-dl-kn { color: rgba(255, 255, 255, .05); }
+#bvm-launch .bvm-case { background: #2a2b55; }
+#bvm-launch .bvm-out { background: #24233d; border-color: #4a4466; }
+#bvm-launch .bvm-window { border-color: rgba(255, 255, 255, .08); }
+#bvm-launch a, #bvm-launch a:hover, #bvm-launch a:focus, #bvm-launch a:visited { text-decoration: none; }
+#bvm-launch .bvm-nav a:hover { text-decoration: underline; text-underline-offset: 4px; }
+#bvm-launch p, #bvm-launch li, #bvm-launch dd, #bvm-launch figcaption { line-height: 1.6; }
+#bvm-launch .bvm-mudrana { line-height: .95; font-size: clamp(84px, 13vw, 190px); white-space: nowrap; overflow-wrap: normal; word-wrap: normal; margin: 0 0 18px -.04em; }
+#bvm-launch .bvm-h1 { line-height: 1.08; }
+#bvm-launch h2 { line-height: 1.08; }
+#bvm-launch .bvm-sort { line-height: 1; }
+#bvm-launch .bvm-uni { line-height: 1.25; }
+#bvm-launch .bvm-dl-kn { line-height: 1; }
+#bvm-launch .bvm-spec-sample { line-height: 1.25; }
+#bvm-launch .bvm-cell p { line-height: 1.5; }
+#bvm-launch .bvm-btn, #bvm-launch .bvm-mini, #bvm-launch .bvm-tab, #bvm-launch .bvm-swap, #bvm-launch .bvm-pips button, #bvm-launch .bvm-ws-list button { text-transform: none; letter-spacing: normal; }
+#bvm-launch .bvm-btn { line-height: 1; }
+#bvm-launch .bvm-brand b { line-height: 1; }
+#bvm-launch .bvm-pane textarea { line-height: 1.5; }
+#bvm-launch .bvm-out { line-height: 1.55; }
+</style>
+</div>
