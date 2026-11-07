@@ -189,6 +189,16 @@ def main():
     if os.path.exists(DIST):
         shutil.rmtree(DIST)
     shutil.copytree(os.path.join(ROOT, 'assets'), os.path.join(DIST, 'assets'))
+    # Stylesheets also say url(/assets/...). Make those relative to the CSS file itself,
+    # so fonts and images load even when the site lives in a subfolder (GitHub Pages preview).
+    for dirpath, _, files in os.walk(os.path.join(DIST, 'assets')):
+        for f in files:
+            if f.endswith('.css'):
+                p = os.path.join(dirpath, f)
+                up = os.path.relpath(DIST, dirpath).replace(os.sep, '/') + '/'
+                css = open(p, encoding='utf-8').read()
+                css = re.sub(r'url\((["\']?)/(?!/)([^)"\']+)\1\)', lambda m: f'url({m.group(1)}{up}{m.group(2)}{m.group(1)})', css)
+                open(p, 'w', encoding='utf-8').write(css)
     for extra in ('CNAME', 'robots.txt'):
         if os.path.exists(os.path.join(ROOT, extra)):
             shutil.copy(os.path.join(ROOT, extra), DIST)

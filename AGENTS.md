@@ -41,7 +41,9 @@ GitHub Actions builds, checks and publishes on every push to `main`
    rename a page file unless you also add the old address to `redirects.json`.
    `/stotravahini-privacy-policy/` is linked from Google Play: never move it.
 2. **Write site links starting with `/`** (e.g. `/contact/`, `/assets/uploads/x.jpg`).
-   The builder makes them relative. Exception: paths set from JavaScript at
+   The builder makes them relative, in pages and in stylesheets (`url(/assets/...)`),
+   so the site also works from a subfolder such as the GitHub Pages preview;
+   `check.py` fails on any root-absolute path left over. Exception: paths set from JavaScript at
    runtime are not rewritten; write those relative to the page (see
    `assets/js/tools/bv-mudrana.js`).
 3. **Contact details, menu, footer and form links live only in `site.json`.**

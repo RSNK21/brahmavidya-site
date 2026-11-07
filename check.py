@@ -57,6 +57,11 @@ for dirpath, _, files in os.walk(DIST):
         for m in SRCSET.finditer(text):
             refs += [part.strip().split()[0] for part in m.group(2).split(',') if part.strip()]
         for r in refs:
+            if r.startswith('/') and not r.startswith('//') and 'http-equiv="refresh"' not in text:
+                # Root-absolute paths break when the site is served from a subfolder
+                # (the GitHub Pages preview). build.py should have made every one relative.
+                errors.append(f'{rel}: root-absolute path "{r}" (would break in a subfolder)')
+                continue
             t = local_target(p, r)
             if t == 'EXTERNAL':
                 external.add(r)
