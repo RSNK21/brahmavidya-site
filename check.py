@@ -52,6 +52,8 @@ for dirpath, _, files in os.walk(DIST):
             warnings.append(f'large file ({size/1e6:.0f} MB): {rel}')
         if not f.endswith(('.html', '.css')):
             continue
+        if re.fullmatch(r'google[0-9a-f]+\.html|yandex_[0-9a-f]+\.html', f) and dirpath == DIST:
+            continue  # search-engine ownership file, served exactly as given
         text = open(p, encoding='utf-8', errors='replace').read()
         refs = [m.group(2) for m in ATTR.finditer(text)] + [m.group(2) for m in CSSURL.finditer(text)]
         for m in SRCSET.finditer(text):

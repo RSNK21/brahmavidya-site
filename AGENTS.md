@@ -23,6 +23,7 @@ assets/uploads/    ← images and documents (same folder layout as old WordPress
 build.py           ← builds everything into dist/
 check.py           ← verifies dist/ (links, images, placeholders, headings)
 robots.txt         ← search-engine rules, copied to the site root (never block /assets/)
+google*.html       ← Google Search Console ownership file: keep it, never edit it
 ```
 
 ## The workflow (always)

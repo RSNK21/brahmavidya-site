@@ -216,6 +216,11 @@ def main():
     for extra in ('CNAME', 'robots.txt'):
         if os.path.exists(os.path.join(ROOT, extra)):
             shutil.copy(os.path.join(ROOT, extra), DIST)
+    # Search-engine ownership files (Google googleXXXX.html, Bing BingSiteAuth.xml) are
+    # copied to the site root byte for byte; never wrap them in the page template.
+    for f in os.listdir(ROOT):
+        if re.fullmatch(r'google[0-9a-f]+\.html|BingSiteAuth\.xml|yandex_[0-9a-f]+\.html', f):
+            shutil.copy(os.path.join(ROOT, f), DIST)
 
     footer = build_footer()
     sub = site['forms']['subscribe']
