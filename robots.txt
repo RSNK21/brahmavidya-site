@@ -1,0 +1,31 @@
+# robots.txt for https://brahmavidya.co.in
+# Brahmavidya, Mysuru: Indian musicology and Indology
+#
+# Every page, image, PDF, font, stylesheet and script is open to search engines.
+# (Search engines need CSS, JS and fonts to see pages as visitors do, so they are
+# never blocked here.) Only leftovers from the old WordPress site, which no longer
+# exist, and a duplicate view of one tool are kept out of the index.
+
+User-agent: *
+Allow: /
+
+# Old WordPress admin, login, feeds and search addresses (no longer exist)
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+Disallow: /xmlrpc.php
+Disallow: /wp-json/
+Disallow: /feed/
+Disallow: /comments/feed/
+Disallow: /*/feed/
+Disallow: /?s=
+Disallow: /*?s=
+Disallow: /?p=
+Disallow: /?page_id=
+
+# The Kannada Tools page opened as a Microsoft Word add-in (same page, cut down)
+Disallow: /*?word-addin=
+
+# Old document addresses (/wp-content/uploads/...) still open, and must stay crawlable
+Allow: /wp-content/uploads/
+
+Sitemap: https://brahmavidya.co.in/sitemap.xml
