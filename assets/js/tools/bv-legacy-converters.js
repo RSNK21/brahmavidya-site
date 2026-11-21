@@ -165,10 +165,10 @@ function legacyToUnicode(input, opts = {}) {
   const custom = (opts.custom || []).filter((e) => e && e.from && e.to);
   const customKeys = custom.map((e) => e.from).sort((a, b) => b.length - a.length);
   const customMap = new Map(custom.map((e) => [e.from, e.to]));
-  let text = String(input).normalize('NFC')
-    .replace(/[­​‎‏‪-‮⁠﻿]/g, '')
-    .replace(/μ/g, 'µ');                                  // Greek mu typed for the Nudi ಷ byte
-  if (opts.keepEnglish !== false) text = protectEnglish(text);
+  // with opts.segments the input is read as is, so piece offsets stay true to the source
+  let text = String(input).replace(/\u03BC/g, '\u00B5');   // Greek mu typed for the Nudi ಷ byte
+  if (!opts.segments) text = text.normalize('NFC').replace(/[\u00AD\u200B\u200E\u200F\u202A-\u202E\u2060\uFEFF]/g, '');
+  if (opts.keepEnglish !== false && !opts.segments) text = protectEnglish(text);
   const out = [];
   let at = 0;
   const emit = (str) => out.push([at, str]);
