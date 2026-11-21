@@ -74,6 +74,21 @@ def out_path(url):
     return os.path.join(DIST, url.strip('/'), 'index.html') if url != '/' else os.path.join(DIST, 'index.html')
 
 
+_asset_versions = {}
+def version_assets(doc):
+    """Add ?v=<content hash> to the site's own CSS and JS links, so browsers fetch a fresh copy
+    after every change instead of mixing a new page with an old cached script."""
+    import hashlib
+    def ver(m):
+        path = m.group(2)
+        if path not in _asset_versions:
+            f = os.path.join(ROOT, path.lstrip('/'))
+            _asset_versions[path] = hashlib.sha1(open(f, 'rb').read()).hexdigest()[:10] if os.path.isfile(f) else ''
+        v = _asset_versions[path]
+        return f'{m.group(1)}="{path}' + (f'?v={v}"' if v else '"')
+    return re.sub(r'\b(href|src)="(/assets/(?:css|js)/[^"?#]+\.(?:css|js))"', ver, doc)
+
+
 def relativize(doc, page_url):
     """Turn root-absolute "/x" paths into paths relative to page_url."""
     depth = 0 if page_url == '/' else page_url.strip('/').count('/') + 1
@@ -260,6 +275,7 @@ def main():
         for k, v in rep.items():
             doc = doc.replace(k, v)
         doc = fill(doc)
+        doc = version_assets(doc)
         target = os.path.join(DIST, '404.html') if rel == '404.html' else out_path(url)
         if rel == '404.html':
             doc = doc.replace('href="/', f'href="{site["url"]}/').replace('src="/', f'src="{site["url"]}/').replace('srcset="/', f'srcset="{site["url"]}/').replace(', /assets/', f', {site["url"]}/assets/') if not FILE_LINKS else relativize(doc, '/')

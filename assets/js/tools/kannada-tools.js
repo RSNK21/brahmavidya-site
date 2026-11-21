@@ -5,7 +5,8 @@
 (function () {
   'use strict';
   var HERE = (document.currentScript && document.currentScript.src) || '';
-  var asset = function (name) { return HERE ? new URL(name, HERE).href : name; };
+  // lazily loaded files carry the same ?v= stamp as this script, so a new release is never mixed with an old cached file
+  var asset = function (name) { if (!HERE) return name; var h = new URL(HERE); return new URL(name, HERE).href + h.search; };
   var K = window.BV && window.BV.BVKannada;
   var $ = function (id) { return document.getElementById(id); };
   var wordCount = function (s) { var t = s.trim(); return t ? t.split(/\s+/).length : 0; };
