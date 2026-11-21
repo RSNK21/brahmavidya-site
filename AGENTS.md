@@ -119,6 +119,16 @@ version to the "How it grew" list.
 `bv-mudrana`, `kannada-ascii-to-unicode-converter`, `bvmatanga-kannada-font` have their
 own CSS/JS in `assets/css/tools/` and `assets/js/tools/` (named in each page's header
 block). Their converter engine is `assets/js/tools/bv-legacy-converters.js`
-(Nudi/Baraha, Praja, Chanakya, Nalanda ↔ Unicode). The Kannada Tools page doubles as a
-Microsoft Word add-in when opened with `?word-addin=1`. Only its Aksharamukha panel sends
-text to an outside service; everything else runs in the browser.
+(Nudi/Baraha, Praja, Chanakya, Nalanda ↔ Unicode). Its first block, `BV.BVKannada`, is the
+Nudi/Baraha engine (rebuilt Nov 2026): it works on whole aksharas, and its legacy byte order was
+checked glyph by glyph in `assets/fonts/BVNudiAkshar01.woff2`. Keep the API
+(`toUnicode(text, opts)` / `toAscii(text, opts)` returning `{ text, unknown, clean }`): BV Mudrana
+uses it too. After any change, round-trip a long Unicode text (Unicode → ASCII → Unicode must
+come back identical) and look at the ASCII in the NUDI font.
+
+The Kannada Tools page also has a file converter (`assets/js/tools/bv-kannada-docs.js`, with
+`assets/js/tools/vendor/jszip.min.js`, MIT/GPLv3). Both load only when a visitor picks a file,
+from paths worked out at runtime from the URL of `kannada-tools.js`. It converts .docx, .xlsx,
+.pptx, .odt, .ods, .odp, .txt and .csv in both directions, touching only text in a Nudi or
+Baraha font. The page doubles as a Microsoft Word add-in when opened with `?word-addin=1`.
+Only its Aksharamukha panel sends text to an outside service; everything else runs in the browser.

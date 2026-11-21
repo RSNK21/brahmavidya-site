@@ -1,464 +1,362 @@
-/* Kannada ASCII (Nudi / Baraha) <-> Unicode converter.
-   Conversion engine from the Brahmavidya Kannada converter
-   (https://brahmavidya.co.in/kannada-ascii-to-unicode-converter/), used here unchanged
-   except for indexing the lookup tables by first character for speed on whole books. */
+/* BV Kannada engine: legacy Nudi / Baraha (ANSI) <-> Unicode Kannada.
+   Rebuilt Nov 2026. Both directions work on whole syllables (aksharas):
+   base consonant, ottaksharas, vowel sign, arkavattu, anusvara/visarga.
+   Legacy byte order was checked glyph by glyph against the NUDI01 font
+   (BVNudiAkshar01) so the ASCII we write renders correctly, and the reader
+   accepts every ordering seen in real Nudi, Baraha and Sanka output.
+   API (unchanged): toUnicode(text, opts) / toAscii(text, opts) -> { text, unknown, clean } */
 (function () {
 'use strict';
-const KANNADA = "\u0C80-\u0CFF";
 
-/** Longest-match table for the Nudi/Baraha ANSI family. */
-const mapping = new Map();
-const add = (legacy, unicode) => legacy && mapping.set(legacy, unicode);
+// ---------------------------------------------------------------- tables
+const V = ['dead', 'a', 'aa', 'i', 'ii', 'u', 'uu', 'r', 'e', 'ee', 'ai', 'o', 'oo', 'au'];
+const SIGN = { dead: '್', a: '', aa: 'ಾ', i: 'ಿ', ii: 'ೀ', u: 'ು', uu: 'ೂ', r: 'ೃ', rr: 'ೄ', e: 'ೆ', ee: 'ೇ', ai: 'ೈ', o: 'ೊ', oo: 'ೋ', au: 'ೌ' };
+const SIGN_TO_V = Object.fromEntries(Object.entries(SIGN).filter(([k, s]) => s && k !== 'dead').map(([k, s]) => [s, k]));
 
-[
-  ["C", "ಅ"], [",,", "ಽ"], ["D", "ಆ"], ["E", "ಇ"], ["F", "ಈ"], ["G", "ಉ"],
-  ["H", "ಊ"], ["IÄ", "ಋ"], ["IÆ2", "ೠ"], ["IÆA", "ೠಂ"], ["®ñA", "ಲೄಂ"], ["J", "ಎ"], ["K", "ಏ"],
-  ["L", "ಐ"], ["M", "ಒ"], ["N", "ಓ"], ["O", "ಔ"], ["A", "ಂ"], ["B", "ಃ"],
-].forEach(([a, u]) => add(a, u));
+// letter, then the 14 forms in V order (canonical spellings first)
+const SERIES = [
+  ['ಕ','Pï','PÀ','PÁ','Q','QÃ','PÀÄ','PÀÆ','PÀÈ','PÉ','PÉÃ','PÉÊ','PÉÆ','PÉÆÃ','PË'],
+  ['ಖ','Sï','R','SÁ','T','TÃ','RÄ','RÆ','RÈ','SÉ','SÉÃ','SÉÊ','SÉÆ','SÉÆÃ','SË'],
+  ['ಗ','Uï','UÀ','UÁ','V','VÃ','UÀÄ','UÀÆ','UÀÈ','UÉ','UÉÃ','UÉÊ','UÉÆ','UÉÆÃ','UË'],
+  ['ಘ','Wï','WÀ','WÁ','X','XÃ','WÀÄ','WÀÆ','WÀÈ','WÉ','WÉÃ','WÉÊ','WÉÆ','WÉÆÃ','WË'],
+  ['ಙ','Yï','Y','YÁ','YÂ','YÂÃ','YÄ','YÆ','YÈ','YÉ','YÉÃ','YÉÊ','YÉÆ','YÉÆÃ','YË'],
+  ['ಚ','Zï','ZÀ','ZÁ','a','aÃ','ZÀÄ','ZÀÆ','ZÀÈ','ZÉ','ZÉÃ','ZÉÊ','ZÉÆ','ZÉÆÃ','ZË'],
+  ['ಛ','bï','bÀ','bÁ','c','cÃ','bÀÄ','bÀÆ','bÀÈ','bÉ','bÉÃ','bÉÊ','bÉÆ','bÉÆÃ','bË'],
+  ['ಜ','eï','d','eÁ','f','fÃ','dÄ','dÆ','dÈ','eÉ','eÉÃ','eÉÊ','eÉÆ','eÉÆÃ','eË'],
+  ['ಝ','gÀhiï','gÀhÄ','gÀhiÁ','jhÄ','jhÄÃ','gÀhÄÄ','gÀhÄÆ','gÀhÄÈ','gÉhÄ','gÉhÄÃ','gÉhÄÊ','gÉhÆ','gÉhÆÃ','gÀhiË'],
+  ['ಞ','kï','k','kÁ','kÂ','kÂÃ','kÄ','kÆ','kÈ','kÉ','kÉÃ','kÉÊ','kÉÆ','kÉÆÃ','kË'],
+  ['ಟ','mï','l','mÁ','n','nÃ','lÄ','lÆ','lÈ','mÉ','mÉÃ','mÉÊ','mÉÆ','mÉÆÃ','mË'],
+  ['ಠ','oï','oÀ','oÁ','p','pÃ','oÀÄ','oÀÆ','oÀÈ','oÉ','oÉÃ','oÉÊ','oÉÆ','oÉÆÃ','oË'],
+  ['ಡ','qï','qÀ','qÁ','r','rÃ','qÀÄ','qÀÆ','qÀÈ','qÉ','qÉÃ','qÉÊ','qÉÆ','qÉÆÃ','qË'],
+  ['ಢ','qsï','qsÀ','qsÁ','rü','rüÃ','qsÀÄ','qsÀÆ','qsÀÈ','qsÉ','qsÉÃ','qsÉÊ','qsÉÆ','qsÉÆÃ','qsË'],
+  ['ಣ','uï','t','uÁ','tÂ','tÂÃ','tÄ','tÆ','tÈ','uÉ','uÉÃ','uÉÊ','uÉÆ','uÉÆÃ','uË'],
+  ['ತ','vï','vÀ','vÁ','w','wÃ','vÀÄ','vÀÆ','vÀÈ','vÉ','vÉÃ','vÉÊ','vÉÆ','vÉÆÃ','vË'],
+  ['ಥ','xï','xÀ','xÁ','y','yÃ','xÀÄ','xÀÆ','xÀÈ','xÉ','xÉÃ','xÉÊ','xÉÆ','xÉÆÃ','xË'],
+  ['ದ','zï','zÀ','zÁ','¢','¢Ã','zÀÄ','zÀÆ','zÀÈ','zÉ','zÉÃ','zÉÊ','zÉÆ','zÉÆÃ','zË'],
+  ['ಧ','zsï','zsÀ','zsÁ','¢ü','¢üÃ','zsÀÄ','zsÀÆ','zsÀÈ','zsÉ','zsÉÃ','zsÉÊ','zsÉÆ','zsÉÆÃ','zsË'],
+  ['ನ','£ï','£À','£Á','¤','¤Ã','£ÀÄ','£ÀÆ','£ÀÈ','£É','£ÉÃ','£ÉÊ','£ÉÆ','£ÉÆÃ','£Ë'],
+  ['ಪ','¥ï','¥À','¥Á','¦','¦Ã','¥ÀÅ','¥ÀÇ','¥ÀÈ','¥É','¥ÉÃ','¥ÉÊ','¥ÉÇ','¥ÉÇÃ','¥Ë'],
+  ['ಫ','¥sï','¥sÀ','¥sÁ','¦ü','¦üÃ','¥sÀÅ','¥sÀÇ','¥sÀÈ','¥sÉ','¥sÉÃ','¥sÉÊ','¥sÉÇ','¥sÉÇÃ','¥sË'],
+  ['ಬ','¨ï','§','¨Á','©','©Ã','§Ä','§Æ','§È','¨É','¨ÉÃ','¨ÉÊ','¨ÉÆ','¨ÉÆÃ','¨Ë'],
+  ['ಭ','¨sï','¨sÀ','¨sÁ','©ü','©üÃ','¨sÀÄ','¨sÀÆ','¨sÀÈ','¨sÉ','¨sÉÃ','¨sÉÊ','¨sÉÆ','¨sÉÆÃ','¨sË'],
+  ['ಮ','ªÀiï','ªÀÄ','ªÀiÁ','«Ä','«ÄÃ','ªÀÄÄ','ªÀÄÆ','ªÀÄÈ','ªÉÄ','ªÉÄÃ','ªÉÄÊ','ªÉÆ','ªÉÆÃ','ªÀiË'],
+  ['ಯ','AiÀiï','AiÀÄ','AiÀiÁ','¬Ä','¬ÄÃ','AiÀÄÄ','AiÀÄÆ','AiÀÄÈ','AiÉÄ','AiÉÄÃ','AiÉÄÊ','AiÉÆ','AiÉÆÃ','AiÀiË'],
+  ['ರ','gï','gÀ','gÁ','j','jÃ','gÀÄ','gÀÆ','gÀÈ','gÉ','gÉÃ','gÉÊ','gÉÆ','gÉÆÃ','gË'],
+  ['ಲ','¯ï','®','¯Á','°','°Ã','®Ä','®Æ','®È','¯É','¯ÉÃ','¯ÉÊ','¯ÉÆ','¯ÉÆÃ','¯Ë'],
+  ['ವ','ªï','ªÀ','ªÁ','«','«Ã','ªÀÅ','ªÀÇ','ªÀÈ','ªÉ','ªÉÃ','ªÉÊ','ªÉÇ','ªÉÇÃ','ªË'],
+  ['ಶ','±ï','±À','±Á','²','²Ã','±ÀÄ','±ÀÆ','±ÀÈ','±É','±ÉÃ','±ÉÊ','±ÉÆ','±ÉÆÃ','±Ë'],
+  ['ಷ','µï','µÀ','µÁ','¶','¶Ã','µÀÄ','µÀÆ','µÀÈ','µÉ','µÉÃ','µÉÊ','µÉÆ','µÉÆÃ','µË'],
+  ['ಸ','¸ï','¸À','¸Á','¹','¹Ã','¸ÀÄ','¸ÀÆ','¸ÀÈ','¸É','¸ÉÃ','¸ÉÊ','¸ÉÆ','¸ÉÆÃ','¸Ë'],
+  ['ಹ','ºï','ºÀ','ºÁ','»','»Ã','ºÀÄ','ºÀÆ','ºÀÈ','ºÉ','ºÉÃ','ºÉÊ','ºÉÆ','ºÉÆÃ','ºË'],
+  ['ಳ','¼ï','¼À','¼Á','½','½Ã','¼ÀÄ','¼ÀÆ','¼ÀÈ','¼É','¼ÉÃ','¼ÉÊ','¼ÉÆ','¼ÉÆÃ','¼Ë'],
+  ['ೞ','¿õï','¿õÀ','¿õÁ','¿Â','¿ÂÃ','¿Ä','¿Æ','¿È','¿õÉ','¿õÉÃ','¿õÉÊ','¿õÉÆ','¿õÉÆÃ','¿õË'],
+  ['ಱ','¾õï','¾õÀ','¾õÁ','¾Â','¾ÂÃ','¾Ä','¾Æ','¾È','¾õÉ','¾õÉÃ','¾õÉÊ','¾õÉÆ','¾õÉÆÃ','¾õË'],
+];
+const FORMS = new Map(SERIES.map((r) => [r[0], r.slice(1)]));
 
-// These are context fragments in Nudi/Baraha output. A terminal z is the
-// inherent-vowel form of ದ when the font omits its usual À suffix; a lone i is
-// a positioning/control component and must never leak into Unicode output.
-add("z", "ದ");
-add("i", "");
-// Alternate Nudi/Baraha-family single-byte forms seen in PDF extraction.
-add("e", "ಜ");
-add("¨", "ಬ");
-
-// dead, base, aa, i, ii, u, uu, vocalic-r, e, ee, ai, o, oo, au
-const series = [
-  ["ಕ","Pï","PÀ","PÁ","Q","QÃ","PÀÄ","PÀÆ","PÀÈ","PÉ","PÉÃ","PÉÊ","PÉÆ","PÉÆÃ","PË"],
-  ["ಖ","Sï","R","SÁ","T","TÃ","RÄ","RÆ","RÈ","SÉ","SÉÃ","SÉÊ","SÉÆ","SÉÆÃ","SË"],
-  ["ಗ","Uï","UÀ","UÁ","V","VÃ","UÀÄ","UÀÆ","UÀÈ","UÉ","UÉÃ","UÉÊ","UÉÆ","UÉÆÃ","UË"],
-  ["ಘ","Wï","WÀ","WÁ","X","XÃ","WÀÄ","WÀÆ","WÀÈ","WÉ","WÉÃ","WÉÊ","WÉÆ","WÉÆÃ","WË"],
-  ["ಙ","Yï","Y","YÁ","YÂ","YÂÃ","YÄ","YÆ","YÈ","YÉ","YÉÃ","YÉÊ","YÉÆ","YÉÆÃ","YË"],
-  ["ಚ","Zï","ZÀ","ZÁ","a","aÃ","ZÀÄ","ZÀÆ","ZÀÈ","ZÉ","ZÉÃ","ZÉÊ","ZÉÆ","ZÉÆÃ","ZË"],
-  ["ಛ","bï","bÀ","bÁ","c","cÃ","bÀÄ","bÀÆ","bÀÈ","bÉ","bÉÃ","bÉÊ","bÉÆ","bÉÆÃ","bË"],
-  ["ಜ","dï","d","eÁ","f","fÃ","dÄ","dÆ","dÈ","eÉ","eÉÃ","eÉÊ","eÉÆ","eÉÆÃ","eË"],
-  ["ಝ","gÀhÄï","gÀhÄ","gÀhiÁ","jhÄ","jhÄÃ","gÀhÄÄ","gÀhÄÆ","gÀhÄÈ","gÉhÄ","gÉhÄÃ","gÉhÄÊ","gÉhÆ","gÉhÆÃ","gÀhiË"],
-  ["ಞ","kï","k","kÁ","kÂ","kÂÃ","kÄ","kÆ","kÈ","kÉ","kÉÃ","kÉÊ","kÉÆ","kÉÆÃ","kË"],
-  ["ಟ","mï","l","mÁ","n","nÃ","lÄ","lÆ","lÈ","mÉ","mÉÃ","mÉÊ","mÉÆ","mÉÆÃ","mË"],
-  ["ಠ","oï","oÀ","oÁ","p","pÃ","oÀÄ","oÀÆ","oÀÈ","oÉ","oÉÃ","oÉÊ","oÉÆ","oÉÆÃ","oË"],
-  ["ಡ","qï","qÀ","qÁ","r","rÃ","qÀÄ","qÀÆ","qÀÈ","qÉ","qÉÃ","qÉÊ","qÉÆ","qÉÆÃ","qË"],
-  ["ಢ","qsï","qsÀ","qsÁ","rü","rüÃ","qsÀÄ","qsÀÆ","qsÀÈ","qsÉ","qsÉÃ","qsÉÊ","qsÉÆ","qsÉÆÃ","qsË"],
-  ["ಣ","uï","t","uÁ","tÂ","tÂÃ","tÄ","tÆ","tÈ","uÉ","uÉÃ","uÉÊ","uÉÆ","uÉÆÃ","uË"],
-  ["ತ","vï","vÀ","vÁ","w","wÃ","vÀÄ","vÀÆ","vÀÈ","vÉ","vÉÃ","vÉÊ","vÉÆ","vÉÆÃ","vË"],
-  ["ಥ","xï","xÀ","xÁ","y","yÃ","xÀÄ","xÀÆ","xÀÈ","xÉ","xÉÃ","xÉÊ","xÉÆ","xÉÆÃ","xË"],
-  ["ದ","zï","zÀ","zÁ","¢","¢Ã","zÀÄ","zÀÆ","zÀÈ","zÉ","zÉÃ","zÉÊ","zÉÆ","zÉÆÃ","zË"],
-  ["ಧ","zsï","zsÀ","zsÁ","¢ü","¢üÃ","zsÀÄ","zsÀÆ","zsÀÈ","zsÉ","zsÉÃ","zsÉÊ","zsÉÆ","zsÉÆÃ","zsË"],
-  ["ನ","£ï","£À","£Á","¤","¤Ã","£ÀÄ","£ÀÆ","£ÀÈ","£É","£ÉÃ","£ÉÊ","£ÉÆ","£ÉÆÃ","£Ë"],
-  ["ಪ","¥ï","¥À","¥Á","¦","¦Ã","¥ÀÄ","¥ÀÆ","¥ÀÈ","¥É","¥ÉÃ","¥ÉÊ","¥ÉÆ","¥ÉÆÃ","¥Ë"],
-  ["ಫ","¥sï","¥sÀ","¥sÁ","¦ü","¦üÃ","¥sÀÄ","¥sÀÆ","¥sÀÈ","¥sÉ","¥sÉÃ","¥sÉÊ","¥sÉÆ","¥sÉÆÃ","¥sË"],
-  ["ಬ","§ï","§","¨Á","©","©Ã","§Ä","§Æ","§È","¨É","¨ÉÃ","¨ÉÊ","¨ÉÆ","¨ÉÆÃ","¨Ë"],
-  ["ಭ","¨sï","¨sÀ","¨sÁ","©ü","©üÃ","¨sÀÄ","¨sÀÆ","¨sÀÈ","¨sÉ","¨sÉÃ","¨sÉÊ","¨sÉÆ","¨sÉÆÃ","¨sË"],
-  ["ಮ","ªÀÄï","ªÀÄ","ªÀiÁ","«Ä","«ÄÃ","ªÀÄÄ","ªÀÄÆ","ªÀÄÈ","ªÉÄ","ªÉÄÃ","ªÉÄÊ","ªÉÆ","ªÉÆÃ","ªÀiË"],
-  ["ಯ","AiÀÄï","AiÀÄ","AiÀiÁ","¬Ä","¬ÄÃ","AiÀÄÄ","AiÀÄÆ","AiÀÄÈ","AiÉÀÄ","AiÉÄÃ","AiÉÀÄÊ","AiÉÆ","AiÉÆÃ","AiÀiË"],
-  ["ರ","gï","gÀ","gÁ","j","jÃ","gÀÄ","gÀÆ","gÀÈ","gÉ","gÉÃ","gÉÊ","gÉÆ","gÉÆÃ","gË"],
-  ["ಲ","®ï","®","¯Á","°","°Ã","®Ä","®Æ","®È","¯É","¯ÉÃ","¯ÉÊ","¯ÉÆ","¯ÉÆÃ","¯Ë"],
-  ["ವ","ªï","ªÀ","ªÁ","«","«Ã","ªÀÅ","ªÀÇ","ªÀÈ","ªÉ","ªÉÃ","ªÉÊ","ªÉÇ","ªÉÇÃ","ªË"],
-  ["ಶ","±ï","±À","±Á","²","²Ã","±ÀÄ","±ÀÆ","±ÀÈ","±É","±ÉÃ","±ÉÊ","±ÉÆ","±ÉÆÃ","±Ë"],
-  ["ಷ","µï","µÀ","µÁ","¶","¶Ã","µÀÄ","µÀÆ","µÀÈ","µÉ","µÉÃ","µÉÊ","µÉÆ","µÉÆÃ","µË"],
-  ["ಸ","¸ï","¸À","¸Á","¹","¹Ã","¸ÀÄ","¸ÀÆ","¸ÀÈ","¸É","¸ÉÃ","¸ÉÊ","¸ÉÆ","¸ÉÆÃ","¸Ë"],
-  ["ಹ","ºï","ºÀ","ºÁ","»","»Ã","ºÀÄ","ºÀÆ","ºÀÈ","ºÉ","ºÉÃ","ºÉÊ","ºÉÆ","ºÉÆÃ","ºË"],
-  ["ಳ","¼ï","¼À","¼Á","½","½Ã","¼ÀÄ","¼ÀÆ","¼ÀÈ","¼É","¼ÉÃ","¼ÉÊ","¼ÉÆ","¼ÉÆÃ","¼Ë"],
+// Alternative spellings found in real documents and other converters (read only).
+const ALT_FORMS = [
+  ['ಕ','r','PÀø'], ['ಖ','r','Rø'], ['ಗ','r','UÀø'], ['ಘ','r','WÀø'], ['ಚ','r','ZÀø'], ['ಛ','r','bÀø'],
+  ['ಜ','r','dø'], ['ಝ','r','gÀhÄø'], ['ಟ','r','lø'], ['ಠ','r','oÀø'], ['ಡ','r','qÀø'], ['ಢ','r','qsÀø'],
+  ['ಣ','r','tø'], ['ತ','r','vÀø'], ['ಥ','r','xÀø'], ['ದ','r','zÀø'], ['ಧ','r','zsÀø'], ['ನ','r','£Àø'],
+  ['ಪ','r','¥Àø'], ['ಫ','r','¥sÀø'], ['ಬ','r','§ø'], ['ಭ','r','¨sÀø'], ['ಮ','r','ªÀÄø'], ['ಯ','r','AiÀÄø'],
+  ['ರ','r','gÀø'], ['ಲ','r','®ø'], ['ವ','r','ªÀø'], ['ಶ','r','±Àø'], ['ಷ','r','µÀø'], ['ಸ','r','¸Àø'],
+  ['ಹ','r','ºÀø'], ['ಳ','r','¼Àø'], ['ೞ','r','¿ø'], ['ಱ','r','¾ø'],
+  ['ಜ','a','e'], ['ಬ','a','¨'], ['ಲ','dead','®ï'], ['ಝ','dead','gÀhÄï'], ['ಮ','dead','ªÀÄï'], ['ಯ','dead','AiÀÄï'],
+  ['ಯ','e','AiÉÀÄ'], ['ಯ','ai','AiÉÀÄÊ'], ['ಝ','aa','gÀhÄÁ'],
+  ['ಪ','u','¥ÀÄ'], ['ಪ','uu','¥ÀÆ'], ['ಫ','u','¥sÀÄ'], ['ಫ','uu','¥sÀÆ'], ['ಪ','o','¥ÉÆ'], ['ಪ','oo','¥ÉÆÃ'],
+  ['ಫ','o','¥sÉÆ'], ['ಫ','oo','¥sÉÆÃ'],
+  ['ಯ','a','0iÀÄ'], ['ಯ','u','0iÀÄÄ'], ['ಯ','uu','0iÀÄÆ'], ['ಯ','e','0iÉÄ'], ['ಯ','ee','0iÉÄÃ'], ['ಯ','ai','0iÉÄÊ'],
+  ['ಯ','o','0iÉÆ'], ['ಯ','oo','0iÉÆÃ'], ['ಯ','aa','0iÀiÁ'], ['ಯ','au','0iÀiË'], ['ಯ','dead','0iÀiï'],
 ];
 
-const vowelSigns = ["್", "", "ಾ", "ಿ", "ೀ", "ು", "ೂ", "ೃ", "ೆ", "ೇ", "ೈ", "ೊ", "ೋ", "ೌ"];
-for (const row of series) {
-  const [letter, ...forms] = row;
-  forms.forEach((form, index) => add(form, letter + vowelSigns[index]));
-  add(forms[1] + "A", letter + "ಂ");
-  add(forms[1] + "B", letter + "ಃ");
-}
-
-const subjoined = {
-  "Ì":"ಕ","Í":"ಖ","Î":"ಗ","Ï":"ಘ","Ð":"ಙ","Ñ":"ಚ","Ò":"ಛ","Ó":"ಜ","Ô":"ಝ","Õ":"ಞ",
-  "Ö":"ಟ","×":"ಠ","Ø":"ಡ","Ù":"ಢ","Ú":"ಣ","Û":"ತ","Ü":"ಥ","Ý":"ದ","Þ":"ಧ","ß":"ನ",
-  "à":"ಪ","á":"ಫ","â":"ಬ","ã":"ಭ","ä":"ಮ","å":"ಯ","æ":"ರ","è":"ಲ","é":"ವ","ê":"ಶ",
-  "ë":"ಷ","ì":"ಸ","í":"ಹ","î":"ಳ","¿":"ೞ",
+const SUB = { // ottakshara (subjoined) glyphs
+  'ಕ':'Ì','ಖ':'Í','ಗ':'Î','ಘ':'Ï','ಙ':'Ð','ಚ':'Ñ','ಛ':'Ò','ಜ':'Ó','ಝ':'Ô','ಞ':'Õ','ಟ':'Ö','ಠ':'×',
+  'ಡ':'Ø','ಢ':'Ù','ಣ':'Ú','ತ':'Û','ಥ':'Ü','ದ':'Ý','ಧ':'Þ','ನ':'ß','ಪ':'à','ಫ':'á','ಬ':'â','ಭ':'ã',
+  'ಮ':'ä','ಯ':'å','ರ':'æ','ಲ':'è','ವ':'é','ಶ':'ê','ಷ':'ë','ಸ':'ì','ಹ':'í','ಳ':'î','ಱ':'ù','ೞ':'ú',
 };
-Object.entries(subjoined).forEach(([a, u]) => add(a, "್" + u));
+const SUB_READ = Object.fromEntries(Object.entries(SUB).map(([c, g]) => [g, c]));
+SUB_READ['ç'] = 'ರ';           // ra ottu, form used after another ottu
+const RA_SECOND = 'ç';
+const OTTU_SPACER = 'ö';       // blank byte that moves a 2nd/3rd ottu clear of the 1st
+const SPACED_OTTU = new Set(Object.values(SUB).filter((g) => g !== 'å' && g !== 'æ' && g !== 'ß' && g !== 'Ï'));
 
-// NUDI01 uses a dedicated final-ra form for the three-consonant ಸ್ತ್ರ family.
-// The final ç positions the ottakshara correctly; no visible prefix is required.
-const canonicalLegacyClusters = new Map();
-// NUDI01 requires this exact keypress order for ತ್ಯೇ. The leading marker is
-// part of its visual cluster form, not a separate Kannada ರ.
-canonicalLegacyClusters.set("ತ್ಯೇ", "ævÉåÃ");
-add("ævÉåÃ", "ತ್ಯೇ");
-// Avoid ambiguous NUDI byte sequences in repha + ವ vowel forms.
-[
-  ["", "gÀé"], ["ಾ", "gÀéÁ"], ["ಿ", "gÀéÂ"], ["ೀ", "gÀéÂÃ"],
-  ["ು", "gÀéÄ"], ["ೂ", "gÀéÆ"], ["ೃ", "gÀéø"], ["ೆ", "gÀéÉ"],
-  ["ೇ", "gÀéÉÃ"], ["ೈ", "gÀéÉÊ"], ["ೊ", "gÀéÉÆ"], ["ೋ", "gÀéÉÆÃ"], ["ೌ", "gÀéË"],
-].forEach(([sign, legacy]) => {
-  canonicalLegacyClusters.set("ರ್ವ" + sign, legacy);
-  add(legacy, "ರ್ವ" + sign);
+const VOWELS = [['C','ಅ'],['D','ಆ'],['E','ಇ'],['F','ಈ'],['G','ಉ'],['H','ಊ'],['IÄ','ಋ'],['IÆ','ೠ'],['IÆ2','ೠ'],
+  ['J','ಎ'],['K','ಏ'],['L','ಐ'],['M','ಒ'],['N','ಓ'],['O','ಔ']];
+const VOWEL_OUT = { 'ಅ':'C','ಆ':'D','ಇ':'E','ಈ':'F','ಉ':'G','ಊ':'H','ಋ':'IÄ','ೠ':'IÆ','ಎ':'J','ಏ':'K','ಐ':'L','ಒ':'M','ಓ':'N','ಔ':'O' };
+const ASPIRATE = { 'ದ':'ಧ', 'ಡ':'ಢ', 'ಪ':'ಫ', 'ಬ':'ಭ' };
+
+// how many trailing bytes of a form are a post-base vowel piece (ottus go before them)
+const TAIL_LEN = { dead: 1, a: 0, aa: 1, i: 0, ii: 1, u: 1, uu: 1, r: 1, e: 0, ee: 1, ai: 1, o: 1, oo: 2, au: 1 };
+const TAIL_CHARS = /^[ÁÃÄÅÆÇÈÊËøï]+$/;
+function split(form, v) {
+  const n = TAIL_LEN[v] || 0;
+  const tail = n ? form.slice(-n) : '';
+  return n && TAIL_CHARS.test(tail) ? [form.slice(0, -n), tail] : [form, ''];
+}
+// the state a head is in before its tail bytes arrive
+const HEAD_STATE = { dead: 'a', aa: 'a', ii: 'i', u: 'a', uu: 'a', r: 'a', ee: 'e', ai: 'e', o: 'e', oo: 'o', au: 'a' };
+
+// ---------------------------------------------------------------- legacy reader tokens
+const TOK = new Map();
+const put = (k, t) => { if (k && !TOK.has(k)) TOK.set(k, t); };
+for (const [c, ...forms] of SERIES) forms.forEach((f, i) => put(f, { t: 'C', c, v: V[i] }));
+for (const [c, v, f] of ALT_FORMS) put(f, { t: 'C', c, v });
+for (const [c, ...forms] of SERIES) forms.forEach((f, i) => {
+  const [head, tail] = split(f, V[i]);
+  if (tail && head) put(head, { t: 'C', c, v: HEAD_STATE[V[i]] });
 });
-const saFormsForStra = series.find((row) => row[0] === "ಸ").slice(1);
-vowelSigns.forEach((sign, index) => {
-  const unicode = "ಸ್ತ್ರ" + sign;
-  const legacy = saFormsForStra[index] + "Ûç";
-  canonicalLegacyClusters.set(unicode, legacy);
-  add(legacy, unicode);
-  add("s" + legacy, unicode); // Accept the short-lived prefixed form without emitting it.
-});
-
-[
-  ["PÀë", "ಕ್ಷ"], ["kÕ", "ಞ್ಞ"], ["gÀÜå", "ರ್ಥ್ಯ"], ["xÀåð", "ರ್ಥ್ಯ"],
-  ["gÀå", "ರ್ಯ"], ["gÁå", "ರ್ಯಾ"], ["AiÀÄð", "ರ್ಯ"], ["ªÀÄåð", "ರ್ಮ್ಯ"],
-  ["gÉæ", "ರ್ರೆ"], ["gÀä", "ರ್ಮ"], ["jä", "ರ್ಮಿ"], ["jäÃ", "ರ್ಮೀ"],
-  ["gÀé", "ರ್ವ"], ["jÛ", "ರ್ತಿ"], ["VæÃ", "ಗ್ರೀ"], ["¶ÖæÃ", "ಷ್ಟ್ರೀ"],
-  ["wÛ", "ತ್ತಿ"], ["¥Áæ", "ಪ್ರಾ"], ["¸ÀÌø", "ಸ್ಕೃ"], ["gÁ¶ÖçÃAiÀÄ", "ರಾಷ್ಟ್ರೀಯ"],
-  ["EAVèµï", "ಇಂಗ್ಲಿಷ್"], ["«µÀAiÀÄ", "ವಿಷಯ"], ["¸ËPÀAiÀÄð", "ಸೌಕರ್ಯ"],
-  ["0iÀÄÄ", "ಯು"], ["AiÉÄ", "ಯೆ"], ["0iÉÆ", "ಯೊ"], ["¥ÀÇ", "ಪೂ"],
-  ["¥sÀÅ", "ಫು"], ["¥sÀÇ", "ಫೂ"], ["gÉå", "ರ್ಯೆ"], ["gÉåÃ", "ರ್ಯೇ"],
-  ["gÉÆå", "ರ್ಯೊ"], ["gÉÆåÃ", "ರ್ಯೋ"], ["gÀÄå", "ರ್ಯು"], ["gÀÆå", "ರ್ಯೂ"],
-  ["jå", "ರ್ಯಿ"], ["jåÃ", "ರ್ಯೀ"], ["gÀåA", "ರ್ಯಂ"], ["gÀåB", "ರ್ಯಃ"],
-  ["gÉÆÜåÃ", "ರ್ಥ್ಯೋ"], ["ªÀiÁåð", "ರ್ಮ್ಯಾ"], ["gÁìöå", "ರ್ಸ್ಯಾ"],
-  ["¢æ", "ದ್ರಿ"], ["ªÀÄ¢æ", "ಮುದ್ರಿ"], ["UÉÀ", "ಗೆ"], ["¥ÀÅ", "ಪು"],
-  ["AiÀÄUÀ", "ಯಗ"], ["¥ÀÖ", "ಪ್ಟ"],
-].forEach(([a, u]) => add(a, u));
-
-const suspicious = /[A-Za-zÀ-ÿ¢£¤¥¦§¨©¬®¯°±²µ¶¸¹º»¼½¾¿]/;
-// Preserve ZWNJ/ZWJ: they are meaningful Kannada shaping controls.
-const invisibleFormatting = /[\u00AD\u034F\u061C\u180E\u200B\u200E\u200F\u202A-\u202E\u2060-\u206F\uFEFF]/g;
-const dependentVowelAtEnd = /[ಾಿೀುೂೃೆೇೈೊೋೌ]$/u;
-const kannadaClusterAtEnd = /[\u0C80-\u0CFF\u200C\u200D]$/u;
-
-function endsInKannadaCluster(output) {
-  return kannadaClusterAtEnd.test(output);
+for (const [k, u] of VOWELS) put(k, { t: 'V', u });
+for (const [g, c] of Object.entries(SUB_READ)) put(g, { t: 'O', c });
+'ÁÃÄÅÆÇÈÊËÂÉøñïðÀüs'.split('').forEach((m) => put(m, { t: 'M', m }));
+put('A', { t: 'A', u: 'ಂ' }); put('B', { t: 'A', u: 'ಃ' });
+put('„', { t: 'X', u: 'ಽ' }); put(',,', { t: 'X', u: 'ಽ' }); put('ó', { t: 'M', m: 'ó' });
+['ö', '÷', 'i', 'õ', '\u00AD', '\u200B', '\u200E', '\u200F', '\u2060', '\uFEFF'].forEach((z) => put(z, { t: 'Z' }));
+const SINGLE_INDEX = new Map();
+for (const k of [...TOK.keys()].sort((a, b) => b.length - a.length)) {
+  if (!SINGLE_INDEX.has(k[0])) SINGLE_INDEX.set(k[0], []);
+  SINGLE_INDEX.get(k[0]).push(k);
 }
 
-function preprocessLegacy(input) {
-  return input
-    .normalize("NFC")
-    .replace(invisibleFormatting, "")
-    // Some legacy documents substitute Greek mu (U+03BC) for the NUDI
-    // micro sign (U+00B5) used by every ಷ syllable.
-    .replace(/μ/g, "µ")
-    // Some NUDI variants encode final ಲ್ with a standalone macron. Preserve
-    // the established ಲಾ/ಲೆ/ಲೈ/ಲೊ/ಲೋ/ಲೌ sequences that also begin with ¯.
-    .replace(/¯ï/g, "®ï")
-    .replace(/¯(?![ÁÉË])/g, "®ï")
-    .replace(/À{2,}/g, "À")
-    .replace(/É{2,}/g, "É");
+// ---------------------------------------------------------------- legacy -> Unicode
+const CONSONANT = '[ಕ-ಹೞ]';
+function syllableText(s) {
+  if (s.kind === 'V') return s.u + s.mods;
+  let out = (s.repha ? 'ರ್' : '') + s.c + (s.nukta ? '಼' : '');
+  for (const o of s.ottus) out += '್' + o;
+  out += s.v === 'dead' ? '್' : SIGN[s.v];
+  return out + s.mods;
 }
-
-function applySubjoined(output, consonant) {
-  const vowel = output.match(dependentVowelAtEnd)?.[0] || "";
-  if (vowel) {
-    return output.slice(0, -vowel.length) + "್" + consonant + vowel;
+function mark(s, m) {               // returns false if the mark does not fit the syllable
+  const v = s.v;
+  switch (m) {
+    case 'À': return true;
+    case 's': case 'ü':
+      if (ASPIRATE[s.c]) { s.c = ASPIRATE[s.c]; return true; }
+      return s.c === 'ಧ' || s.c === 'ಢ' || s.c === 'ಫ' || s.c === 'ಭ';
+    case 'Á': if (v === 'a') { s.v = 'aa'; return true; } return v === 'aa';
+    case 'Â': if (v === 'a') { s.v = 'i'; return true; } return v === 'i';
+    case 'É': if (v === 'a') { s.v = 'e'; return true; } return v === 'e';
+    case 'Ã': if (v === 'i') s.v = 'ii'; else if (v === 'e') s.v = 'ee'; else if (v === 'o') s.v = 'oo'; else return false; return true;
+    case 'Ä':
+      if (s.c === 'ವ' && (v === 'a' || v === 'i' || v === 'e')) { s.c = 'ಮ'; return true; }
+      if (v === 'a') { s.v = 'u'; return true; }
+      if ((v === 'e' || v === 'i') && (s.c === 'ಯ' || s.c === 'ಝ' || s.c === 'ಮ')) return true;
+      return false;
+    case 'Å': if (v === 'a') { s.v = 'u'; return true; } return false;
+    case 'Æ':
+      if (v === 'a') { s.v = 'uu'; return true; }
+      if (v === 'e') { if (s.c === 'ವ') s.c = 'ಮ'; s.v = 'o'; return true; }
+      return false;
+    case 'Ç': if (v === 'a') { s.v = 'uu'; return true; } if (v === 'e') { s.v = 'o'; return true; } return false;
+    case 'È': case 'ø': if (v === 'a') { s.v = 'r'; return true; } return v === 'r';
+    case 'ñ': if (v === 'a' || v === 'r') { s.v = 'rr'; return true; } return false;
+    case 'Ê': if (v === 'e') { s.v = 'ai'; return true; } return false;
+    case 'Ë': if (v === 'a') { s.v = 'au'; return true; } return false;
+    case 'ï': s.v = 'dead'; return true;
+    case 'ð': s.repha = true; return true;
+    case 'ó': s.nukta = true; return true;
   }
-  return output + "್" + consonant;
+  return false;
 }
 
-function applyBrokenMark(output, mark) {
-  const transforms = {
-    "Ã": [[/ಿ$/u, "ೀ"], [/ೆ$/u, "ೇ"], [/ೊ$/u, "ೋ"]],
-    "Ê": [[/ೆ$/u, "ೈ"]],
-    "Æ": [[/ೆ$/u, "ೊ"]],
-  };
-  for (const [pattern, replacement] of transforms[mark] || []) {
-    if (pattern.test(output)) return output.replace(pattern, replacement);
-  }
-  return output + ({ "Ã":"ೀ", "Ä":"ು", "Æ":"ೂ", "È":"ೃ", "Ê":"ೈ" }[mark] || mark);
-}
-
-function applyLooseModifier(output, mark) {
-  if (mark === "À") return output;
-  if (mark === "ç" || mark === "æ") return applySubjoined(output, "ರ");
-  if (mark === "ü") return output + "ರ್";
-  if (mark === "ï") return output.replace(dependentVowelAtEnd, "") + "್";
-  const signs = { "Á":"ಾ", "Â":"ಿ", "É":"ೆ", "Ë":"ೌ", "ø":"ೃ" };
-  const sign = signs[mark];
-  if (!sign) return null;
-  return output.replace(dependentVowelAtEnd, "") + sign;
-}
-
-/**
- * Converts Nudi/Baraha legacy text using longest-match-first and Kannada cluster rules.
- * Text between $...$ is preserved as English.
- */
-function convertKannada(input, customEntries = []) {
-  const localMap = new Map(mapping);
-  for (const entry of customEntries) {
-    if (entry?.from && entry?.to) localMap.set(entry.from, entry.to);
-  }
-  const keys = [...localMap.keys()].sort((a, b) => b.length - a.length);
-  const keyIndex = new Map();
-  for (const k of keys) { const c = k[0]; if (!keyIndex.has(c)) keyIndex.set(c, []); keyIndex.get(c).push(k); }
-  const aLongKeys = keys.filter((nextKey) => nextKey.length > 1 && nextKey.startsWith("A"));
-  const preparedInput = protectEnglishWords(preprocessLegacy(protectDigitFractions(input)), keys);
-  let output = "";
+const ENG_START = '', ENG_END = '';
+function legacyToUnicode(input, opts = {}) {
+  const custom = (opts.custom || []).filter((e) => e && e.from && e.to);
+  const customKeys = custom.map((e) => e.from).sort((a, b) => b.length - a.length);
+  const customMap = new Map(custom.map((e) => [e.from, e.to]));
+  let text = String(input).normalize('NFC')
+    .replace(/[­​‎‏‪-‮⁠﻿]/g, '')
+    .replace(/μ/g, 'µ');                                  // Greek mu typed for the Nudi ಷ byte
+  if (opts.keepEnglish !== false) text = protectEnglish(text);
+  const out = [];
+  let at = 0;
+  const emit = (str) => out.push([at, str]);
   const unknown = [];
-  let preserved = false;
-
-  for (let i = 0; i < preparedInput.length;) {
-    if (preparedInput[i] === "$") { preserved = !preserved; i += 1; continue; }
-    if (preparedInput[i] === englishStartSentinel) { preserved = true; i += 1; continue; }
-    if (preparedInput[i] === englishEndSentinel) { preserved = false; i += 1; continue; }
-    if (preserved) { output += preparedInput[i++]; continue; }
-
-    const key = (keyIndex.get(preparedInput[i]) || []).find((candidate) => {
-      if (!preparedInput.startsWith(candidate, i)) return false;
-      // Anusvara A is also the first byte of legacy Ya syllables. Do not let a
-      // shorter consonant+A match steal it when A begins any valid longer key
-      // (AiÀÄ, AiÉÄÃ, AiÉÆ...); this is the ಗಣಪತಯೇ / paryaya class of bug.
-      if (candidate.endsWith("A")) {
-        const possibleNextKey = preparedInput.slice(i + candidate.length - 1);
-        const aStartsLongerMapping = aLongKeys.some((nextKey) => possibleNextKey.startsWith(nextKey));
-        if (aStartsLongerMapping) return false;
-      }
-      return true;
-    });
-    if (key) {
-      if (key.length === 1 && subjoined[key]) output = applySubjoined(output, subjoined[key]);
-      else output += localMap.get(key);
-      i += key.length;
-      continue;
+  let syl = null, dollar = false, eng = false, pendingRepha = false, prevDead = false;
+  const flush = () => { if (syl) { out.push([syl.start, syllableText(syl)]); prevDead = syl.kind === 'C' && syl.v === 'dead' && !syl.mods; syl = null; } };
+  for (let i = 0; i < text.length;) {
+    at = i;
+    const ch = text[i];
+    if (ch === ENG_START || ch === ENG_END) { flush(); eng = ch === ENG_START; i++; prevDead = false; continue; }
+    if (ch === '$') { flush(); dollar = !dollar; i++; prevDead = false; continue; }
+    if (dollar || eng) { emit(ch); i++; continue; }
+    const ck = customKeys.find((k) => text.startsWith(k, i));
+    if (ck) { flush(); emit(customMap.get(ck)); i += ck.length; prevDead = false; continue; }
+    const key = (SINGLE_INDEX.get(ch) || []).find((k) => text.startsWith(k, i));
+    const tok = key ? TOK.get(key) : null;
+    if (!tok) {
+      flush(); prevDead = false;
+      if (/[0-9]/.test(ch) && opts.kannadaDigits) emit(String.fromCharCode(0x0CE6 + +ch));
+      else { emit(ch); if (/[\u0080-ÿ]/.test(ch)) unknown.push({ char: ch, position: i }); }
+      i++; continue;
     }
-
-    const char = preparedInput[i++];
-    if (["Ã", "Ä", "Æ", "È", "Ê"].includes(char) && endsInKannadaCluster(output)) {
-      output = applyBrokenMark(output, char);
-    } else if (char === "ð") {
-      output = output.replace(/([ಕ-ಹಳ](?:್[\u200C\u200D]?[ಕ-ಹಳ])*(?:[ಾಿೀುೂೃೆೇೈೊೋೌ])?)$/u, "ರ್$1");
-    } else if (char === "ö" || char === "÷") {
-      continue;
-    } else if (char === "ü") {
-      // Prefix repha used by some NUDI documents.
-      output += "ರ್";
-      continue;
-    } else if (char === "ï") {
-      // Ignore a truly orphaned legacy virama; otherwise attach it to its base.
-      if (endsInKannadaCluster(output)) output = applyLooseModifier(output, char);
-      continue;
-    } else {
-      const repaired = endsInKannadaCluster(output) ? applyLooseModifier(output, char) : null;
-      if (repaired !== null) output = repaired;
-      else {
-        output += char;
-        if (suspicious.test(char)) unknown.push({ char, position: i - 1 });
-      }
-    }
+    i += key.length;
+    if (tok.t === 'C') {
+      // an explicit halant (ï) right before a new consonant stays visible: ಷಟ್‌ಶ್ರುತಿ
+      const zwnj = syl && syl.kind === 'C' && syl.v === 'dead' && !syl.mods;
+      flush();
+      if (zwnj || prevDead) emit('‌');
+      syl = { kind: 'C', c: tok.c, v: tok.v, ottus: [], mods: '', repha: pendingRepha, start: at };
+      pendingRepha = false; prevDead = false;
+    } else if (tok.t === 'V') {
+      flush(); prevDead = false; syl = { kind: 'V', u: tok.u, mods: '', start: at };
+    } else if (tok.t === 'O') {
+      if (syl && syl.kind === 'C' && !syl.mods) syl.ottus.push(tok.c);
+      else { flush(); emit('್' + tok.c); unknown.push({ char: key, position: i - key.length }); }
+    } else if (tok.t === 'M') {
+      if (syl && syl.kind === 'C' && !syl.mods && mark(syl, tok.m)) continue;
+      if (syl && syl.kind === 'V' && tok.m === 'À') continue;
+      if (tok.m === 'ü' && !syl) { pendingRepha = true; continue; }
+      if (tok.m === 'ð' && syl && syl.kind === 'C') { syl.repha = true; continue; }
+      if (tok.m === 's') { flush(); emit(tok.m); continue; }   // ordinary letters
+      if (syl && syl.kind === 'C' && syl.mods && tok.m === 'Ã') continue;
+      flush(); unknown.push({ char: key, position: i - key.length });
+      emit(key);
+    } else if (tok.t === 'A') {
+      if (syl && (syl.kind === 'V' || syl.v !== 'dead')) syl.mods += tok.u;
+      else { flush(); emit(tok.u); }
+    } else if (tok.t === 'X') { flush(); emit(tok.u); }
+    // 'Z' spacers and control bytes vanish
   }
-
-  return {
-    text: output
-      .replace(/(^|[^\u0C95-\u0CB9\u0CBC])\u0CCD[\u200C\u200D]?/gu, "$1")
-      .replace(/\u200D(?=\u0CCD)/gu, "")
-      .replace(/\u0CCD{2,}/gu, "\u0CCD")
-      .replace(/\u25CC/gu, "")
-      .normalize("NFC")
-      .replace(/\u093D/gu, "\u0CBD")
-      .replace(/[\uE103-\uE105]/gu, (s) => sentinelToDigitFraction.get(s)),
-    unknown,
-    clean: unknown.length === 0,
-  };
-}
-
-/**
- * Converts Unicode Kannada to the canonical legacy form already present in
- * this converter's mapping table. Longer mapped sequences take priority.
- */
-function convertUnicode(input) {
-  const reverseMap = new Map();
-  for (const [legacy, unicode] of mapping) {
-    if (unicode) reverseMap.set(unicode, legacy);
+  flush();
+  const pieces = [];
+  for (let k = 0; k < out.length; k++) {
+    const [pos, str] = out[k];
+    if (str === '\u200C' && !(out[k + 1] && /^[\u0C95-\u0CB9\u0CDE]/.test(out[k + 1][1]))) continue;
+    pieces.push([pos, str.replace(/[\uE110\uE111]/g, '').normalize('NFC')]);
   }
-  reverseMap.set("ಽ", "ಽ");
-  "೦೧೨೩೪೫೬೭೮೯".split("").forEach((digit, index) => reverseMap.set(digit, String(index)));
-  // Accept alternate legacy Ya spellings, but always emit the canonical
-  // Ai... series in Unicode-to-ASCII output.
-  const yaSeries = series.find((row) => row[0] === "ಯ");
-  if (yaSeries) {
-    yaSeries.slice(1).forEach((form, index) => reverseMap.set("ಯ" + vowelSigns[index], form));
-  }
-  const reverseKeys = [...reverseMap.keys()].sort((a, b) => b.length - a.length);
-  const revIndex = new Map();
-  for (const k of reverseKeys) { const c = k[0]; if (!revIndex.has(c)) revIndex.set(c, []); revIndex.get(c).push(k); }
-  const formIndex = new Map(series.map((row) => [row[0], row.slice(1)]));
-  const subjoinedReverse = new Map(
-    Object.entries(subjoined).map(([legacy, letter]) => [letter, legacy]),
-  );
-  const vowelIndex = new Map([
-    ["", 1], ["ಾ", 2], ["ಿ", 3], ["ೀ", 4], ["ು", 5], ["ೂ", 6],
-    ["ೃ", 7], ["ೆ", 8], ["ೇ", 9], ["ೈ", 10], ["ೊ", 11], ["ೋ", 12], ["ೌ", 13],
-  ]);
-  const consonant = /^[ಕ-ಹಳ]$/u;
-  const prepared = protectEnglishWords(protectLiteralFractions(input.replace(/\u0CCD\u0CBC/gu, "\u0CCD").normalize("NFC").replace(invisibleFormatting, "").replace(/([ಕ-ಹಳ])[\u200C\u200D]+(?=[ಾಿೀುೂೃೆೇೈೊೋೌ])/gu, "$1").replace(/ಅಾ/gu, "ಆ").replace(/ಅಿ/gu, "ಇ").replace(/ಅೀ/gu, "ಈ").replace(/ಅು/gu, "ಉ").replace(/ಅೂ/gu, "ಊ").replace(/ಅೃ/gu, "ಋ").replace(/ಅೆ/gu, "ಎ").replace(/ಅೇ/gu, "ಏ").replace(/ಅೈ/gu, "ಐ").replace(/ಅೊ/gu, "ಒ").replace(/ಅೋ/gu, "ಓ").replace(/ಅೌ/gu, "ಔ").normalize("NFC").replace(/\u093D/gu, "\u0CBD")));
-  let text = "";
-  const unknown = [];
-
-  const canonicalClusterKeys = [...canonicalLegacyClusters.keys()].sort((a, b) => b.length - a.length);
-  const canIndex = new Map();
-  for (const k of canonicalClusterKeys) { const c = k[0]; if (!canIndex.has(c)) canIndex.set(c, []); canIndex.get(c).push(k); }
-
-  for (let i = 0; i < prepared.length;) {
-    const canonicalCluster = (canIndex.get(prepared[i]) || []).find((candidate) => prepared.startsWith(candidate, i));
-    if (canonicalCluster) {
-      text += canonicalLegacyClusters.get(canonicalCluster);
-      i += canonicalCluster.length;
-      continue;
-    }
-    const first = prepared[i];
-    if (consonant.test(first) ? (prepared[i + 1] === "್" ?
-        consonant.test(prepared[i + 2] || "") : false) : false) {
-      const letters = [first];
-      let cursor = i + 1;
-      let finalVirama = false;
-      while (prepared[cursor] === "್") {
-        if (consonant.test(prepared[cursor + 1] || "")) {
-          letters.push(prepared[cursor + 1]);
-          cursor += 2;
-          while (prepared[cursor] === "\u200C" || prepared[cursor] === "\u200D") cursor += 1;
-        } else {
-          finalVirama = true;
-          cursor += 1;
-          break;
-        }
-      }
-      const sign = vowelIndex.has(prepared[cursor]) ? prepared[cursor++] : "";
-      const isRepha = letters[0] === "ರ" ? (letters.length > 1 ? !finalVirama : false) : false;
-      const baseLetter = isRepha ? letters[1] : letters[0];
-      const tailLetters = isRepha ? letters.slice(2) : letters.slice(1);
-      const forms = formIndex.get(baseLetter);
-      const tails = tailLetters.map((letter) => subjoinedReverse.get(letter));
-      if (forms ? tails.every(Boolean) : false) {
-        const baseIndex = finalVirama
-          ? (letters.length > 1 ? 1 : 0)
-          : vowelIndex.get(sign);
-        // NUDI01 subjoined glyphs have zero advance. The blank ö byte advances
-        // successive ottaksharas so double and triple clusters do not overprint.
-        const spacedTails = tails.join("ö");
-        // Post-base vowel bytes must follow the complete ottakshara stack. Placing
-        // them inside the base form causes forms such as ಶ್ರೀ and ತ್ಯೇ to jumble.
-        const clusterForms = {
-          "": forms[1] + spacedTails,
-          "ಾ": forms[1] + spacedTails + "Á",
-          "ಿ": forms[3] + spacedTails,
-          "ೀ": forms[3] + spacedTails + "Ã",
-          "ು": forms[1] + spacedTails + "Ä",
-          "ೂ": forms[1] + spacedTails + "Æ",
-          "ೃ": forms[1] + spacedTails + "ø",
-          "ೆ": forms[8] + spacedTails,
-          "ೇ": forms[8] + spacedTails + "Ã",
-          "ೈ": forms[8] + spacedTails + "Ê",
-          "ೊ": forms[8] + spacedTails + "Æ",
-          "ೋ": forms[8] + spacedTails + "ÆÃ",
-          "ೌ": forms[1] + spacedTails + "Ë",
-        };
-        const clusterForm = finalVirama
-          ? forms[1] + spacedTails + "ï"
-          : clusterForms[sign];
-        // Repha follows the complete cluster, including its vowel bytes.
-        text += clusterForm + (isRepha ? "ð" : "");
-        if (prepared[cursor] === "ಂ") { text += "A"; cursor += 1; }
-        else if (prepared[cursor] === "ಃ") { text += "B"; cursor += 1; }
-        i = cursor;
-        continue;
-      }
-    }
-
-    const special = (revIndex.get(prepared[i]) || []).find((candidate) =>
-      candidate.length > 1 && prepared.startsWith(candidate, i),
-    );
-    if (special) {
-      text += reverseMap.get(special);
-      i += special.length;
-      continue;
-    }
-
-    const key = (revIndex.get(prepared[i]) || []).find((candidate) => prepared.startsWith(candidate, i));
-    if (key) {
-      text += reverseMap.get(key);
-      i += key.length;
-      continue;
-    }
-
-    text += first;
-    if (/[ಀ-೿]/u.test(first)) unknown.push({ char: first, position: i });
-    i += 1;
-  }
-
-  return { text, unknown, clean: unknown.length === 0 };
-}
-
-// ═══════════════════════════════════════════════════
-// FRACTION & ENGLISH WORD PROTECTION
-// Prevents conversion engine from consuming literal fractions
-// and English words in mixed Kannada/English documents
-// ═══════════════════════════════════════════════════
-
-const literalFractionToSentinel = new Map([["¼", "\uE100"], ["½", "\uE101"], ["¾", "\uE102"]]);
-const sentinelToLiteralFraction = new Map([...literalFractionToSentinel].map(([fraction, sentinel]) => [sentinel, fraction]));
-function protectLiteralFractions(text) { return text.replace(/[¼½¾]/gu, (fraction) => literalFractionToSentinel.get(fraction)); }
-function restoreLiteralFractions(text) { return text.replace(/[\uE100-\uE102]/gu, (sentinel) => sentinelToLiteralFraction.get(sentinel)); }
-// CONV-001 fix: protect digit+fraction patterns (e.g. 3½) during ASCII→Unicode
-// conversion so the legacy mapping does not consume the fraction character.
-const digitFractionToSentinel = new Map([["¼", "\uE103"], ["½", "\uE104"], ["¾", "\uE105"]]);
-const sentinelToDigitFraction = new Map([...digitFractionToSentinel].map(([fraction, sentinel]) => [sentinel, fraction]));
-function protectDigitFractions(text) { return text.replace(/([0-9\u0CE6-\u0CE9])([¼½¾])/gu, (_, digit, frac) => digit + digitFractionToSentinel.get(frac)); }
-function restoreDigitFractions(text) { return text.replace(/[\uE103-\uE105]/gu, (sentinel) => sentinelToDigitFraction.get(sentinel)); }
-const englishStartSentinel = "\uE110";
-const englishEndSentinel = "\uE111";
-const clearEnglishWord = /(^|[\s([{<"'“‘,:;!?])([A-Z][A-Z0-9]{1,}|[A-Za-z][A-Za-z0-9]{2,}|a|I|an|as|at|be|by|if|in|is|it|of|on|or|to)(?=$|[\s)\]}>"'”’,:;!?])/gm;
-const asciiKeyCache = new WeakMap();
-function canParseAsLegacyWord(word, legacyKeys) {
-  if (!legacyKeys || !legacyKeys.length) return false;
-  const asciiKeys = asciiKeyCache.get(legacyKeys) || (asciiKeyCache.set(legacyKeys, legacyKeys.filter((key) => /^[A-Za-z0-9]+$/.test(key))), asciiKeyCache.get(legacyKeys));
-  const reachable = new Uint8Array(word.length + 1);
-  reachable[0] = 1;
-  for (let index = 0; index < word.length; index += 1) {
-    if (!reachable[index]) continue;
-    for (const key of asciiKeys) {
-      if (word.startsWith(key, index)) reachable[index + key.length] = 1;
-    }
-  }
-  return reachable[word.length] === 1;
-}
-/* ═══════════════════════════════════════════════════════════════
-   SECTION 2: ENGLISH WORD PROTECTION
-   Sentinel-based protection for Latin words in mixed Kannada text.
-   ═══════════════════════════════════════════════════════════════ */
-function protectEnglishWords(text, legacyKeys = null) {
-  const tokens = [...text.matchAll(clearEnglishWord)].map((match) => {
-    const prefix = match[1] || "";
-    const word = match[2];
-    const start = match.index + prefix.length;
-    return { word, start, end: start + word.length, ambiguous: canParseAsLegacyWord(word, legacyKeys) };
-  });
-  const englishGlue = /^[\s()\[\]{}<>"'“”‘’,:;!?-]*$/u;
-  const selected = tokens.filter((token, index) => {
-    if (!token.ambiguous) return true;
-    const previous = tokens[index - 1];
-    const next = tokens[index + 1];
-    const followsEnglish = previous && !previous.ambiguous && englishGlue.test(text.slice(previous.end, token.start));
-    const precedesEnglish = next && !next.ambiguous && englishGlue.test(text.slice(token.end, next.start));
-    return Boolean(followsEnglish || precedesEnglish);
-  });
-  let result = "";
-  let cursor = 0;
-  for (const token of selected) {
-    result += text.slice(cursor, token.start) + englishStartSentinel + token.word + englishEndSentinel;
-    cursor = token.end;
-  }
-  return result + text.slice(cursor);
-}
-function restoreEnglishMarkers(text) { return text.replace(/[\uE110\uE111]/gu, ""); }
-
-
-const keysCache = {};
-function toUnicode(text, opts = {}) {
-  const r = convertKannada(text, opts.custom || []);
+  const result = pieces.map((x) => x[1]).join('');
+  const r = { text: result, unknown, clean: unknown.length === 0 };
+  if (opts.segments) r.pieces = pieces;
   return r;
 }
-function toAscii(text) {
-  const r = convertUnicode(text);
-  return { text: restoreLiteralFractions(restoreEnglishMarkers(r.text)), unknown: r.unknown, clean: r.clean };
+
+// English words inside legacy text. A real Nudi/Baraha word almost always carries a byte above 127
+// (talakattu, vowel signs, ottus), so a plain-ASCII word with vowels is English. Short or vowel-less
+// ASCII words (ಕಿ = Q, ಇತಿ = Ew) count as English only next to clear English or in a line with no legacy bytes.
+const COMMON = new Set('a an as at be by do go he if in is it me my no of on or so to up us we am vs dr mr mrs ms st no pm etc ie eg'.split(' '));
+const WORD = /[A-Za-z][A-Za-z0-9]*(?:['’][A-Za-z]+)*/g;
+function protectEnglish(text) {
+  return text.split(/(\r?\n)/).map((line) => {
+    if (/^\r?\n$/.test(line) || !/[A-Za-z]/.test(line)) return line;
+    const lineIsEnglish = !/[\u0080-ÿ]/.test(line) && /[a-z]{3,}/.test(line);
+    const toks = [];
+    for (const m of line.matchAll(WORD)) {
+      const w = m[0], start = m.index, end = start + w.length;
+      const before = line[start - 1] || ' ', after = line[end] || ' ';
+      if (/[\u0080-ÿ]/.test(before) || /[\u0080-ÿ]/.test(after)) continue; // glued to legacy bytes
+      const sure = lineIsEnglish || COMMON.has(w.toLowerCase()) || (w.length >= 3 && /[aeiouy]/.test(w) && /[a-z]{2}/.test(w));
+      toks.push({ start, end, sure });
+    }
+    const glue = /^[\s,.;:()'"&/-]*$/;
+    const keep = toks.filter((t, i) => t.sure
+      || (toks[i - 1] && toks[i - 1].sure && glue.test(line.slice(toks[i - 1].end, t.start)))
+      || (toks[i + 1] && toks[i + 1].sure && glue.test(line.slice(t.end, toks[i + 1].start))));
+    let r = '', cur = 0;
+    for (const t of keep) { r += line.slice(cur, t.start) + ENG_START + line.slice(t.start, t.end) + ENG_END; cur = t.end; }
+    return r + line.slice(cur);
+  }).join('');
 }
-const api = { toUnicode, toAscii, convertKannada, convertUnicode };
+
+// ---------------------------------------------------------------- Unicode -> legacy
+const IS_C = (ch) => ch >= 'ಕ' && ch <= 'ಹ' && FORMS.has(ch) || ch === 'ೞ';
+function ottuBytes(list) {
+  return list.map((c, i) => {
+    if (i === 0) return SUB[c];
+    if (c === 'ರ') return RA_SECOND;
+    const g = SUB[c];
+    return (SPACED_OTTU.has(g) ? OTTU_SPACER : '') + g;
+  }).join('');
+}
+function clusterToLegacy(c, ottus, v, repha) {
+  const forms = FORMS.get(c);
+  if (!forms) return null;
+  if (!ottus.some((o) => !SUB[o])) {
+    if (v === 'rr') return clusterToLegacy(c, ottus, 'a', repha).replace(/ð$/, '') + 'ñ' + (repha ? 'ð' : '');
+    const form = forms[V.indexOf(v)];
+    const [head, tail] = split(form, v);
+    // after an ottu the vowel sign ೃ takes its hanging form ø (È would sit under the ottu)
+    const t = ottus.length && v === 'r' ? tail.replace('È', 'ø') : tail;
+    return (ottus.length ? head + ottuBytes(ottus) + t : form) + (repha ? 'ð' : '');
+  }
+  return null;
+}
+function unicodeToLegacy(input, opts = {}) {
+  const s = String(input).normalize('NFC')
+    .replace(/[­​‎‏⁠﻿]/g, '')
+    .replace(/ऽ/g, 'ಽ')
+    .replace(/ಅ([ಾಿೀುೂೃೆೇೈೊೋೌ])/g, (m, x) => ({ 'ಾ':'ಆ','ಿ':'ಇ','ೀ':'ಈ','ು':'ಉ','ೂ':'ಊ','ೃ':'ಋ','ೆ':'ಎ','ೇ':'ಏ','ೈ':'ಐ','ೊ':'ಒ','ೋ':'ಓ','ೌ':'ಔ' })[x]);
+  let out = '';
+  const unknown = [];
+  for (let i = 0; i < s.length;) {
+    const ch = s[i];
+    if (IS_C(ch)) {
+      const start = i;
+      const letters = [ch];
+      let j = i + 1, nukta = false, zwjRa = false, dead = false;
+      if (s[j] === '಼') { nukta = true; j++; }
+      if (ch === 'ರ' && s[j] === '‍' && s[j + 1] === '್') { zwjRa = true; j++; }
+      while (s[j] === '್') {
+        let k = j + 1;
+        if (s[k] === '‍') k++;
+        if (IS_C(s[k] || '')) { letters.push(s[k]); j = k + 1; if (s[j] === '಼') j++; continue; }
+        dead = true; j++; if (s[j] === '‌' || s[j] === '‍') j++;
+        break;
+      }
+      let v = dead ? 'dead' : 'a';
+      if (!dead && SIGN_TO_V[s[j]]) { v = SIGN_TO_V[s[j]]; j++; }
+      let mods = '';
+      while (s[j] === 'ಂ' || s[j] === 'ಃ') { mods += s[j] === 'ಂ' ? 'A' : 'B'; j++; }
+      const repha = letters[0] === 'ರ' && letters.length > 1 && !zwjRa;
+      const base = repha ? letters[1] : letters[0];
+      const ottus = letters.slice(repha ? 2 : 1);
+      const legacy = clusterToLegacy(base, ottus, v, repha);
+      if (legacy == null) { out += s.slice(start, j); unknown.push({ char: s.slice(start, j), position: start }); }
+      else out += legacy + (nukta ? 'ó' : '') + mods;
+      i = j; continue;
+    }
+    if (VOWEL_OUT[ch]) {
+      let j = i + 1, mods = '';
+      while (s[j] === 'ಂ' || s[j] === 'ಃ') { mods += s[j] === 'ಂ' ? 'A' : 'B'; j++; }
+      out += VOWEL_OUT[ch] + mods; i = j; continue;
+    }
+    if (ch === 'ಂ') { out += 'A'; i++; continue; }
+    if (ch === 'ಃ') { out += 'B'; i++; continue; }
+    if (ch === 'ಽ') { out += '„'; i++; continue; }
+    if (ch >= '೦' && ch <= '೯') { out += String(ch.charCodeAt(0) - 0x0CE6); i++; continue; }
+    if (ch === '‌' || ch === '‍') { i++; continue; }
+    if (ch >= 'ಀ' && ch <= '೿') unknown.push({ char: ch, position: i });
+    out += ch; i++;
+  }
+  return { text: out, unknown, clean: unknown.length === 0 };
+}
+
+// ---------------------------------------------------------------- options shared by the page
+function postProcess(text, opts) {
+  let t = text;
+  if (opts.trimSpaces) t = t.replace(/[ \t]{2,}/g, ' ').replace(/[ \t]+$/gm, '').replace(/^[ \t]+/gm, '');
+  return t;
+}
+function toUnicode(text, opts = {}) {
+  const r = legacyToUnicode(text, opts);
+  r.text = postProcess(r.text, opts);
+  return r;
+}
+function toAscii(text, opts = {}) {
+  let src = text;
+  if (opts.asciiDigits === false) src = src; // digits are always written as 0-9; the font draws them
+  const r = unicodeToLegacy(src, opts);
+  r.text = postProcess(r.text, opts);
+  return r;
+}
+// Leading bytes that belong to the previous syllable (used when a document splits one akshara across runs)
+const CONTINUATION = /^[ÀÁÂÃÄÅÆÇÈÉÊËÌ-ãåæèéêëìíîçøñïðöùú÷üó]+/;
+function continuationLength(s) { const m = CONTINUATION.exec(s); return m ? m[0].length : 0; }
+function hasKannada(s) { return /[ಀ-೿]/.test(s); }
+
+const api = { toUnicode, toAscii, convertKannada: (t, custom) => toUnicode(t, { custom }), convertUnicode: toAscii,
+  continuationLength, hasKannada, version: '2026.11' };
 if (typeof window !== 'undefined') { window.BV = window.BV || {}; window.BV.BVKannada = api; }
 if (typeof module !== 'undefined') module.exports = api;
 })();

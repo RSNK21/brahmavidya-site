@@ -1,43 +1,163 @@
 ---
 title: Kannada Tools: ASCII and Unicode Converter
-description: Convert legacy Nudi and Baraha Kannada text to Unicode and back in your browser, clean Word and ODT documents, and download the Inna Swaralipi gamaka notation font.
+description: Convert legacy Nudi and Baraha Kannada text and whole Word, Excel, PowerPoint and OpenDocument files to Unicode and back, right in your browser. Also the Inna Swaralipi gamaka font and BVDoClean.
 section: tools
 layout: wide
 css: /assets/css/tools/kannada-tools.css
-js: /assets/js/tools/kannada-tools.js
+js: /assets/js/tools/bv-legacy-converters.js, /assets/js/tools/kannada-tools.js
 image: /assets/uploads/2026/07/brahmavidya-centenary-gift-logo.png
 ---
-<!-- Kannada Tools. Also used as a Microsoft Word add-in task pane when opened with ?word-addin=1
-     (then only #bv-word-addin-pane is shown). Styles: assets/css/tools/kannada-tools.css ·
-     behaviour and converter: assets/js/tools/kannada-tools.js -->
+<!-- Kannada Tools. Also the Microsoft Word add-in task pane when opened with ?word-addin=1
+     (then only #bv-word-addin-pane is shown).
+     Engine: assets/js/tools/bv-legacy-converters.js (BV.BVKannada, rebuilt Nov 2026)
+     Page behaviour: assets/js/tools/kannada-tools.js
+     File converter: assets/js/tools/bv-kannada-docs.js + vendor/jszip.min.js, loaded only when a file is chosen. -->
 <script>if(new URLSearchParams(location.search).get("word-addin")==="1")document.documentElement.classList.add("bv-word-addin");</script>
-<div class="bv-kc" data-mode="unicode" id="bv-kannada-converter"> <section aria-labelledby="bv-word-addin-title" id="bv-word-addin-pane"><div class="bv-word-card"><p class="bv-word-kicker">Brahmavidya Digital Text Tools</p><h2 id="bv-word-addin-title">Kannada ASCII and Unicode Converter</h2><p>Select text in Microsoft Word, then choose conversion direction.</p><div class="bv-word-actions"><button disabled="" id="bv-word-to-unicode" type="button">ASCII to Unicode</button><button disabled="" id="bv-word-to-ascii" type="button">Unicode to ASCII</button></div><p aria-live="polite" id="bv-word-addin-status" role="status">Connecting to Microsoft Word…</p><p class="bv-word-note">Conversion runs locally in this task pane. Aksharamukha is not used. Paragraph breaks, tabs, and repeated spaces are preserved.</p></div></section>
+<div class="bv-kc" data-mode="a2u" id="bv-kannada-converter">
+<section aria-labelledby="bv-word-addin-title" id="bv-word-addin-pane"><div class="bv-word-card"><p class="bv-word-kicker">Brahmavidya Digital Text Tools</p><h2 id="bv-word-addin-title">Kannada ASCII and Unicode Converter</h2><p>Select text in Microsoft Word, then choose conversion direction.</p><div class="bv-word-actions"><button disabled="" id="bv-word-to-unicode" type="button">ASCII to Unicode</button><button disabled="" id="bv-word-to-ascii" type="button">Unicode to ASCII</button></div><p aria-live="polite" id="bv-word-addin-status" role="status">Connecting to Microsoft Word…</p><p class="bv-word-note">Conversion runs locally in this task pane. Aksharamukha is not used. Paragraph breaks, tabs, and repeated spaces are preserved.</p></div></section>
 <section class="bv-kc__hero">
 <div aria-label="Centenary gift and LipiSetu animation" class="bv-kc__media-row">
-<figure class="bv-kc__gift-logo"><img alt="ʼಇದು ಶತಮಾನರಾಸ ಮಹೋತ್ಸವ ಕೊಡುಗೆʼ" fetchpriority="high" height="1254" src="/assets/uploads/2026/07/brahmavidya-centenary-gift-logo.png" width="1254"/></figure>
-<div class="bv-kc__loop-video"><video aria-label="LipiSetu animated icon" autoplay="autoplay" height="150" loop="loop" muted="" preload="metadata" width="300">
-<source src="/assets/uploads/2026/07/2lipisetu-transparent.webm" type="video/webm">
-</source></video></div>
+<figure class="bv-kc__gift-logo"><img alt="ʼಇದು ಶತಮಾನರಾಸ ಮಹೋತ್ಸವ ಕೊಡುಗೆʼ" fetchpriority="high" height="1254" lang="kn" src="/assets/uploads/2026/07/brahmavidya-centenary-gift-logo.png" width="1254"/></figure>
+<div class="bv-kc__loop-video"><video aria-label="LipiSetu animated icon" autoplay="autoplay" height="150" loop="loop" muted="" playsinline="" preload="metadata" width="300"><source src="/assets/uploads/2026/07/2lipisetu-transparent.webm" type="video/webm"/></video></div>
 </div>
 <p class="bv-kc__eyebrow">Brahmavidya Digital Text Tools</p>
 <h1>Kannada Tools</h1>
-<p>A growing toolbox for Kannada digital work: convert legacy Nudi and Baraha text to clean Unicode and back, clean .docx, .doc and .odt documents, and download the Inna Swaralipi font for gamaka notation.</p>
-<div class="bv-kc__privacy"><span aria-hidden="true">●</span> Core conversion stays in this browser. Aksharamukha is contacted only when you select it.</div>
+<p>Old Nudi and Baraha text, made into clean Unicode, and back again when a press or an old program still wants it. Paste a few lines, or drop in a whole Word, Excel, PowerPoint or LibreOffice file.</p>
+<div class="bv-kc__privacy"><span aria-hidden="true">●</span> Your text and files never leave this browser. Only the optional Aksharamukha panel talks to an outside service, and only when you ask it to.</div>
+<nav aria-label="On this page" class="bv-kc__jump"><a href="#bv-kc-text">Text converter</a><a href="#bv-kc-files">File converter</a><a href="#bv-kc-more">Font, add-in and cleaner</a></nav>
 </section>
 
-<div aria-label="Brahmavidya Gamaka Notation Font" class="bv-gamaka-actions" id="bv-gamaka-actions" role="region">
-<a class="bv-gamaka-button" download="INNA_SWARALIPI-REGULAR.TTF" href="https://github.com/RSNK21/Inna-Swaralipi/raw/main/INNA_SWARALIPI-REGULAR.TTF" rel="noopener">Download the Kannada Font for Gamaka Notation</a>
-<button class="bv-gamaka-button" id="bv-gamaka-open" type="button">Instructions on How to Use the Font</button>
+<section aria-labelledby="bv-kc-text-h" class="bv-kc__workspace" id="bv-kc-text">
+<div class="bv-kc__bar">
+<div><h2 id="bv-kc-text-h">Text converter</h2><small id="bv-kc-subtitle">Nudi / Baraha ASCII to Unicode Kannada</small></div>
+<div aria-label="Conversion direction" class="bv-kc__seg" role="group">
+<button aria-pressed="true" class="bv-kc__seg-btn" data-dir="a2u" id="bv-kc-to-unicode" type="button">Nudi / Baraha → Unicode</button>
+<button aria-pressed="false" class="bv-kc__seg-btn" data-dir="u2a" id="bv-kc-to-ascii" type="button">Unicode → Nudi / Baraha</button>
 </div>
+</div>
+<div class="bv-kc__options" id="bv-kc-options">
+<label class="bv-kc__check" data-only="a2u"><input checked="" id="bv-kc-opt-english" type="checkbox"/> Leave English words as they are</label>
+<label class="bv-kc__check" data-only="a2u"><input id="bv-kc-opt-digits" type="checkbox"/> Write numbers as Kannada numerals (೧೨೩)</label>
+<label class="bv-kc__check"><input id="bv-kc-opt-spaces" type="checkbox"/> Tidy extra spaces</label>
+<label class="bv-kc__check"><input checked="" id="bv-kc-opt-font" type="checkbox"/> Show legacy text in the Nudi font</label>
+</div>
+<div class="bv-kc__grid">
+<div class="bv-kc__pane">
+<div class="bv-kc__pane-head"><label for="bv-kc-input" id="bv-kc-in-label">Nudi / Baraha text</label><span class="bv-kc__count" id="bv-kc-in-count">0 words</span></div>
+<textarea id="bv-kc-input" placeholder="Paste text copied from a Nudi or Baraha document…" spellcheck="false"></textarea>
+</div>
+<div class="bv-kc__mid"><button aria-label="Swap: move the result to the left and reverse the direction" class="bv-kc__swap" id="bv-kc-swap" title="Swap sides" type="button">⇄</button></div>
+<div class="bv-kc__pane">
+<div class="bv-kc__pane-head"><label for="bv-kc-output" id="bv-kc-out-label">Unicode Kannada</label><span class="bv-kc__count" id="bv-kc-out-count">0 words</span></div>
+<textarea id="bv-kc-output" lang="kn" placeholder="The Unicode result appears here as you type…" readonly="readonly"></textarea>
+</div>
+</div>
+<div class="bv-kc__footer">
+<p aria-live="polite" id="bv-kc-status" role="status">Ready. The result updates as you type.</p>
+<div class="bv-kc__actions">
+<button class="btn btn-outline" id="bv-kc-sample" type="button">Try a sample</button>
+<button class="btn btn-outline" id="bv-kc-clear" type="button">Clear</button>
+<button class="btn btn-tonal" id="bv-kc-download" type="button">Download .txt</button>
+<button class="btn btn-filled" id="bv-kc-copy" type="button">Copy result</button>
+</div>
+</div>
+</section>
 
-<div aria-label="Brahmavidya Document Cleaner" class="bv-docclean-actions" id="bv-docclean-actions" role="region">
-<a class="bv-docclean-button" download="BVDoClean.exe" href="https://github.com/RSNK21/BVDoCleaner/releases/download/Release/BVDoClean.exe" rel="noopener">Download Doc/ODT/Docx Cleaner</a>
-<button class="bv-docclean-button" id="bv-docclean-open" type="button">Installation Instructions</button>
+<section aria-labelledby="bv-kc-files-h" class="bv-kc__files" id="bv-kc-files">
+<div class="bv-kc__files-head">
+<p class="bv-kc__kicker">Whole documents</p>
+<h2 id="bv-kc-files-h">File converter</h2>
+<p>Drop in a <strong>.docx</strong>, <strong>.xlsx</strong>, <strong>.pptx</strong>, <strong>.odt</strong>, <strong>.ods</strong>, <strong>.odp</strong>, <strong>.txt</strong> or <strong>.csv</strong> file. You get back a copy with the same layout, tables, pictures, bold and italics. Only text set in a Nudi or Baraha font is converted, so English in Times or Calibri stays exactly as it was.</p>
 </div>
-<div aria-label="Brahmavidya Kannada Word Add-in" class="bv-wordaddin-actions" role="region">
-<a class="bv-wordaddin-button" download="BV_Kan_ascii2uni.zip" href="/assets/uploads/2026/08/BV_Kan_ascii2uni.zip">Download MS Word Kannada Add-in</a>
-<button class="bv-wordaddin-button" id="bv-wordaddin-open" type="button">Installation Instructions</button>
+<div class="bv-kc__file-grid">
+<div class="bv-kc__drop" id="bv-kc-drop" tabindex="0" role="button" aria-describedby="bv-kc-drop-hint">
+<input accept=".docx,.xlsx,.pptx,.odt,.ods,.odp,.txt,.csv,.doc,.xls,.ppt" hidden="" id="bv-kc-file" multiple="" type="file"/>
+<span aria-hidden="true" class="bv-kc__drop-icon">⇪</span>
+<strong>Choose files or drop them here</strong>
+<small id="bv-kc-drop-hint">Several files at once is fine. Nothing is uploaded.</small>
 </div>
+<div class="bv-kc__file-opts">
+<fieldset class="bv-kc__radio-row"><legend>Direction</legend>
+<label><input checked="" name="bv-kc-fdir" type="radio" value="a2u"/> Nudi / Baraha → Unicode</label>
+<label><input name="bv-kc-fdir" type="radio" value="u2a"/> Unicode → Nudi / Baraha</label>
+</fieldset>
+<label class="bv-kc__field" data-fonly="a2u">Unicode font for the converted text
+<select id="bv-kc-ufont">
+<option value="Noto Sans Kannada">Noto Sans Kannada</option>
+<option value="Noto Serif Kannada">Noto Serif Kannada</option>
+<option value="Nirmala UI">Nirmala UI (Windows)</option>
+<option value="Tunga">Tunga (older Windows)</option>
+<option value="Praja Unicode">Praja Unicode (Brahmavidya)</option>
+<option value="BV Matanga">BV Matanga (Brahmavidya)</option>
+<option value="Kedage">Kedage</option>
+<option value="Mallige">Mallige</option>
+<option value="Arial Unicode MS">Arial Unicode MS</option>
+<option value="__custom">Another font…</option>
+</select></label>
+<label class="bv-kc__field" data-fonly="u2a">Legacy font for the converted text
+<select id="bv-kc-lfont">
+<option value="Nudi 01 e">Nudi 01 e</option>
+<option value="Nudi Akshar-01">Nudi Akshar-01</option>
+<option value="NUDI 05 e">NUDI 05 e</option>
+<option value="BRH Kannada">BRH Kannada (Baraha)</option>
+<option value="__custom">Another font…</option>
+</select></label>
+<label class="bv-kc__field" hidden="" id="bv-kc-cfont-wrap">Font name, exactly as your computer shows it
+<input autocomplete="off" id="bv-kc-cfont" placeholder="e.g. Nudi Akshar-02" type="text"/></label>
+<label class="bv-kc__check" data-fonly="a2u"><input id="bv-kc-fall" type="checkbox"/> Convert all text, whatever its font (for files that lost their font names)</label>
+<label class="bv-kc__check" data-fonly="a2u"><input id="bv-kc-fdigits" type="checkbox"/> Write numbers as Kannada numerals</label>
+</div>
+</div>
+<ul aria-live="polite" class="bv-kc__results" id="bv-kc-results"></ul>
+<p class="bv-kc__fine">Old .doc, .xls and .ppt files: open them in Office or LibreOffice and save as .docx, .xlsx or .pptx first. Scanned PDFs have no text to convert. Legacy files from this converter use Windows ANSI for .txt, as Nudi and PageMaker expect.</p>
+</section>
+
+<section aria-label="Conversion history" class="bv-kc__history">
+<div class="bv-kc__history-bar">
+<div><strong>Recent conversions</strong><small>The last 10, kept only in this browser</small></div>
+<button class="btn btn-outline" id="bv-kc-history-clear" type="button">Clear history</button>
+</div>
+<div class="bv-kc__history-list" id="bv-kc-history-list"><p class="bv-kc__history-empty">Nothing yet. Conversions you copy, download or pause on will show up here.</p></div>
+</section>
+
+<section aria-labelledby="bv-kc-ak-title" class="bv-kc__aksharamukha" data-target="IAST" id="bv-kc-aksharamukha">
+<div class="bv-kc__ak-heading">
+<div><p class="bv-kc__kicker">Unicode transliteration</p>
+<h2 id="bv-kc-ak-title"><a class="bv-kc__ak-title-link" href="https://www.aksharamukha.com/" rel="noopener noreferrer" target="_blank">Aksharamukha</a></h2></div>
+<a class="bv-kc__ak-site-link" href="https://www.aksharamukha.com/" rel="noopener noreferrer" target="_blank">Open Aksharamukha ↗</a></div>
+<p>Turn the Unicode Kannada from the converter into another script. Only the Unicode side is sent, never the legacy text.</p>
+<div class="bv-kc__ak-controls"><label for="bv-kc-ak-target">Target script</label><select id="bv-kc-ak-target">
+<option selected="selected" value="IAST">Roman (IAST)</option>
+<option value="ISO">Roman (ISO 15919)</option>
+<option value="Devanagari">Devanagari</option>
+<option value="Grantha">Grantha</option>
+<option value="Malayalam">Malayalam</option>
+<option value="Telugu">Telugu</option>
+<option value="Tamil">Tamil</option>
+<option value="Bengali">Bengali</option>
+</select><button class="btn btn-filled" id="bv-kc-ak-run" type="button">Transliterate</button></div>
+<label class="bv-kc__sr" for="bv-kc-ak-output">Aksharamukha output</label><textarea id="bv-kc-ak-output" placeholder="The transliteration appears here…" readonly="readonly"></textarea>
+<div class="bv-kc__ak-footer"><p aria-live="polite" id="bv-kc-ak-status" role="status">Runs only when you press Transliterate.</p><button class="btn btn-outline" id="bv-kc-ak-copy" type="button">Copy transliteration</button></div>
+</section>
+
+<section aria-labelledby="bv-kc-more-h" class="bv-kc__more" id="bv-kc-more">
+<h2 id="bv-kc-more-h">Font, Word add-in and document cleaner</h2>
+<div class="bv-kc__tools">
+<article class="bv-kc__tool"><h3>Inna Swaralipi</h3><p>A Kannada font for Carnatic notation, with eleven gamaka marks added at Brahmavidya.</p>
+<div class="bv-kc__tool-actions"><a class="btn btn-filled" download="INNA_SWARALIPI-REGULAR.TTF" href="https://github.com/RSNK21/Inna-Swaralipi/raw/main/INNA_SWARALIPI-REGULAR.TTF" rel="noopener">Download the font</a><button class="btn btn-outline" data-dialog="bv-gamaka-dialog" type="button">How to type gamakas</button></div></article>
+<article class="bv-kc__tool"><h3>Word add-in</h3><p>Two buttons on Word's ribbon: Nudi to Unicode, and back. Works offline on Windows. Beta.</p>
+<div class="bv-kc__tool-actions"><a class="btn btn-filled" download="BV_Kan_ascii2uni.zip" href="/assets/uploads/2026/08/BV_Kan_ascii2uni.zip">Download the add-in</a><button class="btn btn-outline" data-dialog="bv-wordaddin-dialog" type="button">Installation</button></div></article>
+<article class="bv-kc__tool"><h3>BVDoClean</h3><p>Strips hidden clutter from .docx, .doc and .odt files without touching what you see. Windows.</p>
+<div class="bv-kc__tool-actions"><a class="btn btn-filled" download="BVDoClean.exe" href="https://github.com/RSNK21/BVDoCleaner/releases/download/Release/BVDoClean.exe" rel="noopener">Download BVDoClean</a><button class="btn btn-outline" data-dialog="bv-docclean-dialog" type="button">Installation</button></div></article>
+</div>
+</section>
+
+<section class="bv-kc__notes">
+<h2>How the converter reads Kannada</h2>
+<p>Nudi and Baraha store a letter as a heap of shapes: the body, the talakattu, the pieces of a vowel sign, each ottakshara, the arkavattu. The converter gathers each heap back into one akshara before it writes anything, so <span lang="kn">ಶ್ರೀ</span>, <span lang="kn">ಸ್ತ್ರೀ</span>, <span lang="kn">ಕಾರ್ಯ</span> and <span lang="kn">ಉಜ್ಜ್ವಲ</span> come out whole. It also accepts the different byte orders that older converters and typists produced, and it puts an akshara back together even when Word has split it across two runs of text.</p>
+<p>Going the other way, every legacy spelling was checked shape by shape in the NUDI 01 font, so the second ottakshara in <span lang="kn">ತತ್ತ್ವ</span> sits beside the first, <span lang="kn">ಪು</span> uses its own u-sign, and <span lang="kn">ಕೃ</span> takes the right ṛ-sign with and without an ottu.</p>
+<p class="bv-kc__note">Text between $ signs is left alone, which is handy for an English name inside Kannada. A visible halant, as in <span lang="kn">ಷಟ್‌ಶ್ರುತಿ</span>, stays visible. Legacy fonts that use a different layout, such as Praja, need <a href="/bv-mudrana/">BV Mudrana</a>.</p>
+</section>
 <div class="bv-wordaddin-dialog" hidden="" id="bv-wordaddin-dialog">
 <div class="bv-wordaddin-backdrop" data-bv-wordaddin-close=""></div>
 <section aria-labelledby="bv-wordaddin-title" aria-modal="true" class="bv-wordaddin-panel" role="dialog">
@@ -79,60 +199,5 @@ image: /assets/uploads/2026/07/brahmavidya-centenary-gift-logo.png
 <p class="bv-wordaddin-note"><strong>Two weights:</strong> Regular and Bold are available. The download button above fetches Regular; both files are linked below.</p>
 <div class="bv-wordaddin-final"><a download="INNA_SWARALIPI-REGULAR.TTF" href="https://github.com/RSNK21/Inna-Swaralipi/raw/main/INNA_SWARALIPI-REGULAR.TTF" rel="noopener">Download Regular TTF</a><a download="INNA_SWARALIPI-BOLD.TTF" href="https://github.com/RSNK21/Inna-Swaralipi/raw/main/INNA_SWARALIPI-BOLD.TTF" rel="noopener">Download Bold TTF</a><button data-bv-gamaka-close="" type="button">Close</button></div>
 </section></div>
-<section aria-label="Kannada converter" class="bv-kc__workspace">
-<div class="bv-kc__bar">
-<div><strong>Legacy Kannada</strong><small>Nudi / Baraha ASCII text</small></div>
-<div class="bv-kc__actions"><button class="bv-kc__button bv-kc__button--quiet" id="bv-kc-sample" type="button">Try sample</button> <button class="bv-kc__button bv-kc__button--quiet" id="bv-kc-clear" type="button">Clear</button></div>
-</div>
-<div aria-label="Conversion direction" class="bv-kc__direction" role="group"><button aria-pressed="true" class="bv-kc__direction-button is-active" id="bv-kc-to-unicode" type="button">ASCII to Unicode</button><button aria-pressed="false" class="bv-kc__direction-button" id="bv-kc-to-ascii" type="button">Unicode to ASCII</button></div>
-<p class="bv-kc__legacy-font-note"><strong>Legacy display font:</strong> NUDI01. Copying or downloading preserves the underlying legacy ASCII text.</p>
-<div class="bv-kc__grid">
-<div class="bv-kc__pane"><label for="bv-kc-input">Paste legacy text</label> <textarea id="bv-kc-input" placeholder="Paste text copied from a legacy Kannada document…" spellcheck="false"></textarea></div>
-<div aria-hidden="true" class="bv-kc__arrow">→</div>
-<div class="bv-kc__pane"><label for="bv-kc-output">Unicode Kannada</label> <textarea id="bv-kc-output" placeholder="Unicode output appears here…" readonly="readonly"></textarea>
-<div aria-label="Legacy Kannada ASCII preview" aria-readonly="true" class="bv-kc__legacy-preview" hidden="" id="bv-kc-output-preview" role="textbox" tabindex="0"> </div>
-</div>
-</div>
-<div class="bv-kc__footer">
-<p aria-live="polite" id="bv-kc-status" role="status">Ready for conversion.</p>
-<div class="bv-kc__actions"><button class="bv-kc__button bv-kc__button--quiet" id="bv-kc-download" type="button">Download .txt</button> <button class="bv-kc__button bv-kc__button--primary" id="bv-kc-copy" type="button">Copy Unicode</button></div>
-</div>
-</section>
-<section aria-label="Conversion history" class="bv-kc__history">
-<div class="bv-kc__history-bar">
-<div><strong>Conversion History</strong><small>Last 10 conversions, stored locally</small></div>
-<div class="bv-kc__actions"><button class="bv-kc__button bv-kc__button--quiet" id="bv-kc-history-clear" type="button">Clear History</button></div>
-</div>
-<div class="bv-kc__history-list" id="bv-kc-history-list">
-<p class="bv-kc__history-empty">No conversions yet. Your conversion history will appear here.</p>
-</div>
-</section>
-<section aria-labelledby="bv-kc-ak-title" class="bv-kc__aksharamukha" data-target="IAST" id="bv-kc-aksharamukha">
-<div class="bv-kc__ak-heading">
-<div>
-<p class="bv-kc__ak-kicker">Unicode transliteration</p>
-<h2 id="bv-kc-ak-title"><a class="bv-kc__ak-title-link" href="https://www.aksharamukha.com/" rel="noopener noreferrer" target="_blank">Aksharamukha</a></h2>
-</div>
-<a class="bv-kc__ak-site-link" href="https://www.aksharamukha.com/" rel="noopener noreferrer" target="_blank">Open Aksharamukha website ↗</a></div>
-<p>Transliterate the generated Kannada Unicode into another scholarly script. The legacy ASCII output is never sent.</p>
-<div class="bv-kc__ak-controls"><label for="bv-kc-ak-target">Target script</label><select id="bv-kc-ak-target">
-<option selected="selected" value="IAST">Roman (IAST)</option>
-<option value="Devanagari">Devanagari</option>
-<option value="Grantha">Grantha</option>
-<option value="Malayalam">Malayalam</option>
-<option value="Telugu">Telugu</option>
-<option value="Tamil">Tamil</option>
-<option value="Bengali">Bengali</option>
-</select><button class="bv-kc__button bv-kc__button--primary" id="bv-kc-ak-run" type="button">Transliterate Unicode</button></div>
-<label for="bv-kc-ak-output">Aksharamukha output</label><textarea id="bv-kc-ak-output" placeholder="Transliterated Unicode output appears here…" readonly="readonly"></textarea>
-<div class="bv-kc__ak-footer">
-<p aria-live="polite" id="bv-kc-ak-status" role="status">Runs only when you select Transliterate Unicode.</p>
-<button class="bv-kc__button bv-kc__button--quiet" id="bv-kc-ak-copy" type="button">Copy transliteration</button></div>
-<p class="bv-kc__ak-privacy">This optional action sends only the Kannada Unicode output to Aksharamukha’s public API. Core ASCII and Unicode conversion remains entirely in this browser.</p>
-</section>
-<section class="bv-kc__notes">
-<h2>Designed for difficult conjuncts</h2>
-<p>The conversion engine uses longest-match processing and Kannada cluster rules in both directions. Conjuncts, repha, ottakṣara, split vowel signs, and sequences such as <strong>ಗಣಪತಯೇ</strong> are handled as units rather than one character at a time.</p>
-<p class="bv-kc__note">Legacy fonts differ. Unicode to ASCII uses the canonical legacy form from this converter’s existing character table. If the status line identifies unmapped characters, compare the source font and the original document before publishing the result.</p>
-</section>
+
 </div>
