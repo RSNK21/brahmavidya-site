@@ -237,28 +237,42 @@
   }
 
   // ------------------------------------------------------------ dialogs
+  // The instruction links open their dialog through #address with plain CSS, so they work even
+  // when this script is missing or stale. With the script, they open without changing the address,
+  // close on Escape and keep keyboard focus inside.
   function initDialogs() {
     var last = null;
+    var isClose = function (el) { return el && Array.prototype.some.call(el.attributes, function (a) { return /^data-bv-.*-close$/.test(a.name); }); };
+    function open(d, from) {
+      last = from || null;
+      d.classList.remove('is-closed'); d.classList.add('is-open'); document.body.classList.add('bv-kc-lock');
+      var x = d.querySelector('.bv-wordaddin-x'); if (x) x.focus();
+    }
+    function close(d) {
+      d.classList.remove('is-open'); d.classList.add('is-closed'); document.body.classList.remove('bv-kc-lock');
+      if (location.hash === '#' + d.id) history.replaceState(null, '', location.pathname + location.search);
+      if (last) last.focus();
+    }
     document.querySelectorAll('[data-dialog]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', function (e) {
         var d = $(btn.getAttribute('data-dialog')); if (!d) return;
-        last = btn; d.hidden = false; document.body.classList.add('bv-kc-lock');
-        var x = d.querySelector('.bv-wordaddin-x'); if (x) x.focus();
+        e.preventDefault(); open(d, btn);
       });
     });
-    function close(d) { d.hidden = true; document.body.classList.remove('bv-kc-lock'); if (last) last.focus(); }
     document.querySelectorAll('.bv-wordaddin-dialog').forEach(function (d) {
       d.addEventListener('click', function (e) {
-        var t = e.target.closest('button, .bv-wordaddin-backdrop');
-        if (t && Array.prototype.some.call(t.attributes, function (a) { return /^data-bv-.*-close$/.test(a.name); })) close(d);
+        var t = e.target.closest('a, button');
+        if (isClose(t)) { e.preventDefault(); close(d); }
       });
       d.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') close(d);
+        if (e.key === 'Escape') { e.preventDefault(); close(d); return; }
         if (e.key !== 'Tab') return;
-        var f = d.querySelectorAll('a[href], button:not([disabled])'); if (!f.length) return;
+        var f = d.querySelectorAll('a[href]:not([tabindex="-1"]), button:not([disabled])'); if (!f.length) return;
         if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
         else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
       });
+      // arriving with #bv-gamaka-dialog (a shared link) opens it the same way
+      if (location.hash === '#' + d.id) open(d);
     });
   }
 

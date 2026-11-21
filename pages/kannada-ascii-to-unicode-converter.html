@@ -20,10 +20,10 @@ image: /assets/uploads/2026/07/brahmavidya-centenary-gift-logo.png
 <figure class="bv-kc__gift-logo"><img alt="ʼಇದು ಶತಮಾನರಾಸ ಮಹೋತ್ಸವ ಕೊಡುಗೆʼ" fetchpriority="high" height="1254" lang="kn" src="/assets/uploads/2026/07/brahmavidya-centenary-gift-logo.png" width="1254"/></figure>
 <div class="bv-kc__loop-video"><video aria-label="LipiSetu animated icon" autoplay="autoplay" height="150" loop="loop" muted="" playsinline="" preload="metadata" width="300"><source src="/assets/uploads/2026/07/2lipisetu-transparent.webm" type="video/webm"/></video></div>
 </div>
-<div aria-label="Gamaka font, document cleaner and Word add-in" class="bv-kc__quick" role="region">
-<div class="bv-kc__qrow bv-kc__qrow--gold"><a class="bv-kc__qbtn" download="INNA_SWARALIPI-REGULAR.TTF" href="https://github.com/RSNK21/Inna-Swaralipi/raw/main/INNA_SWARALIPI-REGULAR.TTF" rel="noopener">Download the Kannada Font for Gamaka Notation</a><button class="bv-kc__qbtn" data-dialog="bv-gamaka-dialog" type="button">Instructions on How to Use the Font</button></div>
-<div class="bv-kc__qrow bv-kc__qrow--slate"><a class="bv-kc__qbtn" download="BVDoClean.exe" href="https://github.com/RSNK21/BVDoCleaner/releases/download/Release/BVDoClean.exe" rel="noopener">Download Doc/ODT/Docx Cleaner</a><button class="bv-kc__qbtn" data-dialog="bv-docclean-dialog" type="button">Installation Instructions</button></div>
-<div class="bv-kc__qrow bv-kc__qrow--madder"><a class="bv-kc__qbtn" download="BV_Kannada_Word_AddIn_2.0.zip" href="/assets/uploads/2026/08/BV_Kan_ascii2uni.zip">Download MS Word Kannada Add-in</a><button class="bv-kc__qbtn" data-dialog="bv-wordaddin-dialog" type="button">Installation Instructions</button></div>
+<div aria-label="Gamaka font, document cleaner and Word add-in" class="bv-kc__quick" id="bv-kc-quick" role="region">
+<div class="bv-kc__qrow bv-kc__qrow--gold"><a class="bv-kc__qbtn" download="INNA_SWARALIPI-REGULAR.TTF" href="https://github.com/RSNK21/Inna-Swaralipi/raw/main/INNA_SWARALIPI-REGULAR.TTF" rel="noopener">Download the Kannada Font for Gamaka Notation</a><a class="bv-kc__qbtn" data-dialog="bv-gamaka-dialog" href="#bv-gamaka-dialog" role="button">Instructions on How to Use the Font</a></div>
+<div class="bv-kc__qrow bv-kc__qrow--slate"><a class="bv-kc__qbtn" download="BVDoClean.exe" href="https://github.com/RSNK21/BVDoCleaner/releases/download/Release/BVDoClean.exe" rel="noopener">Download Doc/ODT/Docx Cleaner</a><a class="bv-kc__qbtn" data-dialog="bv-docclean-dialog" href="#bv-docclean-dialog" role="button">Installation Instructions</a></div>
+<div class="bv-kc__qrow bv-kc__qrow--madder"><a class="bv-kc__qbtn" download="BV_Kannada_Word_AddIn_2.0.zip" href="/assets/uploads/2026/08/BV_Kan_ascii2uni.zip">Download MS Word Kannada Add-in</a><a class="bv-kc__qbtn" data-dialog="bv-wordaddin-dialog" href="#bv-wordaddin-dialog" role="button">Installation Instructions</a></div>
 </div>
 <p class="bv-kc__eyebrow">Brahmavidya Digital Text Tools</p>
 <h1>Kannada Tools</h1>
@@ -151,10 +151,10 @@ image: /assets/uploads/2026/07/brahmavidya-centenary-gift-logo.png
 <p>Going the other way, every legacy spelling was checked shape by shape in the NUDI 01 font, so the second ottakshara in <span lang="kn">ತತ್ತ್ವ</span> sits beside the first, <span lang="kn">ಪು</span> uses its own u-sign, and <span lang="kn">ಕೃ</span> takes the right ṛ-sign with and without an ottu.</p>
 <p class="bv-kc__note">Text between $ signs is left alone, which is handy for an English name inside Kannada. A visible halant, as in <span lang="kn">ಷಟ್‌ಶ್ರುತಿ</span>, stays visible. Legacy fonts that use a different layout, such as Praja, need <a href="/bv-mudrana/">BV Mudrana</a>.</p>
 </section>
-<div class="bv-wordaddin-dialog" hidden="" id="bv-wordaddin-dialog">
-<div class="bv-wordaddin-backdrop" data-bv-wordaddin-close=""></div>
+<div class="bv-wordaddin-dialog" id="bv-wordaddin-dialog">
+<a aria-hidden="true" class="bv-wordaddin-backdrop" data-bv-wordaddin-close="" href="#bv-kc-quick" tabindex="-1"></a>
 <section aria-labelledby="bv-wordaddin-title" aria-modal="true" class="bv-wordaddin-panel" role="dialog">
-<button aria-label="Close installation instructions" class="bv-wordaddin-x" data-bv-wordaddin-close="" type="button">×</button>
+<a aria-label="Close installation instructions" class="bv-wordaddin-x" data-bv-wordaddin-close="" href="#bv-kc-quick" role="button">×</a>
 <p class="bv-wordaddin-kicker">Version 2.0 for Windows · November 2026</p>
 <h2 id="bv-wordaddin-title">Install the Brahmavidya Kannada Word Add-in</h2>
 <p>A Brahmavidya Kannada tab on Word's ribbon with two buttons: Nudi to Unicode, and Unicode to Nudi. Select some text, or select nothing to convert the whole document, headers, footers and footnotes included. Bold, italics, sizes, footnotes and pictures stay as they were. It uses the same engine as this page and works offline.</p>
@@ -162,24 +162,24 @@ image: /assets/uploads/2026/07/brahmavidya-centenary-gift-logo.png
 <ol><li>Select <strong>Download the add-in</strong> and open the ZIP.</li><li>Close every Microsoft Word window.</li><li>Double-click <strong>BV_Kannada_Word_AddIn.exe</strong> and choose <strong>Install</strong>. No administrator rights are needed.</li><li>Open Word and go to the <strong>Brahmavidya Kannada</strong> tab.</li><li>Pick the fonts you want for converted text from the two lists on the tab. Ctrl+Z undoes a conversion in one step.</li></ol>
 <p>Already using version 1? Install 2.0 over it; it takes its place.</p>
 <p class="bv-wordaddin-note"><strong>Windows warning:</strong> the program is not commercially code-signed, so Windows may say it protected your PC. Choose <strong>More info</strong>, then <strong>Run anyway</strong>. To remove the add-in, run the same program and choose <strong>Remove</strong>.</p>
-<div class="bv-wordaddin-final"><a download="BV_Kannada_Word_AddIn_2.0.zip" href="/assets/uploads/2026/08/BV_Kan_ascii2uni.zip">Download ZIP (version 2.0)</a><button data-bv-wordaddin-close="" type="button">Close</button></div>
+<div class="bv-wordaddin-final"><a download="BV_Kannada_Word_AddIn_2.0.zip" href="/assets/uploads/2026/08/BV_Kan_ascii2uni.zip">Download ZIP (version 2.0)</a><a data-bv-wordaddin-close="" href="#bv-kc-quick" role="button">Close</a></div>
 </section></div>
-<div class="bv-wordaddin-dialog bv-docclean-dialog" hidden="" id="bv-docclean-dialog">
-<div class="bv-wordaddin-backdrop" data-bv-docclean-close=""></div>
+<div class="bv-wordaddin-dialog bv-docclean-dialog" id="bv-docclean-dialog">
+<a aria-hidden="true" class="bv-wordaddin-backdrop" data-bv-docclean-close="" href="#bv-kc-quick" tabindex="-1"></a>
 <section aria-labelledby="bv-docclean-title" aria-modal="true" class="bv-wordaddin-panel" role="dialog">
-<button aria-label="Close document cleaner instructions" class="bv-wordaddin-x" data-bv-docclean-close="" type="button">×</button>
+<a aria-label="Close document cleaner instructions" class="bv-wordaddin-x" data-bv-docclean-close="" href="#bv-kc-quick" role="button">×</a>
 <p class="bv-wordaddin-kicker">Windows document utility</p>
 <h2 id="bv-docclean-title">Install BVDoClean, the Document Cleaner</h2>
 <p>BVDoClean is a native Windows utility for Microsoft Word (.docx, .doc) and OpenDocument (.odt) files. It removes invisible bloat (revision identifiers, proofing markers, redundant language tags, duplicate embedded fonts, unreferenced hidden bookmarks, orphaned settings and stored metadata) while leaving visible text, layout, footnotes and headers untouched. The cleaned document keeps its original format.</p>
 <h3>Installation instructions</h3>
 <ol><li>Select <strong>Download Doc/ODT/Docx Cleaner</strong> and save <strong>BVDoClean.exe</strong>.</li><li>The program is a single self-contained file: no setup wizard, no extra software. Keep it in any folder on your computer.</li><li>If Windows SmartScreen shows an Unknown Publisher warning, choose <strong>More info → Run anyway</strong>. The program is not commercially code-signed.</li><li>Double-click <strong>BVDoClean.exe</strong>, open a .docx or .odt file with the button or by drag-and-drop, then choose <strong>Clean Save</strong>.</li><li>For batch work, use the command line: <code>BVDoClean.exe --cli input.docx [output.docx]</code>.</li></ol>
 <p class="bv-wordaddin-note"><strong>Note:</strong> .doc files require Microsoft Word to be installed; they are cleaned through Word automatically. .docx and .odt files are cleaned natively with no extra software.</p>
-<div class="bv-wordaddin-final"><a download="BVDoClean.exe" href="https://github.com/RSNK21/BVDoCleaner/releases/download/Release/BVDoClean.exe" rel="noopener">Download BVDoClean.exe</a><button data-bv-docclean-close="" type="button">Close</button></div>
+<div class="bv-wordaddin-final"><a download="BVDoClean.exe" href="https://github.com/RSNK21/BVDoCleaner/releases/download/Release/BVDoClean.exe" rel="noopener">Download BVDoClean.exe</a><a data-bv-docclean-close="" href="#bv-kc-quick" role="button">Close</a></div>
 </section></div>
-<div class="bv-wordaddin-dialog bv-gamaka-dialog" hidden="" id="bv-gamaka-dialog">
-<div class="bv-wordaddin-backdrop" data-bv-gamaka-close=""></div>
+<div class="bv-wordaddin-dialog bv-gamaka-dialog" id="bv-gamaka-dialog">
+<a aria-hidden="true" class="bv-wordaddin-backdrop" data-bv-gamaka-close="" href="#bv-kc-quick" tabindex="-1"></a>
 <section aria-labelledby="bv-gamaka-title" aria-modal="true" class="bv-wordaddin-panel" role="dialog">
-<button aria-label="Close font instructions" class="bv-wordaddin-x" data-bv-gamaka-close="" type="button">×</button>
+<a aria-label="Close font instructions" class="bv-wordaddin-x" data-bv-gamaka-close="" href="#bv-kc-quick" role="button">×</a>
 <p class="bv-wordaddin-kicker">Kannada gamaka notation typeface</p>
 <h2 id="bv-gamaka-title">Using the Inna Swaralipi Font</h2>
 <p>Inna Swaralipi is a Kannada font for Carnatic music notation, built on Baraha’s BRH Kannada Music Keys 2 with eleven gamaka symbols added by Brahmavidya. Install the downloaded TTF on your computer (on Windows: double-click the file and choose Install), then select Inna Swaralipi in Word, Baraha, or any editor that lets you pick fonts.</p>
@@ -191,7 +191,7 @@ image: /assets/uploads/2026/07/brahmavidya-centenary-gift-logo.png
 <li><strong>8</strong> and <strong>9</strong> are inline jāru slide marks placed before or after a swara, for example <strong>s8p</strong> slides ಸ to ಪ.</li>
 </ul>
 <p class="bv-wordaddin-note"><strong>Two weights:</strong> Regular and Bold are available. The download button above fetches Regular; both files are linked below.</p>
-<div class="bv-wordaddin-final"><a download="INNA_SWARALIPI-REGULAR.TTF" href="https://github.com/RSNK21/Inna-Swaralipi/raw/main/INNA_SWARALIPI-REGULAR.TTF" rel="noopener">Download Regular TTF</a><a download="INNA_SWARALIPI-BOLD.TTF" href="https://github.com/RSNK21/Inna-Swaralipi/raw/main/INNA_SWARALIPI-BOLD.TTF" rel="noopener">Download Bold TTF</a><button data-bv-gamaka-close="" type="button">Close</button></div>
+<div class="bv-wordaddin-final"><a download="INNA_SWARALIPI-REGULAR.TTF" href="https://github.com/RSNK21/Inna-Swaralipi/raw/main/INNA_SWARALIPI-REGULAR.TTF" rel="noopener">Download Regular TTF</a><a download="INNA_SWARALIPI-BOLD.TTF" href="https://github.com/RSNK21/Inna-Swaralipi/raw/main/INNA_SWARALIPI-BOLD.TTF" rel="noopener">Download Bold TTF</a><a data-bv-gamaka-close="" href="#bv-kc-quick" role="button">Close</a></div>
 </section></div>
 
 </div>
