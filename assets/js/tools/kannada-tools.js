@@ -145,14 +145,15 @@
     var panel = $('bv-kc-aksharamukha'), target = $('bv-kc-ak-target'), run = $('bv-kc-ak-run'), out = $('bv-kc-ak-output'), st = $('bv-kc-ak-status');
     if (!panel) return;
     akReset = function () { if (out.value) { out.value = ''; say(st, 'Runs only when you press Transliterate.'); } };
-    target.addEventListener('change', function () { panel.setAttribute('data-target', target.value); akReset(); });
+    // picking another script runs again straight away when there is something to transliterate
+    target.addEventListener('change', function () { panel.setAttribute('data-target', target.value); akReset(); if (getUnicode().trim()) run.click(); });
     run.addEventListener('click', async function () {
       var text = getUnicode();
       if (!text.trim()) { say(st, 'Convert or paste some Unicode Kannada first.', 'warn'); return; }
       run.disabled = true; say(st, 'Asking Aksharamukha…');
       var params = new URLSearchParams({ source: 'Kannada', target: target.value, text: text, nativize: 'false' });
       var url = 'https://aksharamukha-plugin.appspot.com/api/public';
-      var tries = [{ u: url + '?' + params, o: { method: 'GET' } }, { u: url, o: { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }, body: params.toString() } }, { u: url + '?' + params, o: { method: 'GET' } }];
+      var tries = [{ u: url + '?' + params, o: { method: 'GET', headers: { Accept: 'text/plain' } } }, { u: url, o: { method: 'POST', headers: { Accept: 'text/plain', 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' }, body: params.toString() } }, { u: url + '?' + params, o: { method: 'GET', headers: { Accept: 'text/plain' } } }];
       try {
         var res = null;
         for (var i = 0; i < tries.length; i++) {
@@ -165,7 +166,7 @@
         try { var j = JSON.parse(t); t = typeof j === 'string' ? j : (j.output || j.text || t); } catch (e) { /* plain text */ }
         if (target.value === 'Grantha') t = t.replace(/ऽ/g, '\u{1133D}');
         out.value = t; say(st, 'Done.', 'ok');
-      } catch (e) { out.value = ''; say(st, 'Aksharamukha did not answer after three tries. Your converted text is safe; try again in a minute.', 'warn'); }
+      } catch (e) { out.value = ''; say(st, 'Aksharamukha did not answer after three tries. Its server may be busy, or a browser extension or network filter may be blocking aksharamukha-plugin.appspot.com. Your converted text is safe; try again in a minute.', 'warn'); }
       finally { run.disabled = false; }
     });
     $('bv-kc-ak-copy').addEventListener('click', function () { if (out.value) copy(out.value, out).then(function (ok) { say(st, ok ? 'Copied.' : 'Selected; press Ctrl+C.', ok ? 'ok' : 'warn'); }); });
